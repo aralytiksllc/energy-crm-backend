@@ -4,46 +4,35 @@ import {
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
-import { Observable, catchError, tap } from 'rxjs';
-import { throwError } from 'rxjs';
-import { AppLoggerService } from './app-logger.service';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 import { Request } from 'express';
+import { AppLoggerService } from './app-logger.service';
 
 @Injectable()
 export class AppLoggerInterceptor implements NestInterceptor {
   constructor(private readonly logger: AppLoggerService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const request = this.getRequest(context);
-    const controller = context.getClass().name;
-    const handler = context.getHandler().name;
     const now = Date.now();
 
-    this.logStart(request, controller, handler);
+    this.handleRequest(context);
 
     return next.handle().pipe(
-      tap(() => this.logSuccess(request, controller, handler, now)),
-      catchError((error) =>
-        this.handleError(request, controller, handler, now, error),
-      ),
+      tap(() => this.handleSuccess(context, now)),
+      catchError((error) => this.handleFailure(context, now, error)),
     );
   }
 
-  private getRequest(context: ExecutionContext): Request {
-    return context.switchToHttp().getRequest<Request>();
-  }
+  private handleRequest(context: ExecutionContext): void {
+    const request = this.getRequest(context);
+    const controller = context.getClass().name;
+    const handler = context.getHandler().name;
 
-  private logStart(
-    request: Request,
-    controller: string,
-    handler: string,
-  ): void {
     const method = request.method;
     const url = request.url;
-
     const params = JSON.stringify(request.params || {});
     const query = JSON.stringify(request.query || {});
-    const body = JSON.stringify(this.sanitizeBody(request.body || {}));
+    const body = JSON.stringify(request.body || {});
 
     this.logger.log(
       `[${method}] ${url} → ${controller}.${handler} started\n` +
@@ -52,12 +41,11 @@ export class AppLoggerInterceptor implements NestInterceptor {
     );
   }
 
-  private logSuccess(
-    request: Request,
-    controller: string,
-    handler: string,
-    startTime: number,
-  ): void {
+  private handleSuccess(context: ExecutionContext, startTime: number): void {
+    const request = this.getRequest(context);
+    const controller = context.getClass().name;
+    const handler = context.getHandler().name;
+
     const method = request.method;
     const url = request.url;
     const duration = Date.now() - startTime;
@@ -68,13 +56,15 @@ export class AppLoggerInterceptor implements NestInterceptor {
     );
   }
 
-  private handleError(
-    request: Request,
-    controller: string,
-    handler: string,
+  private handleFailure(
+    context: ExecutionContext,
     startTime: number,
-    error: any,
+    error: Error,
   ): Observable<never> {
+    const request = this.getRequest(context);
+    const controller = context.getClass().name;
+    const handler = context.getHandler().name;
+
     const method = request.method;
     const url = request.url;
     const duration = Date.now() - startTime;
@@ -88,16 +78,7 @@ export class AppLoggerInterceptor implements NestInterceptor {
     return throwError(() => error);
   }
 
-  private sanitizeBody(body: any): any {
-    const clone = { ...body };
-    const sensitiveFields = ['password', 'token'];
-
-    for (const key of sensitiveFields) {
-      if (key in clone) {
-        clone[key] = '[REDACTED]';
-      }
-    }
-
-    return clone;
+  private getRequest(context: ExecutionContext): Request {
+    return context.switchToHttp().getRequest<Request>();
   }
 }

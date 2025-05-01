@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsString,
   MaxLength,
+  IsDateString,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -27,6 +28,14 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MaxLength(255)
   password: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  dateOfBirth: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  dateOfJoining: string;
 
   @IsOptional()
   settings?: Record<string, any>;

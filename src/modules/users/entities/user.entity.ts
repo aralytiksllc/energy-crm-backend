@@ -6,24 +6,24 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { AuditableEntity } from '@/common/auditable/auditable.entity';
+import { Auditable } from '@/common/auditable/auditable.entity';
 
 @Entity('users')
-export class User extends AuditableEntity {
+export class User extends Auditable {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar' })
   firstName: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar' })
   lastName: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', unique: true })
   email: string;
 
   @Exclude()
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar' })
   password: string;
 
   @Column({ type: 'date' })

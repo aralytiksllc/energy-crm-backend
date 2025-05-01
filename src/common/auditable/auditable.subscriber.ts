@@ -4,20 +4,20 @@ import {
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
-import { AuditableEntity } from './auditable.entity';
+import { Auditable } from './auditable.entity';
 import { IAuditableProvider } from './auditable.interfaces';
 
 @EventSubscriber()
 export class AuditableSubscriber
-  implements EntitySubscriberInterface<AuditableEntity>
+  implements EntitySubscriberInterface<Auditable>
 {
   constructor(private readonly auditableProvider: IAuditableProvider) {}
 
   listenTo() {
-    return AuditableEntity;
+    return Auditable;
   }
 
-  async beforeInsert(event: InsertEvent<AuditableEntity>) {
+  async beforeInsert(event: InsertEvent<Auditable>) {
     const userId = await this.auditableProvider.getCurrentUserId();
     if (event.entity && userId) {
       event.entity.createdById = userId;
@@ -25,7 +25,7 @@ export class AuditableSubscriber
     }
   }
 
-  async beforeUpdate(event: UpdateEvent<AuditableEntity>) {
+  async beforeUpdate(event: UpdateEvent<Auditable>) {
     const userId = await this.auditableProvider.getCurrentUserId();
     if (event.entity && userId) {
       event.entity.updatedById = userId;

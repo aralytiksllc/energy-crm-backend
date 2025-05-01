@@ -4,6 +4,6 @@ import { IAuditableProvider } from '../../common/auditable/auditable.interfaces'
 @Injectable()
 export class AuditableUserService implements IAuditableProvider {
   async getCurrentUserId(): Promise<string | null> {
-    return '8cb190f7-4910-4861-9e16-6207c674a7f0';
+    return '5a860531-e405-4dc7-b59a-cce1055c653e';
   }
 }

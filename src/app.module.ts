@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppLoggerModule } from './common/app-logger/app-logger.module';
 import { AuditableModule } from './common/auditable/auditable.module';
-import { AuditableSubscriber } from './common/auditable/auditable.subscriber';
-import { AUDITABLE_PROVIDER } from './common/auditable/auditable.constants';
 import { AuditableUserService } from './modules/users/auditable-user-service';
+import { VendorModule } from './modules/vendors/vendor.module';
+import { ItemModule } from './modules/items/item.module';
 import { UserModule } from './modules/users/user.module';
 
 @Module({
@@ -25,6 +25,10 @@ import { UserModule } from './modules/users/user.module';
       logging: false,
       subscribers: [],
     }),
+
+    VendorModule,
+
+    ItemModule,
 
     UserModule,
   ],

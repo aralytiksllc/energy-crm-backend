@@ -1,0 +1,1 @@
+export const AUDITABLE_PROVIDER = Symbol('AUDITABLE_PROVIDER');

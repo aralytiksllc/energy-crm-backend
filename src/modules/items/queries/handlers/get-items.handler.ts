@@ -8,9 +8,9 @@ import { GetItemsQuery } from '../impl/get-items.query';
 export class GetItemsHandler implements IQueryHandler<GetItemsQuery> {
   constructor(
     @InjectRepository(Item) protected readonly repository: Repository<Item>,
-  ) {}
+  ) { }
 
   async execute(query: GetItemsQuery): Promise<Item[]> {
-    return await this.repository.find(query);
+    return await this.repository.find(query.toFindOptions());
   }
 }

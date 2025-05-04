@@ -8,9 +8,9 @@ import { GetVendorsQuery } from '../impl/get-vendors.query';
 export class GetVendorsHandler implements IQueryHandler<GetVendorsQuery> {
   constructor(
     @InjectRepository(Vendor) protected readonly repository: Repository<Vendor>,
-  ) {}
+  ) { }
 
   async execute(query: GetVendorsQuery): Promise<Vendor[]> {
-    return await this.repository.find(query);
+    return await this.repository.find(query.toFindOptions());
   }
 }

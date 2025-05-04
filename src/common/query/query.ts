@@ -1,18 +1,14 @@
-import {
-  FindOptionsOrder,
-  FindOptionsWhere,
-  FindManyOptions
-} from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, FindManyOptions } from 'typeorm';
 import { QueryParams } from './query-params';
 import { QueryOperators } from './query-operators';
 import { QueryFilter, QueryOrder } from './query.interfaces';
 import { QueryOperator } from './query.enums';
 
 export class Query<T extends object> {
-  private readonly filter: QueryFilter<T>;
-  private readonly orderBy: QueryOrder<T>;
-  private readonly page: number;
-  private readonly limit: number;
+  public readonly filter: QueryFilter<T>;
+  public readonly orderBy: QueryOrder<T>;
+  public readonly page: number;
+  public readonly limit: number;
 
   constructor(params: QueryParams<T>) {
     this.filter = params.filter ?? {};
@@ -33,6 +29,8 @@ export class Query<T extends object> {
   public toWhere(): FindOptionsWhere<T> {
     const where: Partial<Record<keyof T, unknown>> = {};
 
+    console.log('this.filter', this.filter);
+
     for (const [key, value] of Object.entries(this.filter)) {
       if (value === undefined) continue;
 
@@ -42,7 +40,7 @@ export class Query<T extends object> {
 
       where[field] = QueryOperators.resolve<T, typeof field>(
         operator,
-        value as T[typeof field]
+        value as T[typeof field],
       );
     }
 

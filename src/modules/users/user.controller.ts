@@ -6,15 +6,18 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { QueryBus, CommandBus } from '@nestjs/cqrs';
-import { GetUsersQuery } from './queries/impl/get-users.query';
-import { GetUserByIdQuery } from './queries/impl/get-user-by-id.query';
-import { CreateUserCommand } from './commands/impl/create-user.command';
-import { UpdateUserCommand } from './commands/impl/update-user.command';
-import { DeleteUserCommand } from './commands/impl/delete-user.command';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { QueryParams } from '@/common/query/query-params';
+import { PaginationResult } from '@/common/pagination/pagination.interfaces';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { DeleteUserCommand } from './commands/impl/delete-user.command';
+import { CreateUserCommand } from './commands/impl/create-user.command';
+import { UpdateUserCommand } from './commands/impl/update-user.command';
+import { GetUserByIdQuery } from './queries/impl/get-user-by-id.query';
+import { GetUsersQuery } from './queries/impl/get-users.query';
 import { User } from './entities/user.entity';
 
 @Controller('users')
@@ -25,8 +28,10 @@ export class UserController {
   ) {}
 
   @Get()
-  async findAll(): Promise<User[]> {
-    return this.queryBus.execute(new GetUsersQuery());
+  async findAll(
+    @Query() queryParams: QueryParams<User>,
+  ): Promise<PaginationResult<User>> {
+    return this.queryBus.execute(new GetUsersQuery(queryParams));
   }
 
   @Get(':id')

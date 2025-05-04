@@ -6,15 +6,18 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { QueryBus, CommandBus } from '@nestjs/cqrs';
-import { GetVendorsQuery } from './queries/impl/get-vendors.query';
-import { GetVendorByIdQuery } from './queries/impl/get-vendor-by-id.query';
-import { CreateVendorCommand } from './commands/impl/create-vendor.command';
-import { UpdateVendorCommand } from './commands/impl/update-vendor.command';
-import { DeleteVendorCommand } from './commands/impl/delete-vendor.command';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { PaginationResult } from '@/common/pagination/pagination.interfaces';
+import { QueryParams } from '@/common/query/query-params';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
+import { DeleteVendorCommand } from './commands/impl/delete-vendor.command';
+import { CreateVendorCommand } from './commands/impl/create-vendor.command';
+import { UpdateVendorCommand } from './commands/impl/update-vendor.command';
+import { GetVendorByIdQuery } from './queries/impl/get-vendor-by-id.query';
+import { GetVendorsQuery } from './queries/impl/get-vendors.query';
 import { Vendor } from './entities/vendor.entity';
 
 @Controller('vendors')
@@ -25,8 +28,10 @@ export class VendorController {
   ) {}
 
   @Get()
-  async findAll(): Promise<Vendor[]> {
-    return this.queryBus.execute(new GetVendorsQuery());
+  async findAll(
+    @Query() queryParams: QueryParams<Vendor>,
+  ): Promise<PaginationResult<Vendor>> {
+    return this.queryBus.execute(new GetVendorsQuery(queryParams));
   }
 
   @Get(':id')

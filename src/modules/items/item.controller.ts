@@ -6,15 +6,18 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { QueryBus, CommandBus } from '@nestjs/cqrs';
-import { GetItemsQuery } from './queries/impl/get-items.query';
-import { GetItemByIdQuery } from './queries/impl/get-item-by-id.query';
-import { CreateItemCommand } from './commands/impl/create-item.command';
-import { UpdateItemCommand } from './commands/impl/update-item.command';
-import { DeleteItemCommand } from './commands/impl/delete-item.command';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { PaginationResult } from '@/common/pagination/pagination.interfaces';
+import { QueryParams } from '@/common/query/query-params';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
+import { DeleteItemCommand } from './commands/impl/delete-item.command';
+import { CreateItemCommand } from './commands/impl/create-item.command';
+import { UpdateItemCommand } from './commands/impl/update-item.command';
+import { GetItemByIdQuery } from './queries/impl/get-item-by-id.query';
+import { GetItemsQuery } from './queries/impl/get-items.query';
 import { Item } from './entities/item.entity';
 
 @Controller('items')
@@ -25,8 +28,10 @@ export class ItemController {
   ) {}
 
   @Get()
-  async findAll(): Promise<Item[]> {
-    return this.queryBus.execute(new GetItemsQuery());
+  async findAll(
+    @Query() queryParams: QueryParams<Item>,
+  ): Promise<PaginationResult<Item>> {
+    return this.queryBus.execute(new GetItemsQuery(queryParams));
   }
 
   @Get(':id')

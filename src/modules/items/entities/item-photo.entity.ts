@@ -20,7 +20,7 @@ export class ItemPhoto extends Auditable {
   @Column({ type: 'int', default: 0 })
   order: number;
 
-  @ManyToOne(() => Item, (item) => item.photos, { orphanedRowAction: 'delete'})
+  @ManyToOne(() => Item, (item) => item.photos, { orphanedRowAction: 'delete' })
   item: Item;
 
   @ManyToOne(() => User, { lazy: true, nullable: true })

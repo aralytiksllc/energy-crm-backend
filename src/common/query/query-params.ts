@@ -1,8 +1,6 @@
 import { IsOptional, IsObject, IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
-import { FindManyOptions } from 'typeorm';
 import { QueryFilter, QueryOrder } from './query.interfaces';
-import { Query } from './query';
 
 export class QueryParams<T extends object> {
   @IsOptional()
@@ -22,8 +20,4 @@ export class QueryParams<T extends object> {
   @Type(() => Number)
   @IsNumber()
   limit?: number;
-
-  toFindOptions(): FindManyOptions<T> {
-    return new Query<T>(this).toFindOptions();
-  }
 }

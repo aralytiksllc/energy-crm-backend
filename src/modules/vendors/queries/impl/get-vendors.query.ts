@@ -1,4 +1,4 @@
-import { QueryParams } from "@/common/query/query-params"
-import { Vendor } from "../../entities/vendor.entity"
+import { Query } from '@/common/query/query';
+import { Vendor } from '../../entities/vendor.entity';
 
-export class GetVendorsQuery extends QueryParams<Vendor> { }
+export class GetVendorsQuery extends Query<Vendor> {}

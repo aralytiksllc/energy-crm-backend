@@ -5,4 +5,6 @@ type QueryField<T> = Extract<keyof T, string>;
 type FilterKey<T> = QueryField<T> | `${QueryField<T>}:${QueryOperator}`;
 
 export type QueryFilter<T> = Partial<Record<FilterKey<T>, T[keyof T]>>;
-export type QueryOrder<T> = Partial<Record<QueryField<T>, FindOptionsOrderValue>>;
+export type QueryOrder<T> = Partial<
+  Record<QueryField<T>, FindOptionsOrderValue>
+>;

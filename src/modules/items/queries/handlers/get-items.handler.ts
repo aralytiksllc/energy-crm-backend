@@ -1,7 +1,7 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Pagination, PaginationResult } from '@/common/pagination';
+import { Paging } from '@/common/paging';
 import { Item } from '../../entities/item.entity';
 import { GetItemsQuery } from '../impl/get-items.query';
 
@@ -9,15 +9,13 @@ import { GetItemsQuery } from '../impl/get-items.query';
 export class GetItemsHandler implements IQueryHandler<GetItemsQuery> {
   constructor(
     @InjectRepository(Item) protected readonly repository: Repository<Item>,
-  ) {}
+  ) { }
 
-  async execute(query: GetItemsQuery): Promise<PaginationResult<Item>> {
-    const pagination = new Pagination(query);
-
+  async execute(query: GetItemsQuery): Promise<Paging<Item>> {
     const findOptions = query.toFindOptions();
 
     const [items, total] = await this.repository.findAndCount(findOptions);
 
-    return pagination.getResult(items, total);
+    return new Paging(items, total);
   }
 }

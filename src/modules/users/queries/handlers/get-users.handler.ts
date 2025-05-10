@@ -12,13 +12,11 @@ export class GetUsersHandler implements IQueryHandler<GetUsersQuery> {
   ) {}
 
   async execute(query: GetUsersQuery): Promise<PaginationResult<User>> {
-    const pagination = new Pagination({ page: query.page, limit: query.limit });
+    const pagination = new Pagination(query);
 
-    console.log('__________________________________', query.toFindOptions());
+    const findOptions = query.toFindOptions();
 
-    const [items, total] = await this.repository.findAndCount(
-      query.toFindOptions(),
-    );
+    const [items, total] = await this.repository.findAndCount(findOptions);
 
     return pagination.getResult(items, total);
   }

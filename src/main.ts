@@ -10,10 +10,11 @@ async function bootstrap() {
     logger: WinstonModule.createLogger(appLoggerConfig),
   });
 
+  app.enableCors({ origin: true });
+
   const expressApp = app.getHttpAdapter().getInstance();
   expressApp.set('query parser', (str: string) => qs.parse(str));
 
-  // Interceptors
   const interceptor = app.get(AppLoggerInterceptor);
   app.useGlobalInterceptors(interceptor);
 

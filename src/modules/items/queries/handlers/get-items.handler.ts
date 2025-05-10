@@ -12,11 +12,11 @@ export class GetItemsHandler implements IQueryHandler<GetItemsQuery> {
   ) {}
 
   async execute(query: GetItemsQuery): Promise<PaginationResult<Item>> {
-    const pagination = new Pagination({ page: query.page, limit: query.limit });
+    const pagination = new Pagination(query);
 
-    const [items, total] = await this.repository.findAndCount(
-      query.toFindOptions(),
-    );
+    const findOptions = query.toFindOptions();
+
+    const [items, total] = await this.repository.findAndCount(findOptions);
 
     return pagination.getResult(items, total);
   }

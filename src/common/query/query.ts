@@ -1,53 +1,60 @@
-import { FindOptionsOrder, FindOptionsWhere, FindManyOptions } from 'typeorm';
+import { FindOptionsWhere, FindOptionsOrder, FindManyOptions } from 'typeorm';
 import { QueryParams } from './query-params';
 import { QueryOperators } from './query-operators';
-import { QueryFilter, QueryOrder } from './query.interfaces';
-import { QueryOperator } from './query.enums';
+import { QueryFilter, QuerySort } from './query.interfaces';
 
 export class Query<T extends object> {
-  public readonly filter: QueryFilter<T>;
-  public readonly orderBy: QueryOrder<T>;
-  public readonly page: number;
-  public readonly limit: number;
+  public readonly filters: QueryFilter<T>[];
+  public readonly sorters: QuerySort<T>[];
+  public readonly current: number;
+  public readonly pageSize: number;
 
   constructor(params: QueryParams<T>) {
-    this.filter = params.filter ?? {};
-    this.orderBy = params.orderBy ?? {};
-    this.page = params.page ?? 1;
-    this.limit = params.limit ?? 20;
+    this.filters = params.filters ?? [];
+    this.sorters = params.sorters ?? [];
+    this.current = params.current ?? 1;
+    this.pageSize = params.pageSize ?? 20;
   }
 
   public toFindOptions(): FindManyOptions<T> {
     return {
-      where: this.toWhere(),
-      order: this.toOrder(),
-      take: this.limit,
-      skip: (this.page - 1) * this.limit,
+      where: this.getWhereOptions(),
+      order: this.getOrderOptions(),
+      take: this.getTake(),
+      skip: this.getSkip(),
     };
   }
 
-  public toWhere(): FindOptionsWhere<T> {
+  private getSkip(): number {
+    return (this.current - 1) * this.pageSize;
+  }
+
+  private getTake(): number {
+    return this.pageSize;
+  }
+
+  private getWhereOptions(): FindOptionsWhere<T> {
     const where: Partial<Record<keyof T, unknown>> = {};
 
-    console.log('this.filter', this.filter);
-
-    for (const [key, value] of Object.entries(this.filter)) {
-      if (value === undefined) continue;
-
-      const [rawField, rawOperator] = key.split(':');
-      const field = rawField as keyof T;
-      const operator = (rawOperator || QueryOperator.EQ) as QueryOperator;
-
+    for (const filter of this.filters) {
+      const field = filter.field as keyof T;
       where[field] = QueryOperators.resolve<T, typeof field>(
-        operator,
-        value as T[typeof field],
+        filter.operator,
+        filter.value as T[typeof field],
       );
     }
 
     return where as FindOptionsWhere<T>;
   }
 
-  public toOrder(): FindOptionsOrder<T> {
-    return this.orderBy as FindOptionsOrder<T>;
+  private getOrderOptions(): FindOptionsOrder<T> {
+    const order: Partial<Record<keyof T, 'ASC' | 'DESC'>> = {};
+
+    for (const sorter of this.sorters) {
+      const field = sorter.field as keyof T;
+      order[field] = sorter.order;
+    }
+
+    return order as FindOptionsOrder<T>;
   }
 }

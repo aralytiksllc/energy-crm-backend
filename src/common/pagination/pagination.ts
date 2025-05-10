@@ -5,28 +5,42 @@ import {
 } from './pagination.interfaces';
 
 export class Pagination {
-  public readonly page: number;
+  private static readonly DEFAULT_PAGE = 1;
+  private static readonly DEFAULT_PAGE_SIZE = 20;
+  private static readonly MIN_PAGE_SIZE = 1;
+  private static readonly MAX_PAGE_SIZE = 100;
 
-  public readonly limit: number;
-
-  public readonly offset: number;
+  public readonly current: number;
+  public readonly pageSize: number;
 
   constructor(queryParams: PaginationParams) {
-    this.page = Math.max(1, Number(queryParams.page) || 1);
+    this.current = this.normalizeCurrent(queryParams.current);
+    this.pageSize = this.normalizePageSize(queryParams.pageSize);
+  }
 
-    this.limit = Math.max(1, Number(queryParams.limit) || 20);
+  private normalizeCurrent(input?: unknown): number {
+    const page = Number(input) || Pagination.DEFAULT_PAGE;
+    return Math.max(Pagination.DEFAULT_PAGE, page);
+  }
 
-    this.offset = (this.page - 1) * this.limit;
+  private normalizePageSize(input?: unknown): number {
+    const size = Number(input) || Pagination.DEFAULT_PAGE_SIZE;
+    return Math.max(
+      Pagination.MIN_PAGE_SIZE,
+      Math.min(size, Pagination.MAX_PAGE_SIZE),
+    );
   }
 
   public getResult<T>(items: T[], total: number): PaginationResult<T> {
-    const totalPages = Math.ceil(total / this.limit);
+    const totalPages = Math.ceil(total / this.pageSize);
 
     const meta: PaginationMeta = {
-      currentPage: this.page,
-      itemsPerPage: this.limit,
+      current: this.current,
+      pageSize: this.pageSize,
       totalItems: total,
       totalPages,
+      hasNextPage: this.current < totalPages,
+      hasPrevPage: this.current > 1,
     };
 
     return {

@@ -1,10 +1,14 @@
-import { FindOptionsOrderValue } from 'typeorm';
 import { QueryOperator } from './query.enums';
 
-type QueryField<T> = Extract<keyof T, string>;
-type FilterKey<T> = QueryField<T> | `${QueryField<T>}:${QueryOperator}`;
+type StringKeyOf<T> = Extract<keyof T, string>;
 
-export type QueryFilter<T> = Partial<Record<FilterKey<T>, T[keyof T]>>;
-export type QueryOrder<T> = Partial<
-  Record<QueryField<T>, FindOptionsOrderValue>
->;
+export type QueryFilter<T, K extends StringKeyOf<T> = StringKeyOf<T>> = {
+  field: K;
+  operator: QueryOperator;
+  value: T[K];
+};
+
+export type QuerySort<T, K extends StringKeyOf<T> = StringKeyOf<T>> = {
+  field: K;
+  order: 'ASC' | 'DESC';
+};

@@ -1,23 +1,23 @@
 import { IsOptional, IsObject, IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
-import { QueryFilter, QueryOrder } from './query.interfaces';
+import { QueryFilter, QuerySort } from './query.interfaces';
 
-export class QueryParams<T extends object> {
+export class QueryParams<T> {
   @IsOptional()
   @IsObject()
-  filter?: QueryFilter<T>;
+  filters?: QueryFilter<T>[];
 
   @IsOptional()
   @IsObject()
-  orderBy?: QueryOrder<T>;
+  sorters?: QuerySort<T>[];
 
   @IsOptional()
   @Type(() => Number)
   @IsNumber()
-  page?: number;
+  current?: number;
 
   @IsOptional()
   @Type(() => Number)
   @IsNumber()
-  limit?: number;
+  pageSize?: number;
 }

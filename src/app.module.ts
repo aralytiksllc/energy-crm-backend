@@ -40,4 +40,4 @@ import { SalesModule } from './modules/sales/sales.module';
   ],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

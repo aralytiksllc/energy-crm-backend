@@ -24,4 +24,4 @@ import { SaleItem } from './entities/sale-item.entity';
     GetSaleByIdHandler,
   ],
 })
-export class SalesModule { }
+export class SalesModule {}

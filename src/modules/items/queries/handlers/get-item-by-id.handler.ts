@@ -8,10 +8,10 @@ import { GetItemByIdQuery } from '../impl/get-item-by-id.query';
 export class GetItemByIdHandler implements IQueryHandler<GetItemByIdQuery> {
   constructor(
     @InjectRepository(Item) protected readonly repository: Repository<Item>,
-  ) {}
+  ) { }
 
   async execute(query: GetItemByIdQuery): Promise<Item> {
     const where = { id: query.id } as FindOptionsWhere<Item>;
-    return await this.repository.findOneByOrFail(where);
+    return await this.repository.findOneOrFail({ where});
   }
 }

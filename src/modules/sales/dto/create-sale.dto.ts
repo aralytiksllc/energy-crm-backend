@@ -1,10 +1,10 @@
-import { 
-  IsUUID, 
-  IsDateString, 
-  IsOptional, 
-  IsString, 
-  ValidateNested, 
-  ArrayMinSize 
+import {
+  IsUUID,
+  IsDateString,
+  IsOptional,
+  IsString,
+  ValidateNested,
+  ArrayMinSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateSaleItemDto } from './create-sale-item.dto';

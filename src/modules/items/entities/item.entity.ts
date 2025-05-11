@@ -69,7 +69,11 @@ export class Item extends Auditable {
   photos: ItemPhoto[];
 
   @ManyToOne(() => Vendor, (vendor) => vendor.items, { nullable: false })
+  @JoinColumn({ name: 'vendorId' })
   vendor: Vendor;
+
+  @Column({ type: 'uuid' })
+  vendorId: string;
 
   @ManyToOne(() => User, { lazy: true, nullable: true })
   @JoinColumn({ name: 'createdById' })

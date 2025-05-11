@@ -1,4 +1,4 @@
-import { UpdateSaleDto } from '../../dto/create-sale.dto';
+import { UpdateSaleDto } from '../../dto/update-sale.dto';
 
 export class UpdateSaleCommand {
   constructor(

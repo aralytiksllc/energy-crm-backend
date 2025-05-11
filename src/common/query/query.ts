@@ -8,12 +8,14 @@ export class Query<T extends object> {
   public readonly sorters: QuerySort<T>[];
   public readonly current: number;
   public readonly pageSize: number;
+  public readonly relations: string[];
 
   constructor(params: QueryParams<T>) {
     this.filters = params.filters ?? [];
     this.sorters = params.sorters ?? [];
     this.current = params.current ?? 1;
     this.pageSize = params.pageSize ?? 20;
+    this.relations = params.relations ?? [];
   }
 
   public toFindOptions(): FindManyOptions<T> {
@@ -22,6 +24,7 @@ export class Query<T extends object> {
       order: this.getOrderOptions(),
       take: this.getTake(),
       skip: this.getSkip(),
+      relations: this.getRelations(),
     };
   }
 
@@ -31,6 +34,10 @@ export class Query<T extends object> {
 
   private getTake(): number {
     return this.pageSize;
+  }
+
+  private getRelations(): string[] {
+    return this.relations;
   }
 
   private getWhereOptions(): FindOptionsWhere<T> {

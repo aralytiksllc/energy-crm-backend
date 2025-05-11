@@ -9,7 +9,7 @@ import { GetItemsQuery } from '../impl/get-items.query';
 export class GetItemsHandler implements IQueryHandler<GetItemsQuery> {
   constructor(
     @InjectRepository(Item) protected readonly repository: Repository<Item>,
-  ) { }
+  ) {}
 
   async execute(query: GetItemsQuery): Promise<Paging<Item>> {
     const findOptions = query.toFindOptions();

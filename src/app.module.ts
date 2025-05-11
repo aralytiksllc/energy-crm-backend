@@ -3,9 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppLoggerModule } from './common/app-logger/app-logger.module';
 import { AuditableModule } from './common/auditable/auditable.module';
 import { AuditableUserService } from './modules/users/auditable-user-service';
+import { CustomerModule } from './modules/customers/customer.module';
 import { VendorModule } from './modules/vendors/vendor.module';
 import { ItemModule } from './modules/items/item.module';
 import { UserModule } from './modules/users/user.module';
+
+
 
 @Module({
   imports: [
@@ -26,6 +29,8 @@ import { UserModule } from './modules/users/user.module';
       subscribers: [],
     }),
 
+    CustomerModule,
+
     VendorModule,
 
     ItemModule,
@@ -34,4 +39,4 @@ import { UserModule } from './modules/users/user.module';
   ],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

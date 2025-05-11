@@ -1,0 +1,23 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { CqrsModule } from '@nestjs/cqrs';
+import { GetCustomersHandler } from './queries/handlers/get-customers.handler';
+import { GetCustomerByIdHandler } from './queries/handlers/get-customer-by-id.handler';
+import { CreateCustomerHandler } from './commands/handlers/create-customer.handler';
+import { UpdateCustomerHandler } from './commands/handlers/update-customer.handler';
+import { DeleteCustomerHandler } from './commands/handlers/delete-customer.handler';
+import { CustomerController } from './customer.controller';
+import { Customer } from './entities/customer.entity';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Customer]), CqrsModule],
+  controllers: [CustomerController],
+  providers: [
+    GetCustomersHandler,
+    GetCustomerByIdHandler,
+    CreateCustomerHandler,
+    UpdateCustomerHandler,
+    DeleteCustomerHandler,
+  ],
+})
+export class CustomerModule {}

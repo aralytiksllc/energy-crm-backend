@@ -9,7 +9,7 @@ import { GetUsersQuery } from '../impl/get-users.query';
 export class GetUsersHandler implements IQueryHandler<GetUsersQuery> {
   constructor(
     @InjectRepository(User) protected readonly repository: Repository<User>,
-  ) { }
+  ) {}
 
   async execute(query: GetUsersQuery): Promise<Paging<User>> {
     const findOptions = query.toFindOptions();

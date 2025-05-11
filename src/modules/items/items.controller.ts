@@ -21,7 +21,7 @@ import { GetItemsQuery } from './queries/impl/get-items.query';
 import { Item } from './entities/item.entity';
 
 @Controller('items')
-export class ItemController {
+export class ItemsController {
   constructor(
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,

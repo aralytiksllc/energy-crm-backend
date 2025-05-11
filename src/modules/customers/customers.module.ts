@@ -6,12 +6,12 @@ import { GetCustomerByIdHandler } from './queries/handlers/get-customer-by-id.ha
 import { CreateCustomerHandler } from './commands/handlers/create-customer.handler';
 import { UpdateCustomerHandler } from './commands/handlers/update-customer.handler';
 import { DeleteCustomerHandler } from './commands/handlers/delete-customer.handler';
-import { CustomerController } from './customer.controller';
+import { CustomersController } from './customers.controller';
 import { Customer } from './entities/customer.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Customer]), CqrsModule],
-  controllers: [CustomerController],
+  controllers: [CustomersController],
   providers: [
     GetCustomersHandler,
     GetCustomerByIdHandler,
@@ -20,4 +20,4 @@ import { Customer } from './entities/customer.entity';
     DeleteCustomerHandler,
   ],
 })
-export class CustomerModule {}
+export class CustomersModule {}

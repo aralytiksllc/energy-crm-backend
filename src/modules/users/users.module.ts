@@ -6,12 +6,12 @@ import { GetUserByIdHandler } from './queries/handlers/get-user-by-id.handler';
 import { CreateUserHandler } from './commands/handlers/create-user.handler';
 import { UpdateUserHandler } from './commands/handlers/update-user.handler';
 import { DeleteUserHandler } from './commands/handlers/delete-user.handler';
-import { UserController } from './user.controller';
+import { UsersController } from './users.controller';
 import { User } from './entities/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), CqrsModule],
-  controllers: [UserController],
+  controllers: [UsersController],
   providers: [
     GetUsersHandler,
     GetUserByIdHandler,
@@ -20,4 +20,4 @@ import { User } from './entities/user.entity';
     DeleteUserHandler,
   ],
 })
-export class UserModule {}
+export class UsersModule {}

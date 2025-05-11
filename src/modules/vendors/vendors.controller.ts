@@ -21,7 +21,7 @@ import { GetVendorsQuery } from './queries/impl/get-vendors.query';
 import { Vendor } from './entities/vendor.entity';
 
 @Controller('vendors')
-export class VendorController {
+export class VendorsController {
   constructor(
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,

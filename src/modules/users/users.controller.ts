@@ -21,7 +21,7 @@ import { GetUsersQuery } from './queries/impl/get-users.query';
 import { User } from './entities/user.entity';
 
 @Controller('users')
-export class UserController {
+export class UsersController {
   constructor(
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,

@@ -21,7 +21,7 @@ import { GetCustomersQuery } from './queries/impl/get-customers.query';
 import { Customer } from './entities/customer.entity';
 
 @Controller('customers')
-export class CustomerController {
+export class CustomersController {
   constructor(
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,

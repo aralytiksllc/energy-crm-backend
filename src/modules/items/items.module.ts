@@ -6,13 +6,13 @@ import { GetItemByIdHandler } from './queries/handlers/get-item-by-id.handler';
 import { CreateItemHandler } from './commands/handlers/create-item.handler';
 import { UpdateItemHandler } from './commands/handlers/update-item.handler';
 import { DeleteItemHandler } from './commands/handlers/delete-item.handler';
-import { ItemController } from './item.controller';
+import { ItemsController } from './items.controller';
 import { Item } from './entities/item.entity';
 import { ItemPhoto } from './entities/item-photo.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Item, ItemPhoto]), CqrsModule],
-  controllers: [ItemController],
+  controllers: [ItemsController],
   providers: [
     GetItemsHandler,
     GetItemByIdHandler,
@@ -21,4 +21,4 @@ import { ItemPhoto } from './entities/item-photo.entity';
     DeleteItemHandler,
   ],
 })
-export class ItemModule {}
+export class ItemsModule {}

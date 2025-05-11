@@ -6,12 +6,12 @@ import { GetVendorByIdHandler } from './queries/handlers/get-vendor-by-id.handle
 import { CreateVendorHandler } from './commands/handlers/create-vendor.handler';
 import { UpdateVendorHandler } from './commands/handlers/update-vendor.handler';
 import { DeleteVendorHandler } from './commands/handlers/delete-vendor.handler';
-import { VendorController } from './vendor.controller';
+import { VendorsController } from './vendors.controller';
 import { Vendor } from './entities/vendor.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Vendor]), CqrsModule],
-  controllers: [VendorController],
+  controllers: [VendorsController],
   providers: [
     GetVendorsHandler,
     GetVendorByIdHandler,
@@ -20,4 +20,4 @@ import { Vendor } from './entities/vendor.entity';
     DeleteVendorHandler,
   ],
 })
-export class VendorModule {}
+export class VendorsModule {}

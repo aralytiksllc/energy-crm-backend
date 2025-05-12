@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsNumber, IsNotEmpty } from 'class-validator';
 
-export class CreateItemPhotoDto {
+export class CreateProductPhotoDto {
   @IsString()
   @IsNotEmpty()
   url: string;

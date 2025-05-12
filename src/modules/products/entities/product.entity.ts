@@ -9,28 +9,25 @@ import {
 import { Auditable } from '@/common/auditable/auditable.entity';
 import { Vendor } from '@/modules/vendors/entities/vendor.entity';
 import { User } from '@/modules/users/entities/user.entity';
-import { ItemType } from '../enums/item-type.enum';
-import { ItemPhoto } from './item-photo.entity';
+import { ProductUnit } from '../enums/product-unit.enum';
+import { ProductPhoto } from './product-photo.entity';
 
-@Entity('items')
-export class Item extends Auditable {
+@Entity('products')
+export class Product extends Auditable {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar' })
   name: string;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+  @Column({ type: 'text' })
+  description: string;
 
-  @Column({ type: 'enum', enum: ItemType })
-  type: ItemType;
+  @Column({ type: 'enum', enum: ProductUnit })
+  unit: ProductUnit;
 
   @Column({ type: 'varchar', unique: true })
   sku: string;
-
-  @Column({ type: 'varchar', nullable: true })
-  unit: string;
 
   @Column({ type: 'float', nullable: true })
   length?: number;
@@ -65,10 +62,10 @@ export class Item extends Auditable {
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
-  @OneToMany(() => ItemPhoto, (photo) => photo.item, { cascade: true })
-  photos: ItemPhoto[];
+  @OneToMany(() => ProductPhoto, (photo) => photo.product, { cascade: true })
+  photos: ProductPhoto[];
 
-  @ManyToOne(() => Vendor, (vendor) => vendor.items, { nullable: false })
+  @ManyToOne(() => Vendor, (vendor) => vendor.products, { nullable: false })
   @JoinColumn({ name: 'vendorId' })
   vendor: Vendor;
 

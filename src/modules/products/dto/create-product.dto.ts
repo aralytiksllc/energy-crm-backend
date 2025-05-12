@@ -10,28 +10,24 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ItemType } from '../enums/item-type.enum';
-import { CreateItemPhotoDto } from './create-item-photo.dto';
+import { ProductUnit } from '../enums/product-unit.enum';
+import { CreateProductPhotoDto } from './create-product-photo.dto';
 
-export class CreateItemDto {
+export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   name: string;
 
   @IsString()
-  @IsOptional()
-  description?: string;
+  @IsNotEmpty()
+  description: string;
 
-  @IsEnum(ItemType)
-  type: ItemType;
+  @IsEnum(ProductUnit)
+  unit: ProductUnit;
 
   @IsString()
   @IsNotEmpty()
   sku: string;
-
-  @IsString()
-  @IsOptional()
-  unit?: string;
 
   @IsNumber()
   @IsOptional()
@@ -82,6 +78,6 @@ export class CreateItemDto {
   @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => CreateItemPhotoDto)
-  photos?: CreateItemPhotoDto[];
+  @Type(() => CreateProductPhotoDto)
+  photos?: CreateProductPhotoDto[];
 }

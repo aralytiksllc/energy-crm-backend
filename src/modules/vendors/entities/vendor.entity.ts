@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Auditable } from '@/common/auditable/auditable.entity';
-import { Item } from '@/modules/items/entities/item.entity';
+import { Product } from '@/modules/products/entities/product.entity';
 import { User } from '@/modules/users/entities/user.entity';
 
 @Entity('vendors')
@@ -36,8 +36,8 @@ export class Vendor extends Auditable {
   @Column({ type: 'simple-json', nullable: true })
   settings?: Record<string, any>;
 
-  @OneToMany(() => Item, (item) => item.vendor)
-  items: Item[];
+  @OneToMany(() => Product, (item) => item.vendor)
+  products: Product[];
 
   @ManyToOne(() => User, { lazy: true, nullable: true })
   @JoinColumn({ name: 'createdById' })

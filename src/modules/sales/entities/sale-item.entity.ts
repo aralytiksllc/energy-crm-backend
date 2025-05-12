@@ -8,11 +8,11 @@ import {
   BeforeUpdate,
 } from 'typeorm';
 import { Auditable } from '@/common/auditable/auditable.entity';
-import { Item } from '@/modules/items/entities/item.entity';
+import { Product } from '@/modules/products/entities/product.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { Sale } from './sale.entity';
 
-@Entity('sale_items')
+@Entity('sales_items')
 export class SaleItem extends Auditable {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -32,8 +32,8 @@ export class SaleItem extends Auditable {
   @ManyToOne(() => Sale, (sale) => sale.items, { onDelete: 'CASCADE' })
   sale: Sale;
 
-  @ManyToOne(() => Item, { nullable: false })
-  item: Item;
+  @ManyToOne(() => Product, { nullable: false })
+  product: Product;
 
   @ManyToOne(() => User, { lazy: true, nullable: true })
   @JoinColumn({ name: 'createdById' })

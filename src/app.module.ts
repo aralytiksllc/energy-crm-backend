@@ -5,7 +5,7 @@ import { AuditableModule } from './common/auditable/auditable.module';
 import { AuditableUserService } from './modules/users/auditable-user-service';
 import { CustomersModule } from './modules/customers/customers.module';
 import { VendorsModule } from './modules/vendors/vendors.module';
-import { ItemsModule } from './modules/items/items.module';
+import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
 import { SalesModule } from './modules/sales/sales.module';
 
@@ -32,7 +32,7 @@ import { SalesModule } from './modules/sales/sales.module';
 
     VendorsModule,
 
-    ItemsModule,
+    ProductsModule,
 
     UsersModule,
 

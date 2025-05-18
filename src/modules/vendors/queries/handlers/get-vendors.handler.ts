@@ -1,21 +1,22 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/sequelize';
 import { Paging } from '@/common/paging';
-import { Vendor } from '../../entities/vendor.entity';
+import { Vendor } from '../../models/vendor.model';
 import { GetVendorsQuery } from '../impl/get-vendors.query';
 
 @QueryHandler(GetVendorsQuery)
 export class GetVendorsHandler implements IQueryHandler<GetVendorsQuery> {
   constructor(
-    @InjectRepository(Vendor) protected readonly repository: Repository<Vendor>,
+    @InjectModel(Vendor)
+    protected readonly vendorModel: typeof Vendor,
   ) {}
 
   async execute(query: GetVendorsQuery): Promise<Paging<Vendor>> {
-    const findOptions = query.toFindOptions();
+    const sequelizeOptions = query.toSequelizeOptions();
 
-    const [items, total] = await this.repository.findAndCount(findOptions);
+    const { rows, count } =
+      await this.vendorModel.findAndCountAll(sequelizeOptions);
 
-    return new Paging(items, total);
+    return new Paging(rows, count);
   }
 }

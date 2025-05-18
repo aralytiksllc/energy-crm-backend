@@ -1,7 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Product } from '../../entities/product.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { Product } from '../../models/product.model';
 import { DeleteProductCommand } from '../impl/delete-product.command';
 
 @CommandHandler(DeleteProductCommand)
@@ -9,11 +8,13 @@ export class DeleteProductHandler
   implements ICommandHandler<DeleteProductCommand>
 {
   constructor(
-    @InjectRepository(Product)
-    private readonly repository: Repository<Product>,
+    @InjectModel(Product)
+    private readonly productModel: typeof Product,
   ) {}
 
   async execute(command: DeleteProductCommand): Promise<void> {
-    await this.repository.delete(command.id);
+    await this.productModel.destroy({
+      where: { id: command.id },
+    });
   }
 }

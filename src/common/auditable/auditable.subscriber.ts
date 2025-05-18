@@ -4,7 +4,7 @@ import {
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
-import { Auditable } from './auditable.entity';
+import { Auditable } from './auditable.model';
 import { IAuditableProvider } from './auditable.interfaces';
 
 @EventSubscriber()

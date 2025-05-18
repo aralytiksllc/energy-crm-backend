@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { AppLoggerModule } from './common/app-logger/app-logger.module';
-import { AuditableModule } from './common/auditable/auditable.module';
-import { AuditableUserService } from './modules/users/auditable-user-service';
 import { CustomersModule } from './modules/customers/customers.module';
 import { VendorsModule } from './modules/vendors/vendors.module';
 import { ProductsModule } from './modules/products/products.module';
@@ -13,19 +11,16 @@ import { SalesModule } from './modules/sales/sales.module';
   imports: [
     AppLoggerModule,
 
-    AuditableModule.forProvider(AuditableUserService),
-
-    TypeOrmModule.forRoot({
-      type: 'postgres',
+    SequelizeModule.forRoot({
+      dialect: 'postgres',
       host: 'localhost',
       port: 5432,
       username: 'root',
       password: 'root',
       database: 'tt-core-flow',
-      entities: ['dist/**/*.entity.js'],
+      autoLoadModels: true,
       synchronize: true,
       logging: false,
-      subscribers: [],
     }),
 
     CustomersModule,

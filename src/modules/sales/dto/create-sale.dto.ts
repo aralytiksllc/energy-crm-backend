@@ -1,5 +1,6 @@
 import {
   IsUUID,
+  IsNumber,
   IsDateString,
   IsOptional,
   IsString,
@@ -10,18 +11,18 @@ import { Type } from 'class-transformer';
 import { CreateSaleItemDto } from './create-sale-item.dto';
 
 export class CreateSaleDto {
-  @IsDateString()
-  saleDate: string;
-
-  @IsString()
-  @IsOptional()
-  notes?: string;
-
   @IsUUID()
   customerId: string;
 
+  @IsDateString()
+  saleDate: string;
+
+  @IsOptional()
+  @IsString()
+  notes?: string;
+
   @ValidateNested({ each: true })
-  @ArrayMinSize(1)
   @Type(() => CreateSaleItemDto)
+  @ArrayMinSize(1)
   items: CreateSaleItemDto[];
 }

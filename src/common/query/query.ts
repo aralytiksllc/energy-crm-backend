@@ -1,30 +1,27 @@
-import { FindOptionsWhere, FindOptionsOrder, FindManyOptions } from 'typeorm';
+import { FindOptions, Order, WhereOptions } from 'sequelize';
 import { QueryParams } from './query-params';
 import { QueryOperators } from './query-operators';
 import { QueryFilter, QuerySort } from './query.interfaces';
 
 export class Query<T extends object> {
-  public readonly filters: QueryFilter<T>[];
-  public readonly sorters: QuerySort<T>[];
+  public readonly filters: QueryFilter<T>[] = [];
+  public readonly sorters: QuerySort<T>[] = [];
   public readonly current: number;
   public readonly pageSize: number;
-  public readonly relations: string[];
 
   constructor(params: QueryParams<T>) {
     this.filters = params.filters ?? [];
     this.sorters = params.sorters ?? [];
     this.current = params.current ?? 1;
     this.pageSize = params.pageSize ?? 20;
-    this.relations = params.relations ?? [];
   }
 
-  public toFindOptions(): FindManyOptions<T> {
+  public toSequelizeOptions(): FindOptions<T> {
     return {
       where: this.getWhereOptions(),
       order: this.getOrderOptions(),
-      take: this.getTake(),
-      skip: this.getSkip(),
-      relations: this.getRelations(),
+      limit: this.getTake(),
+      offset: this.getSkip(),
     };
   }
 
@@ -36,32 +33,20 @@ export class Query<T extends object> {
     return this.pageSize;
   }
 
-  private getRelations(): string[] {
-    return this.relations;
-  }
-
-  private getWhereOptions(): FindOptionsWhere<T> {
-    const where: Partial<Record<keyof T, unknown>> = {};
+  private getWhereOptions(): WhereOptions<T> {
+    const where: Record<string, any> = {};
 
     for (const filter of this.filters) {
-      const field = filter.field as keyof T;
-      where[field] = QueryOperators.resolve<T, typeof field>(
+      where[filter.field] = QueryOperators.resolve(
         filter.operator,
-        filter.value as T[typeof field],
+        filter.value,
       );
     }
 
-    return where as FindOptionsWhere<T>;
+    return where;
   }
 
-  private getOrderOptions(): FindOptionsOrder<T> {
-    const order: Partial<Record<keyof T, 'ASC' | 'DESC'>> = {};
-
-    for (const sorter of this.sorters) {
-      const field = sorter.field as keyof T;
-      order[field] = sorter.order;
-    }
-
-    return order as FindOptionsOrder<T>;
+  private getOrderOptions(): Order {
+    return this.sorters.map((sort) => [sort.field, sort.order]);
   }
 }

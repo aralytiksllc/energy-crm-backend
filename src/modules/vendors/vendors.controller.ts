@@ -18,7 +18,7 @@ import { CreateVendorCommand } from './commands/impl/create-vendor.command';
 import { UpdateVendorCommand } from './commands/impl/update-vendor.command';
 import { GetVendorByIdQuery } from './queries/impl/get-vendor-by-id.query';
 import { GetVendorsQuery } from './queries/impl/get-vendors.query';
-import { Vendor } from './entities/vendor.entity';
+import { Vendor } from './models/vendor.model';
 
 @Controller('vendors')
 export class VendorsController {

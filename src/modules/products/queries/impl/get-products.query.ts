@@ -1,5 +1,5 @@
 import { Query } from '@/common/query/query';
-import { Product } from '../../entities/product.entity';
+import { Product } from '../../models/product.model';
 
 export class GetProductsQuery extends Query<Product> {
   public readonly relations: string[] = ['vendor'];

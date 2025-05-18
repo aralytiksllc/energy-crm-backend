@@ -18,7 +18,7 @@ import { CreateProductCommand } from './commands/impl/create-product.command';
 import { UpdateProductCommand } from './commands/impl/update-product.command';
 import { GetProductByIdQuery } from './queries/impl/get-product-by-id.query';
 import { GetProductsQuery } from './queries/impl/get-products.query';
-import { Product } from './entities/product.entity';
+import { Product } from './models/product.model';
 
 @Controller('products')
 export class ProductsController {

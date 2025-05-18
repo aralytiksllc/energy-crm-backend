@@ -1,21 +1,22 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/sequelize';
 import { Paging } from '@/common/paging';
-import { Sale } from '../../entities/sale.entity';
+import { Sale } from '../../models/sale.model';
 import { GetSalesQuery } from '../impl/get-sales.query';
 
 @QueryHandler(GetSalesQuery)
 export class GetSalesHandler implements IQueryHandler<GetSalesQuery> {
   constructor(
-    @InjectRepository(Sale) protected readonly repository: Repository<Sale>,
+    @InjectModel(Sale)
+    protected readonly saleModel: typeof Sale,
   ) {}
 
   async execute(query: GetSalesQuery): Promise<Paging<Sale>> {
-    const findOptions = query.toFindOptions();
+    const sequelizeOptions = query.toSequelizeOptions();
 
-    const [sales, total] = await this.repository.findAndCount(findOptions);
+    const { rows, count } =
+      await this.saleModel.findAndCountAll(sequelizeOptions);
 
-    return new Paging(sales, total);
+    return new Paging(rows, count);
   }
 }

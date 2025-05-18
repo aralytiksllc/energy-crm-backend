@@ -1,7 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
-import { Product } from '../../entities/product.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { Product } from '../../models/product.model';
 import { UpdateProductCommand } from '../impl/update-product.command';
 
 @CommandHandler(UpdateProductCommand)
@@ -9,15 +8,19 @@ export class UpdateProductHandler
   implements ICommandHandler<UpdateProductCommand>
 {
   constructor(
-    @InjectRepository(Product)
-    private readonly repository: Repository<Product>,
+    @InjectModel(Product)
+    private readonly productModel: typeof Product,
   ) {}
 
   async execute(command: UpdateProductCommand): Promise<Product> {
-    const where = { id: command.id } as FindOptionsWhere<Product>;
-    const entity = await this.repository.findOneByOrFail(where);
+    const product = await this.productModel.findByPk(command.id);
 
-    Object.assign(entity, command.dto);
-    return this.repository.save(entity);
+    if (!product) throw new Error(`Product with ID ${command.id} not found`);
+
+    product.set(command.dto);
+
+    await product.save();
+
+    return product;
   }
 }

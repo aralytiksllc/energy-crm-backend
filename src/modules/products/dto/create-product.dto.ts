@@ -6,12 +6,8 @@ import {
   IsUUID,
   IsNumber,
   IsBoolean,
-  IsArray,
-  ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ProductUnit } from '../enums/product-unit.enum';
-import { CreateProductPhotoDto } from './create-product-photo.dto';
 
 export class CreateProductDto {
   @IsString()
@@ -74,10 +70,4 @@ export class CreateProductDto {
 
   @IsUUID()
   vendorId: string;
-
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => CreateProductPhotoDto)
-  photos?: CreateProductPhotoDto[];
 }

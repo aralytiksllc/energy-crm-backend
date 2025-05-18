@@ -1,7 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
-import { Product } from '../../entities/product.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { Product } from '../../models/product.model';
 import { GetProductByIdQuery } from '../impl/get-product-by-id.query';
 
 @QueryHandler(GetProductByIdQuery)
@@ -9,12 +8,15 @@ export class GetProductByIdHandler
   implements IQueryHandler<GetProductByIdQuery>
 {
   constructor(
-    @InjectRepository(Product)
-    protected readonly repository: Repository<Product>,
+    @InjectModel(Product)
+    protected readonly productModel: typeof Product,
   ) {}
 
   async execute(query: GetProductByIdQuery): Promise<Product> {
-    const where = { id: query.id } as FindOptionsWhere<Product>;
-    return await this.repository.findOneOrFail({ where });
+    const product = await this.productModel.findByPk(query.id);
+
+    if (!product) throw new Error(`Product with ID ${query.id} not found.`);
+
+    return product;
   }
 }

@@ -10,7 +10,9 @@ async function bootstrap() {
     logger: WinstonModule.createLogger(appLoggerConfig),
   });
 
-  app.enableCors({ origin: true });
+  app.enableCors({
+    origin: 'http://localhost:5173',
+  });
 
   const expressApp = app.getHttpAdapter().getInstance();
   expressApp.set('query parser', (str: string) => qs.parse(str));

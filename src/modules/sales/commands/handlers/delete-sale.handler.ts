@@ -1,17 +1,18 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Sale } from '../../entities/sale.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { Sale } from '../../models/sale.model';
 import { DeleteSaleCommand } from '../impl/delete-sale.command';
 
 @CommandHandler(DeleteSaleCommand)
 export class DeleteSaleHandler implements ICommandHandler<DeleteSaleCommand> {
   constructor(
-    @InjectRepository(Sale)
-    private readonly repository: Repository<Sale>,
+    @InjectModel(Sale)
+    private readonly saleModel: typeof Sale,
   ) {}
 
   async execute(command: DeleteSaleCommand): Promise<void> {
-    await this.repository.delete(command.id);
+    await this.saleModel.destroy({
+      where: { id: command.id },
+    });
   }
 }

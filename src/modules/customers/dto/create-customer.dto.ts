@@ -14,19 +14,19 @@ export class CreateCustomerDto {
 
   @IsString()
   @IsOptional()
-  description?: string;
+  description: string;
 
   @IsEmail()
   @IsOptional()
-  contactEmail?: string;
+  contactEmail: string;
 
   @IsString()
   @IsOptional()
-  contactPhone?: string;
+  contactPhone: string;
 
   @IsUrl()
   @IsOptional()
-  website?: string;
+  website: string;
 
   @IsBoolean()
   @IsOptional()

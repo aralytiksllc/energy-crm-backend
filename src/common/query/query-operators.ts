@@ -1,68 +1,47 @@
-import {
-  Between,
-  Equal,
-  FindOperator,
-  ILike,
-  In,
-  LessThan,
-  LessThanOrEqual,
-  Like,
-  MoreThan,
-  MoreThanOrEqual,
-  Not,
-} from 'typeorm';
+import { Op } from 'sequelize';
 import { QueryOperator } from './query.enums';
 
 export class QueryOperators {
   static resolve<T, K extends keyof T>(
     operator: QueryOperator,
     value: T[K],
-  ): FindOperator<any> {
+  ): Record<string, any> {
     switch (operator) {
-      case QueryOperator.EQ: {
-        return Equal(value);
-      }
+      case QueryOperator.EQ:
+        return { [Op.eq]: value };
 
-      case QueryOperator.NE: {
-        return Not(value);
-      }
+      case QueryOperator.NE:
+        return { [Op.ne]: value };
 
-      case QueryOperator.GT: {
-        return MoreThan(value);
-      }
+      case QueryOperator.GT:
+        return { [Op.gt]: value };
 
-      case QueryOperator.GTE: {
-        return MoreThanOrEqual(value);
-      }
+      case QueryOperator.GTE:
+        return { [Op.gte]: value };
 
-      case QueryOperator.LT: {
-        return LessThan(value);
-      }
+      case QueryOperator.LT:
+        return { [Op.lt]: value };
 
-      case QueryOperator.LTE: {
-        return LessThanOrEqual(value);
-      }
+      case QueryOperator.LTE:
+        return { [Op.lte]: value };
 
-      case QueryOperator.LIKE: {
-        return Like(this.toString(value));
-      }
+      case QueryOperator.LIKE:
+        return { [Op.like]: this.toString(value) };
 
-      case QueryOperator.ILIKE: {
-        return ILike(this.toString(value));
-      }
+      case QueryOperator.ILIKE:
+        return { [Op.iLike]: this.toString(value) };
 
-      case QueryOperator.IN: {
-        return In(this.toArray(value));
-      }
+      case QueryOperator.IN:
+        return { [Op.in]: this.toArray(value) };
 
       case QueryOperator.RANGE: {
-        if (typeof value !== 'string') return Equal(value);
+        if (typeof value !== 'string') return { [Op.eq]: value };
         const [start, end] = value.split(',').map((v) => v.trim());
-        return Between(start, end);
+        return { [Op.between]: [start, end] };
       }
 
       default: {
-        return Equal(value);
+        return { [Op.eq]: value };
       }
     }
   }

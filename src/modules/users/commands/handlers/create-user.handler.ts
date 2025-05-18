@@ -1,18 +1,16 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '../../entities/user.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { User } from '../../models/user.model';
 import { CreateUserCommand } from '../impl/create-user.command';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
-    @InjectRepository(User)
-    private readonly repository: Repository<User>,
+    @InjectModel(User)
+    private readonly userModel: typeof User,
   ) {}
 
   async execute(command: CreateUserCommand): Promise<User> {
-    const entity = this.repository.create(command.dto);
-    return this.repository.save(entity);
+    return await this.userModel.create(command.dto as any);
   }
 }

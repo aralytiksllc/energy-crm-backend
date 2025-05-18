@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { CqrsModule } from '@nestjs/cqrs';
 import { GetCustomersHandler } from './queries/handlers/get-customers.handler';
 import { GetCustomerByIdHandler } from './queries/handlers/get-customer-by-id.handler';
@@ -7,10 +7,10 @@ import { CreateCustomerHandler } from './commands/handlers/create-customer.handl
 import { UpdateCustomerHandler } from './commands/handlers/update-customer.handler';
 import { DeleteCustomerHandler } from './commands/handlers/delete-customer.handler';
 import { CustomersController } from './customers.controller';
-import { Customer } from './entities/customer.entity';
+import { Customer } from './models/customer.model';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Customer]), CqrsModule],
+  imports: [SequelizeModule.forFeature([Customer]), CqrsModule],
   controllers: [CustomersController],
   providers: [
     GetCustomersHandler,

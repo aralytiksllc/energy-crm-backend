@@ -1,17 +1,20 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
-import { User } from '../../entities/user.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { User } from '../../models/user.model';
 import { GetUserByIdQuery } from '../impl/get-user-by-id.query';
 
 @QueryHandler(GetUserByIdQuery)
 export class GetUserByIdHandler implements IQueryHandler<GetUserByIdQuery> {
   constructor(
-    @InjectRepository(User) protected readonly repository: Repository<User>,
+    @InjectModel(User)
+    protected readonly userModel: typeof User,
   ) {}
 
   async execute(query: GetUserByIdQuery): Promise<User> {
-    const where = { id: query.id } as FindOptionsWhere<User>;
-    return await this.repository.findOneByOrFail(where);
+    const user = await this.userModel.findByPk(query.id);
+
+    if (!user) throw new Error(`User with ID ${query.id} not found.`);
+
+    return user;
   }
 }

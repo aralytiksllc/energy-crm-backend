@@ -1,7 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
-import { Customer } from '../../entities/customer.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { Customer } from '../../models/customer.model';
 import { GetCustomerByIdQuery } from '../impl/get-customer-by-id.query';
 
 @QueryHandler(GetCustomerByIdQuery)
@@ -9,12 +8,17 @@ export class GetCustomerByIdHandler
   implements IQueryHandler<GetCustomerByIdQuery>
 {
   constructor(
-    @InjectRepository(Customer)
-    protected readonly repository: Repository<Customer>,
+    @InjectModel(Customer)
+    protected readonly customerModel: typeof Customer,
   ) {}
 
   async execute(query: GetCustomerByIdQuery): Promise<Customer> {
-    const where = { id: query.id } as FindOptionsWhere<Customer>;
-    return await this.repository.findOneByOrFail(where);
+    const customer = await this.customerModel.findByPk(query.id);
+
+    if (customer === null) {
+      throw new Error(`Customer with ID ${query.id} not found.`);
+    }
+
+    return customer;
   }
 }

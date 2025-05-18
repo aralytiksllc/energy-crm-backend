@@ -1,17 +1,20 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
-import { Vendor } from '../../entities/vendor.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { Vendor } from '../../models/vendor.model';
 import { GetVendorByIdQuery } from '../impl/get-vendor-by-id.query';
 
 @QueryHandler(GetVendorByIdQuery)
 export class GetVendorByIdHandler implements IQueryHandler<GetVendorByIdQuery> {
   constructor(
-    @InjectRepository(Vendor) protected readonly repository: Repository<Vendor>,
+    @InjectModel(Vendor)
+    protected readonly vendorModel: typeof Vendor,
   ) {}
 
   async execute(query: GetVendorByIdQuery): Promise<Vendor> {
-    const where = { id: query.id } as FindOptionsWhere<Vendor>;
-    return await this.repository.findOneByOrFail(where);
+    const vendor = await this.vendorModel.findByPk(query.id);
+
+    if (!vendor) throw new Error(`Vendor with ID ${query.id} not found.`);
+
+    return vendor;
   }
 }

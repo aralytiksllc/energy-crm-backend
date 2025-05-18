@@ -1,7 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Product } from '../../entities/product.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { Product } from '../../models/product.model';
 import { CreateProductCommand } from '../impl/create-product.command';
 
 @CommandHandler(CreateProductCommand)
@@ -9,12 +8,11 @@ export class CreateProductHandler
   implements ICommandHandler<CreateProductCommand>
 {
   constructor(
-    @InjectRepository(Product)
-    private readonly repository: Repository<Product>,
+    @InjectModel(Product)
+    private readonly productModel: typeof Product,
   ) {}
 
   async execute(command: CreateProductCommand): Promise<Product> {
-    const entity = this.repository.create(command.dto);
-    return this.repository.save(entity);
+    return await this.productModel.create(command.dto);
   }
 }

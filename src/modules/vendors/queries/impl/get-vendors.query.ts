@@ -1,4 +1,4 @@
 import { Query } from '@/common/query/query';
-import { Vendor } from '../../entities/vendor.entity';
+import { Vendor } from '../../models/vendor.model';
 
 export class GetVendorsQuery extends Query<Vendor> {}

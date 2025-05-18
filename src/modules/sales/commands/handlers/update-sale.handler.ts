@@ -1,21 +1,24 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
-import { Sale } from '../../entities/sale.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { Sale } from '../../models/sale.model';
 import { UpdateSaleCommand } from '../impl/update-sale.command';
 
 @CommandHandler(UpdateSaleCommand)
 export class UpdateSaleHandler implements ICommandHandler<UpdateSaleCommand> {
   constructor(
-    @InjectRepository(Sale)
-    private readonly repository: Repository<Sale>,
+    @InjectModel(Sale)
+    private readonly saleModel: typeof Sale,
   ) {}
 
   async execute(command: UpdateSaleCommand): Promise<Sale> {
-    const where = { id: command.id } as FindOptionsWhere<Sale>;
-    const entity = await this.repository.findOneByOrFail(where);
+    const sale = await this.saleModel.findByPk(command.id);
 
-    Object.assign(entity, command.dto);
-    return this.repository.save(entity);
+    if (!sale) throw new Error(`Sale with ID ${command.id} not found.`);
+
+    sale.set(command.dto);
+
+    await sale.save();
+
+    return sale;
   }
 }

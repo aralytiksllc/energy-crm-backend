@@ -1,7 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
-import { Vendor } from '../../entities/vendor.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { Vendor } from '../../models/vendor.model';
 import { UpdateVendorCommand } from '../impl/update-vendor.command';
 
 @CommandHandler(UpdateVendorCommand)
@@ -9,15 +8,19 @@ export class UpdateVendorHandler
   implements ICommandHandler<UpdateVendorCommand>
 {
   constructor(
-    @InjectRepository(Vendor)
-    private readonly repository: Repository<Vendor>,
+    @InjectModel(Vendor)
+    private readonly vendorModel: typeof Vendor,
   ) {}
 
   async execute(command: UpdateVendorCommand): Promise<Vendor> {
-    const where = { id: command.id } as FindOptionsWhere<Vendor>;
-    const entity = await this.repository.findOneByOrFail(where);
+    const vendor = await this.vendorModel.findByPk(command.id);
 
-    Object.assign(entity, command.dto);
-    return this.repository.save(entity);
+    if (!vendor) throw new Error(`Vendor with ID ${command.id} not found.`);
+
+    vendor.set(command.dto);
+
+    await vendor.save();
+
+    return vendor;
   }
 }

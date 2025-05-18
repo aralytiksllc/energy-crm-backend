@@ -8,29 +8,33 @@ import {
   Unique,
   HasMany,
 } from 'sequelize-typescript';
+import { InferAttributes, InferCreationAttributes } from 'sequelize';
 import { Product } from '@/modules/products/models/product.model';
 
 @Table({ tableName: 'vendors' })
-export class Vendor extends Model {
+export class Vendor extends Model<
+  InferAttributes<Vendor>,
+  InferCreationAttributes<Vendor>
+> {
   @Unique
   @Column(DataType.STRING)
   name: string;
 
   @AllowNull
   @Column(DataType.TEXT)
-  description: string;
+  description?: string;
 
   @AllowNull
   @Column(DataType.STRING)
-  contactEmail: string;
+  contactEmail?: string;
 
   @AllowNull
   @Column(DataType.STRING)
-  contactPhone: string;
+  contactPhone?: string;
 
   @AllowNull
   @Column(DataType.STRING)
-  website: string;
+  website?: string;
 
   @Default(true)
   @Column(DataType.BOOLEAN)

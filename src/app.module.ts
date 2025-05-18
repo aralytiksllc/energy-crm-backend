@@ -12,9 +12,9 @@ import { SalesModule } from './modules/sales/sales.module';
     AppLoggerModule,
 
     SequelizeModule.forRoot({
-      dialect: 'postgres',
-      host: 'localhost',
-      port: 5432,
+  dialect: 'postgres',
+  host: '127.0.0.1', // Provoni këtë në vend të 'localhost'
+  port: 5432,
       username: 'root',
       password: 'root',
       database: 'tt-core-flow',

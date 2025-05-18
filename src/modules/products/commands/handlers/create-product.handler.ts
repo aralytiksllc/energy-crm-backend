@@ -13,6 +13,6 @@ export class CreateProductHandler
   ) {}
 
   async execute(command: CreateProductCommand): Promise<Product> {
-    return await this.productModel.create(command.dto);
+    return await this.productModel.create(command.dto as any);
   }
 }

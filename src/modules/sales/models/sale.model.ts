@@ -7,6 +7,7 @@ import {
   Unique,
   BelongsTo,
   HasMany,
+  ForeignKey,
 } from 'sequelize-typescript';
 import { Customer } from '@/modules/customers/models/customer.model';
 import { SaleItem } from './sale-item.model';
@@ -14,8 +15,8 @@ import { SaleItem } from './sale-item.model';
 @Table({ tableName: 'sales' })
 export class Sale extends Model {
   @Unique
-  @Column({ type: DataType.INTEGER, autoIncrement: true })
-  saleNumber!: number;
+  @Column({ type: DataType.INTEGER })
+  saleNumber: number;
 
   @Column(DataType.DATEONLY)
   saleDate: Date;
@@ -24,8 +25,12 @@ export class Sale extends Model {
   @Column(DataType.TEXT)
   notes?: string;
 
+  @ForeignKey(() => Customer)
+  @Column(DataType.INTEGER)
+  customerId: number;
+
   @BelongsTo(() => Customer)
-  customer?: Customer;
+  customer: Customer;
 
   @HasMany(() => SaleItem)
   items?: SaleItem[];

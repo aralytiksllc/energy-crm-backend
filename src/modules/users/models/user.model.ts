@@ -41,5 +41,5 @@ export class User extends Model {
 
   @Default(true)
   @Column(DataType.BOOLEAN)
-  isActive!: boolean;
+  isActive: boolean;
 }

@@ -7,6 +7,7 @@ import {
   AllowNull,
   Unique,
   BelongsTo,
+  ForeignKey,
 } from 'sequelize-typescript';
 import { InferAttributes, InferCreationAttributes } from 'sequelize';
 import { Vendor } from '@/modules/vendors/models/vendor.model';
@@ -66,6 +67,7 @@ export class Product extends Model<
   @Column(DataType.JSON)
   settings?: Record<string, any>;
 
+  @AllowNull
   @Column(DataType.TEXT)
   notes?: string;
 
@@ -73,6 +75,10 @@ export class Product extends Model<
   @Column(DataType.BOOLEAN)
   isActive?: boolean;
 
+  @ForeignKey(() => Vendor)
+  @Column(DataType.INTEGER)
+  vendorId: number;
+
   @BelongsTo(() => Vendor)
-  vendor?: Vendor;
+  vendor: Vendor;
 }

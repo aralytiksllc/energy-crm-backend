@@ -17,7 +17,7 @@ export class UpdateProductHandler
 
     if (!product) throw new Error(`Product with ID ${command.id} not found`);
 
-    product.set(command.dto);
+    product.set(command.dto as any);
 
     await product.save();
 

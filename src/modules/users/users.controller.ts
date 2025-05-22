@@ -8,40 +8,34 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { QueryParams } from '@/common/query/query-params';
 import { PaginationResult } from '@/common/pagination/pagination.interfaces';
+import { QueryParams } from '@/common/query/query-params';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { DeleteUserCommand } from './commands/impl/delete-user.command';
-import { CreateUserCommand } from './commands/impl/create-user.command';
-import { UpdateUserCommand } from './commands/impl/update-user.command';
-import { GetUserByIdQuery } from './queries/impl/get-user-by-id.query';
-import { GetUsersQuery } from './queries/impl/get-users.query';
 import { User } from './models/user.model';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
-    private readonly queryBus: QueryBus,
-    private readonly commandBus: CommandBus,
+    private readonly usersService: UsersService,
   ) {}
 
   @Get()
   async findAll(
     @Query() queryParams: QueryParams<User>,
   ): Promise<PaginationResult<User>> {
-    return this.queryBus.execute(new GetUsersQuery(queryParams));
+    return this.usersService.findAll(queryParams);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<User> {
-    return this.queryBus.execute(new GetUserByIdQuery(id));
+    return this.usersService.findOne(id);
   }
 
   @Post()
   async create(@Body() dto: CreateUserDto): Promise<User> {
-    return this.commandBus.execute(new CreateUserCommand(dto));
+    return this.usersService.create(dto);
   }
 
   @Put(':id')
@@ -49,11 +43,11 @@ export class UsersController {
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
   ): Promise<User> {
-    return this.commandBus.execute(new UpdateUserCommand(id, dto));
+    return this.usersService.update(id, dto);
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
-    return this.commandBus.execute(new DeleteUserCommand(id));
+    return this.usersService.delete(id);
   }
 }

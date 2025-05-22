@@ -5,55 +5,49 @@ import {
   Get,
   Param,
   Post,
-  Patch,
+  Put,
   Query,
 } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { PaginationResult } from '@/common/pagination/pagination.interfaces';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { DeleteProductCommand } from './commands/impl/delete-product.command';
-import { CreateProductCommand } from './commands/impl/create-product.command';
-import { UpdateProductCommand } from './commands/impl/update-product.command';
-import { GetProductByIdQuery } from './queries/impl/get-product-by-id.query';
-import { GetProductsQuery } from './queries/impl/get-products.query';
 import { Product } from './models/product.model';
+import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {
   constructor(
-    private readonly queryBus: QueryBus,
-    private readonly commandBus: CommandBus,
+    private readonly productsService: ProductsService,
   ) {}
 
   @Get()
   async findAll(
     @Query() queryParams: QueryParams<Product>,
   ): Promise<PaginationResult<Product>> {
-    return this.queryBus.execute(new GetProductsQuery(queryParams));
+    return this.productsService.findAll(queryParams);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Product> {
-    return this.queryBus.execute(new GetProductByIdQuery(id));
+    return this.productsService.findOne(id);
   }
 
   @Post()
   async create(@Body() dto: CreateProductDto): Promise<Product> {
-    return this.commandBus.execute(new CreateProductCommand(dto));
+    return this.productsService.create(dto);
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateProductDto,
   ): Promise<Product> {
-    return this.commandBus.execute(new UpdateProductCommand(id, dto));
+    return this.productsService.update(id, dto);
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
-    return this.commandBus.execute(new DeleteProductCommand(id));
+    return this.productsService.delete(id);
   }
 }

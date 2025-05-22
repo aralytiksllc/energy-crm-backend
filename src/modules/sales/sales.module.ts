@@ -7,6 +7,7 @@ import { DeleteSaleHandler } from './commands/handlers/delete-sale.handler';
 import { GetSalesHandler } from './queries/handlers/get-sales.handler';
 import { GetSaleByIdHandler } from './queries/handlers/get-sale-by-id.handler';
 import { SalesController } from './sales.controller';
+import { SalesService } from './sales.service';
 import { Sale } from './models/sale.model';
 import { SaleItem } from './models/sale-item.model';
 
@@ -14,6 +15,7 @@ import { SaleItem } from './models/sale-item.model';
   imports: [SequelizeModule.forFeature([Sale, SaleItem]), CqrsModule],
   controllers: [SalesController],
   providers: [
+    SalesService,
     // CommandHandlers
     CreateSaleHandler,
     UpdateSaleHandler,

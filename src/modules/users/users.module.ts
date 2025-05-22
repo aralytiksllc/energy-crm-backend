@@ -7,12 +7,14 @@ import { CreateUserHandler } from './commands/handlers/create-user.handler';
 import { UpdateUserHandler } from './commands/handlers/update-user.handler';
 import { DeleteUserHandler } from './commands/handlers/delete-user.handler';
 import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
 import { User } from './models/user.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([User]), CqrsModule],
   controllers: [UsersController],
   providers: [
+    UsersService,
     GetUsersHandler,
     GetUserByIdHandler,
     CreateUserHandler,

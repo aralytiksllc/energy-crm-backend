@@ -7,12 +7,14 @@ import { CreateCustomerHandler } from './commands/handlers/create-customer.handl
 import { UpdateCustomerHandler } from './commands/handlers/update-customer.handler';
 import { DeleteCustomerHandler } from './commands/handlers/delete-customer.handler';
 import { CustomersController } from './customers.controller';
+import { CustomersService } from './customers.service';
 import { Customer } from './models/customer.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([Customer]), CqrsModule],
   controllers: [CustomersController],
   providers: [
+    CustomersService,
     GetCustomersHandler,
     GetCustomerByIdHandler,
     CreateCustomerHandler,

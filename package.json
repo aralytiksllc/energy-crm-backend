@@ -18,10 +18,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration:generate": "sequelize-cli migration:generate --name",
-    "migration:run": "sequelize-cli db:migrate",
+    "migration:generate": "cross-env NODE_ENV=development sequelize-cli migration:generate --name",
+    "migration:run": "cross-env NODE_ENV=development sequelize-cli db:migrate",
     "migration:revert": "sequelize-cli db:migrate:undo",
-    "migration:revert:all": "sequelize-cli db:migrate:undo:all"
+    "migration:revert:all": "sequelize-cli db:migrate:undo:all",
+    "migration:undo": "cross-env NODE_ENV=development sequelize-cli db:migrate:undo",
+    "migration:undo:all": "cross-env NODE_ENV=development sequelize-cli db:migrate:undo:all"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -52,7 +54,9 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.15.21",
+    "@types/sequelize": "^4.28.20",
     "@types/supertest": "^6.0.2",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.5.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",

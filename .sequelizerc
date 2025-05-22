@@ -1,5 +1,4 @@
-// Enable TypeScript and path resolution
-require('ts-node/register');
+// Enable TypeScript path resolution
 require('tsconfig-paths/register');
 
 const path = require('path');

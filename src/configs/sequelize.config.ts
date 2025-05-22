@@ -1,56 +1,31 @@
-import { Dialect } from 'sequelize';
-import { config } from 'dotenv';
+import { Options, Dialect } from 'sequelize';
+import { databaseConfig } from './database.config';
 
-// Load environment variables
-config();
+// Remove ssl from databaseConfig since it's not part of Sequelize options
+const { ssl, ...databaseConfigWithoutSsl } = databaseConfig;
 
-// Database configuration interface
-interface DatabaseConfig {
-  username: string;
-  password: string;
-  database: string;
-  host: string;
-  port: number;
-  dialect: Dialect;
-  logging?: boolean | ((sql: string) => void);
-  pool?: {
-    max: number;
-    min: number;
-    acquire: number;
-    idle: number;
-  };
-  define?: {
-    timestamps: boolean;
-    underscored: boolean;
-  };
-}
-
-// Database connection configuration
-const sequelizeConfig: DatabaseConfig = {
-  // Connection settings
-  username: process.env.DB_USERNAME || 'root',
-  password: process.env.DB_PASSWORD || 'root',
-  database: process.env.DB_NAME || 'tt-core-flow',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432', 10),
-  dialect: 'postgres',
+// Sequelize ORM configuration
+export const sequelizeConfig: Options = {
+  ...databaseConfigWithoutSsl,
+  dialect: 'postgres' as Dialect,
   
   // Logging configuration
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
   
-  // Additional options
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  },
-  
-  // Define options
+  // Model configuration
   define: {
     timestamps: true, // Adds createdAt and updatedAt timestamps
-    underscored: true // Use snake_case for fields
-  }
-};
+    underscored: true, // Use snake_case for fields
+    freezeTableName: true // Prevent Sequelize from pluralizing table names
+  },
 
-export default sequelizeConfig; 
+  // Timezone configuration
+  timezone: process.env.DB_TIMEZONE!,
+
+  // SSL configuration (if enabled)
+  dialectOptions: process.env.DB_SSL === 'true' ? {
+    ssl: {
+      rejectUnauthorized: false
+    }
+  } : undefined
+}; 

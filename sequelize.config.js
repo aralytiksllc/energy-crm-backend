@@ -1,2 +1,13 @@
-require('ts-node/register');
-module.exports = require('./src/configs/database.config.ts'); 
+require('dotenv').config();
+
+const sequelizeConfig = {
+  username: process.env.DB_USERNAME || 'root',
+  password: process.env.DB_PASSWORD || 'root',
+  database: process.env.DB_NAME || 'tt-core-flow',
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || '5432', 10),
+  dialect: 'postgres',
+  logging: process.env.NODE_ENV === 'development' ? console.log : false,
+};
+
+module.exports = sequelizeConfig; 

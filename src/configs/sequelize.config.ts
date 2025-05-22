@@ -1,13 +1,15 @@
-import { Options, Dialect } from 'sequelize';
+import { Options } from 'sequelize';
 import { databaseConfig } from './database.config';
-
-// Remove ssl from databaseConfig since it's not part of Sequelize options
-const { ssl, ...databaseConfigWithoutSsl } = databaseConfig;
 
 // Sequelize ORM configuration
 export const sequelizeConfig: Options = {
-  ...databaseConfigWithoutSsl,
-  dialect: 'postgres' as Dialect,
+  username: databaseConfig.username,
+  password: databaseConfig.password,
+  database: databaseConfig.database,
+  host: databaseConfig.host,
+  port: databaseConfig.port,
+  dialect: 'postgres' as const,
+  schema: databaseConfig.schema,
   
   // Logging configuration
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
@@ -20,10 +22,10 @@ export const sequelizeConfig: Options = {
   },
 
   // Timezone configuration
-  timezone: process.env.DB_TIMEZONE!,
+  timezone: databaseConfig.timezone,
 
   // SSL configuration (if enabled)
-  dialectOptions: process.env.DB_SSL === 'true' ? {
+  dialectOptions: databaseConfig.ssl ? {
     ssl: {
       rejectUnauthorized: false
     }

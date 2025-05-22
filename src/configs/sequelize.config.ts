@@ -1,8 +1,32 @@
+import { Dialect } from 'sequelize';
+import { config } from 'dotenv';
+
 // Load environment variables
-require('dotenv').config();
+config();
+
+// Database configuration interface
+interface DatabaseConfig {
+  username: string;
+  password: string;
+  database: string;
+  host: string;
+  port: number;
+  dialect: Dialect;
+  logging?: boolean | ((sql: string) => void);
+  pool?: {
+    max: number;
+    min: number;
+    acquire: number;
+    idle: number;
+  };
+  define?: {
+    timestamps: boolean;
+    underscored: boolean;
+  };
+}
 
 // Database connection configuration
-const sequelizeConfig = {
+const sequelizeConfig: DatabaseConfig = {
   // Connection settings
   username: process.env.DB_USERNAME || 'root',
   password: process.env.DB_PASSWORD || 'root',
@@ -29,4 +53,4 @@ const sequelizeConfig = {
   }
 };
 
-module.exports = sequelizeConfig; 
+export default sequelizeConfig; 

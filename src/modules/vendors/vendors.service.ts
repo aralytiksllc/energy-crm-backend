@@ -18,7 +18,9 @@ export class VendorsService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findAll(queryParams: QueryParams<Vendor>): Promise<PaginationResult<Vendor>> {
+  async findAll(
+    queryParams: QueryParams<Vendor>,
+  ): Promise<PaginationResult<Vendor>> {
     return this.queryBus.execute(new GetVendorsQuery(queryParams));
   }
 
@@ -37,4 +39,4 @@ export class VendorsService {
   async delete(id: string): Promise<void> {
     return this.commandBus.execute(new DeleteVendorCommand(id));
   }
-} 
+}

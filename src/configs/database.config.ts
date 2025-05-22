@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 // Load environment variables
 config();
 
-// Database configuration 
+// Database configuration
 export const databaseConfig = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
@@ -12,7 +12,11 @@ export const databaseConfig = {
   port: parseInt(process.env.DB_PORT!),
   schema: process.env.DB_SCHEMA,
   timezone: process.env.DB_TIMEZONE,
-  ssl: process.env.DB_SSL === 'true' ? {
-    rejectUnauthorized: false
-  } : false
-}; 
+  ssl:
+    process.env.DB_SSL === 'true'
+      ? {
+          rejectUnauthorized: false,
+        }
+      : false,
+  dialect: 'postgres' as const,
+};

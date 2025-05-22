@@ -18,7 +18,9 @@ export class UsersService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findAll(queryParams: QueryParams<User>): Promise<PaginationResult<User>> {
+  async findAll(
+    queryParams: QueryParams<User>,
+  ): Promise<PaginationResult<User>> {
     return this.queryBus.execute(new GetUsersQuery(queryParams));
   }
 
@@ -37,4 +39,4 @@ export class UsersService {
   async delete(id: string): Promise<void> {
     return this.commandBus.execute(new DeleteUserCommand(id));
   }
-} 
+}

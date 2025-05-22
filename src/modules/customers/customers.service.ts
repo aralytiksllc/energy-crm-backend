@@ -18,7 +18,9 @@ export class CustomersService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findAll(queryParams: QueryParams<Customer>): Promise<PaginationResult<Customer>> {
+  async findAll(
+    queryParams: QueryParams<Customer>,
+  ): Promise<PaginationResult<Customer>> {
     return this.queryBus.execute(new GetCustomersQuery(queryParams));
   }
 
@@ -37,4 +39,4 @@ export class CustomersService {
   async delete(id: string): Promise<void> {
     return this.commandBus.execute(new DeleteCustomerCommand(id));
   }
-} 
+}

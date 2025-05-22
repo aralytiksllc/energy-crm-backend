@@ -57,4 +57,4 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
 
 export async function down(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.dropTable('users');
-} 
+}

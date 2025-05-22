@@ -1,5 +1,5 @@
 require('ts-node/register');
 
-const { sequelizeConfig } = require('./src/configs/sequelize.config');
+const { databaseConfig } = require('./src/configs/database.config');
 
-module.exports = sequelizeConfig;
+module.exports = databaseConfig;

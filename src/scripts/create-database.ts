@@ -46,4 +46,4 @@ if (require.main === module) {
     .catch(() => process.exit(1));
 }
 
-export { createDatabase }; 
+export { createDatabase };

@@ -13,7 +13,7 @@ import { SalesModule } from './modules/sales/sales.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    
+
     AppLoggerModule,
 
     SequelizeModule.forRootAsync({

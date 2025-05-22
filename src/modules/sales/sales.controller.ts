@@ -17,9 +17,7 @@ import { SalesService } from './sales.service';
 
 @Controller('sales')
 export class SalesController {
-  constructor(
-    private readonly salesService: SalesService,
-  ) {}
+  constructor(private readonly salesService: SalesService) {}
 
   @Get()
   async findAll(

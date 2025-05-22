@@ -11,11 +11,11 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       dateOfJoining: '2024-01-01',
       isActive: true,
       createdAt: new Date(),
-      updatedAt: new Date()
-    }
+      updatedAt: new Date(),
+    },
   ]);
 }
 
 export async function down(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.bulkDelete('users', {});
-} 
+}

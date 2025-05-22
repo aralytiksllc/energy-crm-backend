@@ -18,7 +18,9 @@ export class SalesService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findAll(queryParams: QueryParams<Sale>): Promise<PaginationResult<Sale>> {
+  async findAll(
+    queryParams: QueryParams<Sale>,
+  ): Promise<PaginationResult<Sale>> {
     return this.queryBus.execute(new GetSalesQuery(queryParams));
   }
 
@@ -37,4 +39,4 @@ export class SalesService {
   async delete(id: string): Promise<void> {
     return this.commandBus.execute(new DeleteSaleCommand(id));
   }
-} 
+}

@@ -7,10 +7,7 @@ import {
   Default,
   IsEmail,
 } from 'sequelize-typescript';
-import {
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize';
+import { InferAttributes, InferCreationAttributes } from 'sequelize';
 import { IContact } from '../interfaces/contact.interface';
 
 @Table({

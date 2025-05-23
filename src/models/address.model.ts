@@ -6,10 +6,7 @@ import {
   Default,
   DataType,
 } from 'sequelize-typescript';
-import {
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize';
+import { InferAttributes, InferCreationAttributes } from 'sequelize';
 import { IAddress } from '../interfaces/address.interface';
 import { AddressType } from '../enums/address-type.enum';
 

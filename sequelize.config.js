@@ -1,7 +1,7 @@
 require('ts-node/register');
 require('dotenv').config();
 
-const config = {
+module.exports = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -11,10 +11,4 @@ const config = {
   schema: process.env.DB_SCHEMA,
   migrationStorage: 'sequelize',
   seederStorage: 'sequelize'
-};
-
-module.exports = {
-  development: config,
-  test: config,
-  production: config
 };

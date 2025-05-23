@@ -10,6 +10,7 @@ import {
 } from 'sequelize-typescript';
 import { InferAttributes, InferCreationAttributes } from 'sequelize';
 import { Sale } from '@/modules/sales/models/sale.model';
+import { Contact } from '@/models/contact.model';
 
 @Table({ tableName: 'customers' })
 export class Customer extends Model<
@@ -46,4 +47,13 @@ export class Customer extends Model<
 
   @HasMany(() => Sale)
   sales?: Sale[];
+
+  @HasMany(() => Contact, {
+    foreignKey: 'contactableId',
+    constraints: false,
+    scope: {
+      contactableType: 'customer'
+    }
+  })
+  contacts?: Contact[];
 }

@@ -1,20 +1,14 @@
-// Enable TypeScript path resolution
-require('tsconfig-paths/register');
-
 const path = require('path');
 
 // Define paths for Sequelize CLI
 // These paths tell Sequelize where to find and create files
 module.exports = {
-  // Path to config file
-  'config': path.resolve(__dirname, 'sequelize.config.js'),
-  
   // Path to migrations directory
-  'migrations-path': path.resolve(__dirname, 'src/migrations'),
-  
+  'migrations-path': path.resolve('src/migrations'),
+
   // Path to seeders directory
-  'seeders-path': path.resolve(__dirname, 'src/seeders'),
-  
-  // Path to models directory
-  'models-path': path.resolve(__dirname, 'src/modules')
+  'seeders-path': path.resolve('src/seeders'),
+
+  // Path to config file
+  'config': path.resolve('sequelize.config.js'),
 }; 

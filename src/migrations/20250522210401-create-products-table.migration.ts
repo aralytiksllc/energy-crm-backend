@@ -1,8 +1,9 @@
-import { QueryInterface, DataTypes } from 'sequelize';
+import { QueryInterface, ModelAttributes, DataTypes } from 'sequelize';
+import { Product } from '../models/product.model';
 import { ProductUnit } from '../modules/products/enums/product-unit.enum';
 
 export async function up(queryInterface: QueryInterface): Promise<void> {
-  await queryInterface.createTable('products', {
+  const attributes: ModelAttributes<Product> = {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -103,9 +104,21 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
         key: 'id',
       },
     },
-  });
+  };
+
+  await queryInterface.sequelize.query(`
+    CREATE TYPE "enum_products_unit" AS ENUM (${Object.values(ProductUnit)
+      .map((v) => `'${v}'`)
+      .join(', ')});
+  `);
+
+  await queryInterface.createTable('products', attributes);
 }
 
 export async function down(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.dropTable('products');
+  
+  await queryInterface.sequelize.query(`
+    DROP TYPE IF EXISTS "enum_products_unit";
+  `);
 }

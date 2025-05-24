@@ -1,7 +1,8 @@
-import { QueryInterface, DataTypes } from 'sequelize';
+import { QueryInterface, ModelAttributes, DataTypes } from 'sequelize';
+import { Sale } from '../models/sale.model';
 
 export async function up(queryInterface: QueryInterface): Promise<void> {
-  await queryInterface.createTable('sales', {
+  const attributes: ModelAttributes<Sale> = {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -55,7 +56,9 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
         key: 'id',
       },
     },
-  });
+  };
+
+  await queryInterface.createTable('sales', attributes);
 }
 
 export async function down(queryInterface: QueryInterface): Promise<void> {

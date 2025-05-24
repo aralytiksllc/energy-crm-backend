@@ -18,9 +18,7 @@ export class VendorsService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findAll(
-    queryParams: QueryParams<Vendor>,
-  ): Promise<Paging<Vendor>> {
+  async findAll(queryParams: QueryParams<Vendor>): Promise<Paging<Vendor>> {
     return this.queryBus.execute(new GetVendorsQuery(queryParams));
   }
 

@@ -1,6 +1,6 @@
 import { QueryInterface, ModelAttributes, DataTypes } from 'sequelize';
 import { Product } from '../models/product.model';
-import { ProductUnit } from '../modules/products/enums/product-unit.enum';
+import { ProductUnit } from '../enums/product-unit.enum';
 
 export async function up(queryInterface: QueryInterface): Promise<void> {
   const attributes: ModelAttributes<Product> = {
@@ -117,7 +117,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
 
 export async function down(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.dropTable('products');
-  
+
   await queryInterface.sequelize.query(`
     DROP TYPE IF EXISTS "enum_products_unit";
   `);

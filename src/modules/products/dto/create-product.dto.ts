@@ -7,7 +7,7 @@ import {
   IsNumber,
   IsBoolean,
 } from 'class-validator';
-import { ProductUnit } from '../enums/product-unit.enum';
+import { ProductUnit } from '@/enums/product-unit.enum';
 
 export class CreateProductDto {
   @IsString()

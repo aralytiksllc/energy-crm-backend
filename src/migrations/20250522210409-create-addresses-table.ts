@@ -61,19 +61,27 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
   };
 
   await queryInterface.sequelize.query(`
-    CREATE TYPE "enum_addresses_address_type" AS ENUM (${Object.values(AddressType).map(v => `'${v}'`).join(', ')});
+    CREATE TYPE "enum_addresses_address_type" AS ENUM (${Object.values(
+      AddressType,
+    )
+      .map((v) => `'${v}'`)
+      .join(', ')});
   `);
 
   await queryInterface.createTable('addresses', attributes);
 
-  await queryInterface.addIndex('addresses', ['addressableType', 'addressableId'], {
-    name: 'addresses_addressable_index',
-  });
+  await queryInterface.addIndex(
+    'addresses',
+    ['addressableType', 'addressableId'],
+    {
+      name: 'addresses_addressable_index',
+    },
+  );
 }
 
 export async function down(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.dropTable('addresses');
-  
+
   await queryInterface.sequelize.query(`
     DROP TYPE IF EXISTS "enum_addresses_address_type";
   `);

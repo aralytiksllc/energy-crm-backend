@@ -24,7 +24,7 @@ export class CustomersService {
     return this.queryBus.execute(new GetCustomersQuery(queryParams));
   }
 
-  async findOne(id: string): Promise<Customer> {
+  async findOne(id: number): Promise<Customer> {
     return this.queryBus.execute(new GetCustomerByIdQuery(id));
   }
 
@@ -32,11 +32,11 @@ export class CustomersService {
     return this.commandBus.execute(new CreateCustomerCommand(dto));
   }
 
-  async update(id: string, dto: UpdateCustomerDto): Promise<Customer> {
+  async update(id: number, dto: UpdateCustomerDto): Promise<Customer> {
     return this.commandBus.execute(new UpdateCustomerCommand(id, dto));
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: number): Promise<void> {
     return this.commandBus.execute(new DeleteCustomerCommand(id));
   }
 }

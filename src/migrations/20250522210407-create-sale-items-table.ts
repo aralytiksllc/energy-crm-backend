@@ -3,12 +3,12 @@ import { QueryInterface, DataTypes } from 'sequelize';
 export async function up(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.createTable('sale_items', {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     saleId: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'sales',
@@ -18,7 +18,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       onDelete: 'CASCADE',
     },
     productId: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'products',
@@ -53,7 +53,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       allowNull: false,
     },
     createdById: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: 'users',
@@ -61,7 +61,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       },
     },
     updatedById: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: 'users',

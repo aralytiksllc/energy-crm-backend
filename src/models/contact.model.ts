@@ -19,39 +19,34 @@ export class Contact
   implements IContact
 {
   @Column(DataType.STRING)
-  @AllowNull(false)
   firstName: string;
 
   @Column(DataType.STRING)
-  @AllowNull(false)
   lastName: string;
 
+  @AllowNull
   @Column(DataType.STRING)
-  @AllowNull(true)
   title: string;
 
-  @Column(DataType.STRING)
-  @AllowNull(false)
   @IsEmail
+  @Column(DataType.STRING)
   email: string;
 
+  @AllowNull
   @Column(DataType.STRING)
-  @AllowNull(true)
   phone: string;
 
-  @Column(DataType.BOOLEAN)
   @Default(true)
+  @Column(DataType.BOOLEAN)
   isPrimary: boolean;
 
+  @AllowNull
   @Column(DataType.TEXT)
-  @AllowNull(true)
   notes: string;
 
   @Column(DataType.STRING)
-  @AllowNull(false)
   contactableType: string;
 
   @Column(DataType.INTEGER)
-  @AllowNull(false)
   contactableId: number;
 }

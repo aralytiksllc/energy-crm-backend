@@ -9,9 +9,10 @@ import { DeleteCustomerHandler } from './commands/handlers/delete-customer.handl
 import { CustomersController } from './customers.controller';
 import { CustomersService } from './customers.service';
 import { Customer } from './models/customer.model';
+import { Contact } from '@/models/contact.model';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Customer]), CqrsModule],
+  imports: [SequelizeModule.forFeature([Customer, Contact]), CqrsModule],
   controllers: [CustomersController],
   providers: [
     CustomersService,

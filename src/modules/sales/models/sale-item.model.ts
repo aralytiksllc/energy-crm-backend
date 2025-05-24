@@ -31,15 +31,15 @@ export class SaleItem extends Model {
   amount: number;
 
   @ForeignKey(() => Sale)
-  @Column({ type: DataType.UUID })
-  saleId: string;
+  @Column({ type: DataType.INTEGER })
+  saleId: number;
 
   @BelongsTo(() => Sale, { onDelete: 'CASCADE' })
   sale: Sale;
 
   @ForeignKey(() => Product)
-  @Column({ type: DataType.UUID })
-  productId: string;
+  @Column({ type: DataType.INTEGER })
+  productId: number;
 
   @BelongsTo(() => Product)
   product: Product;

@@ -3,8 +3,8 @@ import { QueryInterface, DataTypes } from 'sequelize';
 export async function up(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.createTable('sales', {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     saleNumber: {
@@ -22,7 +22,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       allowNull: true,
     },
     customerId: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'customers',
@@ -40,7 +40,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       allowNull: false,
     },
     createdById: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: 'users',
@@ -48,7 +48,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       },
     },
     updatedById: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: 'users',

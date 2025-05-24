@@ -12,7 +12,7 @@ export class UpdateCustomerHandler
     private readonly customerModel: typeof Customer,
   ) {}
 
-  async execute(command: UpdateCustomerCommand): Promise<Customer> {
+  async execute(command: any): Promise<Customer> {
     const customer = await this.customerModel.findByPk(command.id);
 
     if (!customer) throw new Error(`Customer with ID ${command.id} not found.`);

@@ -4,8 +4,8 @@ import { ProductUnit } from '../modules/products/enums/product-unit.enum';
 export async function up(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.createTable('products', {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     name: {
@@ -70,7 +70,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       defaultValue: true,
     },
     vendorId: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'vendors',
@@ -88,7 +88,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       allowNull: false,
     },
     createdById: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: 'users',
@@ -96,7 +96,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       },
     },
     updatedById: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: 'users',

@@ -56,9 +56,13 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
 
   await queryInterface.createTable('contacts', attributes);
 
-  await queryInterface.addIndex('contacts', ['contactableType', 'contactableId'], {
-    name: 'contacts_contactable_index',
-  });
+  await queryInterface.addIndex(
+    'contacts',
+    ['contactableType', 'contactableId'],
+    {
+      name: 'contacts_contactable_index',
+    },
+  );
 }
 
 export async function down(queryInterface: QueryInterface): Promise<void> {

@@ -7,6 +7,14 @@ import { VendorsModule } from './modules/vendors/vendors.module';
 import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
 import { SalesModule } from './modules/sales/sales.module';
+import { Contact } from './models/contact.model';
+import { Address } from './models/address.model';
+import { Customer } from './modules/customers/models/customer.model';
+import { Sale } from './modules/sales/models/sale.model';
+import { SaleItem } from './modules/sales/models/sale-item.model';
+import { Product } from './modules/products/models/product.model';
+import { Vendor } from './modules/vendors/models/vendor.model';
+import { User } from './modules/users/models/user.model';
 
 @Module({
   imports: [
@@ -23,13 +31,15 @@ import { SalesModule } from './modules/sales/sales.module';
         const port = configService.get('DB_PORT');
         const username = configService.get('DB_USERNAME');
         const password = configService.get('DB_PASSWORD');
-        const database = configService.get('DB_DATABASE');
+        const database = configService.get('DB_NAME');
+        const environment = configService.get('NODE_ENV') || 'development';
 
         console.log('Database Config:', {
           host,
           port,
           username,
           database,
+          environment,
           // password hidden for security
         });
 
@@ -40,9 +50,15 @@ import { SalesModule } from './modules/sales/sales.module';
           username,
           password,
           database,
+          models: [Contact, Address, Customer, Sale, SaleItem, Product, Vendor, User],
           autoLoadModels: true,
           synchronize: false,
-          logging: console.log,
+          logging: environment === 'development' ? console.log : false,
+          define: {
+            timestamps: true,
+            underscored: false,
+            freezeTableName: true,
+          },
           retry: {
             max: 5,
             match: [

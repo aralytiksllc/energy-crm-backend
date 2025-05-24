@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PaginationResult } from '@/common/pagination/pagination.interfaces';
 import { QueryParams } from '@/common/query/query-params';
@@ -27,7 +28,7 @@ export class CustomersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Customer> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Customer> {
     return this.customersService.findOne(id);
   }
 
@@ -38,14 +39,14 @@ export class CustomersController {
 
   @Put(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateCustomerDto,
   ): Promise<Customer> {
     return this.customersService.update(id, dto);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.customersService.delete(id);
   }
 }

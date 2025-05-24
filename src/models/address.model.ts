@@ -19,42 +19,35 @@ export class Address
   implements IAddress
 {
   @Column(DataType.STRING)
-  @AllowNull(false)
   street: string;
 
+  @AllowNull
   @Column(DataType.STRING)
-  @AllowNull(true)
   streetTwo: string;
 
   @Column(DataType.STRING)
-  @AllowNull(false)
   city: string;
 
   @Column(DataType.STRING)
-  @AllowNull(false)
   state: string;
 
   @Column(DataType.STRING)
-  @AllowNull(false)
   country: string;
 
   @Column(DataType.STRING)
-  @AllowNull(false)
   postalCode: string;
 
-  @Column(DataType.ENUM(...Object.values(AddressType)))
   @Default(AddressType.BOTH)
+  @Column(DataType.ENUM(...Object.values(AddressType)))
   addressType: AddressType;
 
-  @Column(DataType.BOOLEAN)
   @Default(true)
+  @Column(DataType.BOOLEAN)
   isPrimary: boolean;
 
   @Column(DataType.STRING)
-  @AllowNull(false)
   addressableType: string;
 
   @Column(DataType.INTEGER)
-  @AllowNull(false)
   addressableId: number;
 }

@@ -12,7 +12,9 @@ import { InferAttributes, InferCreationAttributes } from 'sequelize';
 import { Sale } from '@/modules/sales/models/sale.model';
 import { Contact } from '@/models/contact.model';
 
-@Table({ tableName: 'customers' })
+@Table({ 
+  tableName: 'customers'
+})
 export class Customer extends Model<
   InferAttributes<Customer>,
   InferCreationAttributes<Customer>

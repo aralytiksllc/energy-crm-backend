@@ -3,7 +3,7 @@ const path = require('path');
 // Define paths for Sequelize CLI
 // These paths tell Sequelize where to find and create files
 module.exports = {
-  // Path to migrations directory
+  // Path to migrations directory - now includes module migrations
   'migrations-path': path.resolve('src/migrations'),
 
   // Path to seeders directory
@@ -11,4 +11,7 @@ module.exports = {
 
   // Path to config file
   'config': path.resolve('sequelize.config.js'),
+
+  // Migration file pattern
+  migrationFilePattern: /\.migration\.ts$/
 }; 

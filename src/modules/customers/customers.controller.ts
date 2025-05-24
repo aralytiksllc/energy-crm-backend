@@ -13,7 +13,7 @@ import { PaginationResult } from '@/common/pagination/pagination.interfaces';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { Customer } from './models/customer.model';
+import { Customer } from '@/models/customer.model';
 import { CustomersService } from './customers.service';
 
 @Controller('customers')

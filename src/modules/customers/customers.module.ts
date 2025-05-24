@@ -8,7 +8,7 @@ import { UpdateCustomerHandler } from './commands/handlers/update-customer.handl
 import { DeleteCustomerHandler } from './commands/handlers/delete-customer.handler';
 import { CustomersController } from './customers.controller';
 import { CustomersService } from './customers.service';
-import { Customer } from './models/customer.model';
+import { Customer } from '@/models/customer.model';
 import { Contact } from '@/models/contact.model';
 
 @Module({

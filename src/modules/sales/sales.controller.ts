@@ -12,7 +12,7 @@ import { PaginationResult } from '@/common/pagination/pagination.interfaces';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
-import { Sale } from './models/sale.model';
+import { Sale } from '@/models/sale.model';
 import { SalesService } from './sales.service';
 
 @Controller('sales')

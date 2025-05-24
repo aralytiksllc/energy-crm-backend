@@ -12,7 +12,7 @@ import { PaginationResult } from '@/common/pagination/pagination.interfaces';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
-import { Vendor } from './models/vendor.model';
+import { Vendor } from '@/models/vendor.model';
 import { VendorsService } from './vendors.service';
 
 @Controller('vendors')

@@ -1,6 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { Product } from '../../models/product.model';
+import { Product } from '@/models/product.model';
 import { GetProductByIdQuery } from '../impl/get-product-by-id.query';
 
 @QueryHandler(GetProductByIdQuery)

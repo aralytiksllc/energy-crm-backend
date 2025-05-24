@@ -8,7 +8,7 @@ import { UpdateProductHandler } from './commands/handlers/update-product.handler
 import { DeleteProductHandler } from './commands/handlers/delete-product.handler';
 import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
-import { Product } from './models/product.model';
+import { Product } from '@/models/product.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([Product]), CqrsModule],

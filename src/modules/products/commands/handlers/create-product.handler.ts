@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { Product } from '../../models/product.model';
+import { Product } from '@/models/product.model';
 import { CreateProductCommand } from '../impl/create-product.command';
 
 @CommandHandler(CreateProductCommand)

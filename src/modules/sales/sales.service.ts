@@ -9,7 +9,7 @@ import { CreateSaleCommand } from './commands/impl/create-sale.command';
 import { UpdateSaleCommand } from './commands/impl/update-sale.command';
 import { GetSaleByIdQuery } from './queries/impl/get-sale-by-id.query';
 import { GetSalesQuery } from './queries/impl/get-sales.query';
-import { Sale } from './models/sale.model';
+import { Sale } from '@/models/sale.model';
 
 @Injectable()
 export class SalesService {

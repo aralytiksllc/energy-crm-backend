@@ -1,7 +1,7 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
 import { Paging } from '@/common/paging';
-import { Sale } from '../../models/sale.model';
+import { Sale } from '@/models/sale.model';
 import { GetSalesQuery } from '../impl/get-sales.query';
 
 @QueryHandler(GetSalesQuery)

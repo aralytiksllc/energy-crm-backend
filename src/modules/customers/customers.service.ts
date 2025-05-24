@@ -9,7 +9,7 @@ import { CreateCustomerCommand } from './commands/impl/create-customer.command';
 import { UpdateCustomerCommand } from './commands/impl/update-customer.command';
 import { GetCustomerByIdQuery } from './queries/impl/get-customer-by-id.query';
 import { GetCustomersQuery } from './queries/impl/get-customers.query';
-import { Customer } from './models/customer.model';
+import { Customer } from '@/models/customer.model';
 
 @Injectable()
 export class CustomersService {

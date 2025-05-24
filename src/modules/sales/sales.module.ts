@@ -8,8 +8,8 @@ import { GetSalesHandler } from './queries/handlers/get-sales.handler';
 import { GetSaleByIdHandler } from './queries/handlers/get-sale-by-id.handler';
 import { SalesController } from './sales.controller';
 import { SalesService } from './sales.service';
-import { Sale } from './models/sale.model';
-import { SaleItem } from './models/sale-item.model';
+import { Sale } from '@/models/sale.model';
+import { SaleItem } from '@/models/sale-item.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([Sale, SaleItem]), CqrsModule],

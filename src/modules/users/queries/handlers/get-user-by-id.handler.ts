@@ -1,6 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from '../../models/user.model';
+import { User } from '@/models/user.model';
 import { GetUserByIdQuery } from '../impl/get-user-by-id.query';
 
 @QueryHandler(GetUserByIdQuery)

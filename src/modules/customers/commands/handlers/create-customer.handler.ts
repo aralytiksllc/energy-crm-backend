@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { Customer } from '../../models/customer.model';
+import { Customer } from '@/models/customer.model';
 import { Contact } from '@/models/contact.model';
 import { CreateCustomerCommand } from '../impl/create-customer.command';
 
@@ -14,9 +14,8 @@ export class CreateCustomerHandler
   ) {}
 
   async execute(command: CreateCustomerCommand): Promise<Customer> {
-    
     const customer = await this.customerModel.create(command.dto as any, {
-      include: [Contact]
+      include: [Contact],
     });
 
     return customer;

@@ -9,7 +9,7 @@ import {
   BeforeCreate,
   BeforeUpdate,
 } from 'sequelize-typescript';
-import { Product } from '@/modules/products/models/product.model';
+import { Product } from './product.model';
 import { Sale } from './sale.model';
 
 @Table({ tableName: 'sales_items' })

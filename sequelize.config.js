@@ -1,7 +1,7 @@
 require('ts-node/register');
 require('dotenv').config();
 
-module.exports = {
+const databaseConfig = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -10,5 +10,14 @@ module.exports = {
   dialect: 'postgres',
   schema: process.env.DB_SCHEMA,
   migrationStorage: 'sequelize',
-  seederStorage: 'sequelize'
+  seederStorage: 'sequelize',
+  dialectOptions: {
+    bigNumberStrings: true
+  }
+};
+
+module.exports = {
+  development: databaseConfig,
+  test: databaseConfig,
+  production: databaseConfig
 };

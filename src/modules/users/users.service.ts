@@ -9,7 +9,7 @@ import { CreateUserCommand } from './commands/impl/create-user.command';
 import { UpdateUserCommand } from './commands/impl/update-user.command';
 import { GetUserByIdQuery } from './queries/impl/get-user-by-id.query';
 import { GetUsersQuery } from './queries/impl/get-users.query';
-import { User } from './models/user.model';
+import { User } from '@/models/user.model';
 
 @Injectable()
 export class UsersService {

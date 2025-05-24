@@ -9,12 +9,12 @@ import { UsersModule } from './modules/users/users.module';
 import { SalesModule } from './modules/sales/sales.module';
 import { Contact } from './models/contact.model';
 import { Address } from './models/address.model';
-import { Customer } from './modules/customers/models/customer.model';
-import { Sale } from './modules/sales/models/sale.model';
-import { SaleItem } from './modules/sales/models/sale-item.model';
-import { Product } from './modules/products/models/product.model';
-import { Vendor } from './modules/vendors/models/vendor.model';
-import { User } from './modules/users/models/user.model';
+import { Customer } from './models/customer.model';
+import { Sale } from './models/sale.model';
+import { SaleItem } from './models/sale-item.model';
+import { Product } from './models/product.model';
+import { Vendor } from './models/vendor.model';
+import { User } from './models/user.model';
 
 @Module({
   imports: [
@@ -50,7 +50,16 @@ import { User } from './modules/users/models/user.model';
           username,
           password,
           database,
-          models: [Contact, Address, Customer, Sale, SaleItem, Product, Vendor, User],
+          models: [
+            Contact,
+            Address,
+            Customer,
+            Sale,
+            SaleItem,
+            Product,
+            Vendor,
+            User,
+          ],
           autoLoadModels: true,
           synchronize: false,
           logging: environment === 'development' ? console.log : false,

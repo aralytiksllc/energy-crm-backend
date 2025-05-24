@@ -12,7 +12,7 @@ import { PaginationResult } from '@/common/pagination/pagination.interfaces';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Product } from './models/product.model';
+import { Product } from '@/models/product.model';
 import { ProductsService } from './products.service';
 
 @Controller('products')

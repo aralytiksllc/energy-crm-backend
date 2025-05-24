@@ -9,7 +9,7 @@ import {
   HasMany,
   ForeignKey,
 } from 'sequelize-typescript';
-import { Customer } from '@/modules/customers/models/customer.model';
+import { Customer } from './customer.model';
 import { SaleItem } from './sale-item.model';
 
 @Table({ tableName: 'sales' })

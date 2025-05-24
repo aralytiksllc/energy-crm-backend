@@ -10,8 +10,8 @@ import {
   ForeignKey,
 } from 'sequelize-typescript';
 import { InferAttributes, InferCreationAttributes } from 'sequelize';
-import { Vendor } from '@/modules/vendors/models/vendor.model';
-import { ProductUnit } from '../enums/product-unit.enum';
+import { Vendor } from './vendor.model';
+import { ProductUnit } from '../modules/products/enums/product-unit.enum';
 
 @Table({ tableName: 'products' })
 export class Product extends Model<

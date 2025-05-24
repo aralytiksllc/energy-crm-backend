@@ -9,7 +9,7 @@ import { CreateProductCommand } from './commands/impl/create-product.command';
 import { UpdateProductCommand } from './commands/impl/update-product.command';
 import { GetProductByIdQuery } from './queries/impl/get-product-by-id.query';
 import { GetProductsQuery } from './queries/impl/get-products.query';
-import { Product } from './models/product.model';
+import { Product } from '@/models/product.model';
 
 @Injectable()
 export class ProductsService {

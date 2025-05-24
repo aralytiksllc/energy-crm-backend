@@ -12,7 +12,7 @@ import { PaginationResult } from '@/common/pagination/pagination.interfaces';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './models/user.model';
+import { User } from '@/models/user.model';
 import { UsersService } from './users.service';
 
 @Controller('users')

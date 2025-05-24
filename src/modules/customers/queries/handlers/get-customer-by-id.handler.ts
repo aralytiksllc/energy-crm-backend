@@ -1,6 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { Customer } from '../../models/customer.model';
+import { Customer } from '@/models/customer.model';
 import { GetCustomerByIdQuery } from '../impl/get-customer-by-id.query';
 import { Contact } from '@/models/contact.model';
 
@@ -15,7 +15,7 @@ export class GetCustomerByIdHandler
 
   async execute(query: GetCustomerByIdQuery): Promise<Customer> {
     const customer = await this.customerModel.findByPk(query.id, {
-      include: [Contact]
+      include: [Contact],
     });
 
     if (customer === null) {

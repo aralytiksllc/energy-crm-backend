@@ -9,19 +9,16 @@ import {
   HasMany,
 } from 'sequelize-typescript';
 import { InferAttributes, InferCreationAttributes } from 'sequelize';
-import { Sale } from '@/modules/sales/models/sale.model';
-import { Contact } from '@/models/contact.model';
+import { Product } from './product.model';
 
-@Table({ 
-  tableName: 'customers'
-})
-export class Customer extends Model<
-  InferAttributes<Customer>,
-  InferCreationAttributes<Customer>
+@Table({ tableName: 'vendors' })
+export class Vendor extends Model<
+  InferAttributes<Vendor>,
+  InferCreationAttributes<Vendor>
 > {
   @Unique
   @Column(DataType.STRING)
-  name!: string;
+  name: string;
 
   @AllowNull
   @Column(DataType.TEXT)
@@ -41,21 +38,12 @@ export class Customer extends Model<
 
   @Default(true)
   @Column(DataType.BOOLEAN)
-  isActive?: boolean;
+  isActive: boolean;
 
   @AllowNull
   @Column(DataType.JSON)
   settings?: Record<string, any>;
 
-  @HasMany(() => Sale)
-  sales?: Sale[];
-
-  @HasMany(() => Contact, {
-    foreignKey: 'contactableId',
-    constraints: false,
-    scope: {
-      contactableType: 'customer'
-    }
-  })
-  contacts?: Contact[];
+  @HasMany(() => Product)
+  products: Product[];
 }

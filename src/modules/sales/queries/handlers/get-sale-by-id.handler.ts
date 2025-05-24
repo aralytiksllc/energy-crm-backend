@@ -1,6 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { Sale } from '../../models/sale.model';
+import { Sale } from '@/models/sale.model';
 import { GetSaleByIdQuery } from '../impl/get-sale-by-id.query';
 
 @QueryHandler(GetSaleByIdQuery)

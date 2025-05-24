@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from '../../models/user.model';
+import { User } from '@/models/user.model';
 import { CreateUserCommand } from '../impl/create-user.command';
 
 @CommandHandler(CreateUserCommand)

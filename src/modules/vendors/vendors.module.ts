@@ -8,7 +8,7 @@ import { UpdateVendorHandler } from './commands/handlers/update-vendor.handler';
 import { DeleteVendorHandler } from './commands/handlers/delete-vendor.handler';
 import { VendorsController } from './vendors.controller';
 import { VendorsService } from './vendors.service';
-import { Vendor } from './models/vendor.model';
+import { Vendor } from '@/models/vendor.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([Vendor]), CqrsModule],

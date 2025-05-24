@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { PaginationResult } from '@/common/pagination/pagination.interfaces';
+import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -18,9 +18,7 @@ export class UsersService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findAll(
-    queryParams: QueryParams<User>,
-  ): Promise<PaginationResult<User>> {
+  async findAll(queryParams: QueryParams<User>): Promise<Paging<User>> {
     return this.queryBus.execute(new GetUsersQuery(queryParams));
   }
 

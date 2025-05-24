@@ -1,51 +1,49 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  Param,
   Post,
-  Put,
+  Body,
+  Patch,
+  Param,
+  Delete,
   Query,
 } from '@nestjs/common';
-import { PaginationResult } from '@/common/pagination/pagination.interfaces';
+import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
 import { Sale } from '@/models/sale.model';
-import { SalesService } from './sales.service';
 
 @Controller('sales')
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
   @Get()
-  async findAll(
-    @Query() queryParams: QueryParams<Sale>,
-  ): Promise<PaginationResult<Sale>> {
-    return this.salesService.findAll(queryParams);
+  findAll(@Query() query: QueryParams<Sale>): Promise<Paging<Sale>> {
+    return this.salesService.findAll(query);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Sale> {
+  findOne(@Param('id') id: string): Promise<Sale> {
     return this.salesService.findOne(id);
   }
 
   @Post()
-  async create(@Body() dto: CreateSaleDto): Promise<Sale> {
-    return this.salesService.create(dto);
+  create(@Body() createSaleDto: CreateSaleDto): Promise<Sale> {
+    return this.salesService.create(createSaleDto);
   }
 
-  @Put(':id')
-  async update(
+  @Patch(':id')
+  update(
     @Param('id') id: string,
-    @Body() dto: UpdateSaleDto,
+    @Body() updateSaleDto: UpdateSaleDto,
   ): Promise<Sale> {
-    return this.salesService.update(id, dto);
+    return this.salesService.update(id, updateSaleDto);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
+  remove(@Param('id') id: string): Promise<void> {
     return this.salesService.delete(id);
   }
 }

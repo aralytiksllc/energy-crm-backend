@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { PaginationResult } from '@/common/pagination/pagination.interfaces';
+import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
@@ -20,7 +20,7 @@ export class VendorsService {
 
   async findAll(
     queryParams: QueryParams<Vendor>,
-  ): Promise<PaginationResult<Vendor>> {
+  ): Promise<Paging<Vendor>> {
     return this.queryBus.execute(new GetVendorsQuery(queryParams));
   }
 

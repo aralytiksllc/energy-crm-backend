@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { PaginationResult } from '@/common/pagination/pagination.interfaces';
+import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
@@ -18,9 +18,7 @@ export class CustomersService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findAll(
-    queryParams: QueryParams<Customer>,
-  ): Promise<PaginationResult<Customer>> {
+  async findAll(queryParams: QueryParams<Customer>): Promise<Paging<Customer>> {
     return this.queryBus.execute(new GetCustomersQuery(queryParams));
   }
 

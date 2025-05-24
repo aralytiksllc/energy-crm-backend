@@ -1,52 +1,50 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  Param,
   Post,
-  Put,
+  Body,
+  Patch,
+  Param,
+  Delete,
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
-import { PaginationResult } from '@/common/pagination/pagination.interfaces';
+import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from '@/models/customer.model';
-import { CustomersService } from './customers.service';
 
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
   @Get()
-  async findAll(
-    @Query() queryParams: QueryParams<Customer>,
-  ): Promise<PaginationResult<Customer>> {
-    return this.customersService.findAll(queryParams);
+  findAll(@Query() query: QueryParams<Customer>): Promise<Paging<Customer>> {
+    return this.customersService.findAll(query);
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Customer> {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Customer> {
     return this.customersService.findOne(id);
   }
 
   @Post()
-  async create(@Body() dto: CreateCustomerDto): Promise<Customer> {
-    return this.customersService.create(dto);
+  create(@Body() createCustomerDto: CreateCustomerDto): Promise<Customer> {
+    return this.customersService.create(createCustomerDto);
   }
 
-  @Put(':id')
-  async update(
+  @Patch(':id')
+  update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateCustomerDto,
+    @Body() updateCustomerDto: UpdateCustomerDto,
   ): Promise<Customer> {
-    return this.customersService.update(id, dto);
+    return this.customersService.update(id, updateCustomerDto);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.customersService.delete(id);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { PaginationResult } from '@/common/pagination/pagination.interfaces';
+import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
@@ -18,9 +18,7 @@ export class SalesService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findAll(
-    queryParams: QueryParams<Sale>,
-  ): Promise<PaginationResult<Sale>> {
+  async findAll(queryParams: QueryParams<Sale>): Promise<Paging<Sale>> {
     return this.queryBus.execute(new GetSalesQuery(queryParams));
   }
 

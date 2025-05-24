@@ -11,7 +11,7 @@ import { IContact } from '../interfaces/contact.interface';
 import { BaseModel } from './base.model';
 import { User } from './user.model';
 
-@Table({ tableName: 'contacts' })
+@Table
 export class Contact extends BaseModel<Contact> implements IContact {
   @Column(DataType.STRING)
   firstName: string;
@@ -45,9 +45,9 @@ export class Contact extends BaseModel<Contact> implements IContact {
   @Column(DataType.INTEGER)
   contactableId: number;
 
-  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  @BelongsTo(() => User, 'createdById')
   createdBy: User;
 
-  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  @BelongsTo(() => User, 'updatedById')
   updatedBy: User;
 }

@@ -2,9 +2,9 @@ import {
   Table,
   Column,
   DataType,
-  Default,
-  AllowNull,
   Unique,
+  AllowNull,
+  Default,
   HasMany,
   BelongsTo,
 } from 'sequelize-typescript';
@@ -13,9 +13,7 @@ import { Sale } from './sale.model';
 import { Contact } from './contact.model';
 import { User } from './user.model';
 
-@Table({
-  tableName: 'customers',
-})
+@Table
 export class Customer extends BaseModel<Customer> {
   @Unique
   @Column(DataType.STRING)
@@ -57,9 +55,9 @@ export class Customer extends BaseModel<Customer> {
   })
   contacts?: Contact[];
 
-  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  @BelongsTo(() => User, 'createdById')
   createdBy: User;
 
-  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  @BelongsTo(() => User, 'updatedById')
   updatedBy: User;
 }

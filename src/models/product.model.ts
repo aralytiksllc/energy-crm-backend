@@ -5,17 +5,39 @@ import {
   Default,
   AllowNull,
   Unique,
+  BelongsTo,
+  ForeignKey,
 } from 'sequelize-typescript';
-import { ProductUnit } from '@/enums/product-unit.enum';
+import { ProductUnit } from '../enums/product-unit.enum';
 import { BaseModel } from './base.model';
+import { Vendor } from './vendor.model';
+import { User } from './user.model';
 
-@Table({ tableName: 'products' })
+@Table
 export class Product extends BaseModel<Product> {
+  @Unique
   @Column(DataType.STRING)
   name: string;
 
+  @AllowNull
   @Column(DataType.TEXT)
-  description: string;
+  description?: string;
+
+  @Default(0)
+  @Column(DataType.FLOAT)
+  price: number;
+
+  @Default(0)
+  @Column(DataType.INTEGER)
+  stock: number;
+
+  @Default(true)
+  @Column(DataType.BOOLEAN)
+  isActive: boolean;
+
+  @AllowNull
+  @Column(DataType.JSON)
+  settings?: Record<string, any>;
 
   @Column(DataType.ENUM(...Object.values(ProductUnit)))
   unit: ProductUnit;
@@ -57,17 +79,19 @@ export class Product extends BaseModel<Product> {
   isbn?: string;
 
   @AllowNull
-  @Column(DataType.JSON)
-  settings?: Record<string, any>;
-
-  @AllowNull
   @Column(DataType.TEXT)
   notes?: string;
 
-  @Default(true)
-  @Column(DataType.BOOLEAN)
-  isActive?: boolean;
-
+  @ForeignKey(() => Vendor)
   @Column(DataType.INTEGER)
   vendorId: number;
+
+  @BelongsTo(() => Vendor)
+  vendor: Vendor;
+
+  @BelongsTo(() => User, 'createdById')
+  createdBy: User;
+
+  @BelongsTo(() => User, 'updatedById')
+  updatedBy: User;
 }

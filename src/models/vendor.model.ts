@@ -2,16 +2,15 @@ import {
   Table,
   Column,
   DataType,
-  Default,
-  AllowNull,
   Unique,
+  AllowNull,
+  Default,
   BelongsTo,
 } from 'sequelize-typescript';
-import { NonAttribute } from 'sequelize';
 import { BaseModel } from './base.model';
 import { User } from './user.model';
 
-@Table({ tableName: 'vendors' })
+@Table
 export class Vendor extends BaseModel<Vendor> {
   @Unique
   @Column(DataType.STRING)
@@ -41,9 +40,9 @@ export class Vendor extends BaseModel<Vendor> {
   @Column(DataType.JSON)
   settings?: Record<string, any>;
 
-  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  @BelongsTo(() => User, 'createdById')
   createdBy: User;
 
-  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  @BelongsTo(() => User, 'updatedById')
   updatedBy: User;
 }

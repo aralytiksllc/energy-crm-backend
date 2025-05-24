@@ -13,7 +13,7 @@ import { SaleItem } from './sale-item.model';
 import { BaseModel } from './base.model';
 import { User } from './user.model';
 
-@Table({ tableName: 'sales' })
+@Table
 export class Sale extends BaseModel<Sale> {
   @Unique
   @Column(DataType.INTEGER)
@@ -36,10 +36,10 @@ export class Sale extends BaseModel<Sale> {
   @HasMany(() => SaleItem)
   items?: SaleItem[];
 
-  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  @BelongsTo(() => User, 'createdById')
   createdBy: User;
 
-  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  @BelongsTo(() => User, 'updatedById')
   updatedBy: User;
 
   get formattedSaleNumber(): string {

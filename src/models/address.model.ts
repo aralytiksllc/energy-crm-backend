@@ -2,20 +2,21 @@ import {
   Table,
   Column,
   DataType,
-  Default,
   AllowNull,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { AddressType } from '@/enums/address-type.enum';
 import { BaseModel } from './base.model';
+import { User } from './user.model';
 
-@Table({ tableName: 'addresses' })
+@Table
 export class Address extends BaseModel<Address> {
   @Column(DataType.STRING)
   street: string;
 
   @AllowNull
   @Column(DataType.STRING)
-  streetTwo?: string;
+  street2?: string;
 
   @Column(DataType.STRING)
   city: string;
@@ -27,18 +28,20 @@ export class Address extends BaseModel<Address> {
   country: string;
 
   @Column(DataType.STRING)
-  postalCode: string;
+  zipCode: string;
 
   @Column(DataType.ENUM(...Object.values(AddressType)))
   addressType: AddressType;
-
-  @Default(true)
-  @Column(DataType.BOOLEAN)
-  isPrimary: boolean;
 
   @Column(DataType.STRING)
   addressableType: string;
 
   @Column(DataType.INTEGER)
   addressableId: number;
+
+  @BelongsTo(() => User, 'createdById')
+  createdBy: User;
+
+  @BelongsTo(() => User, 'updatedById')
+  updatedBy: User;
 }

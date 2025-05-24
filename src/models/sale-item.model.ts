@@ -8,12 +8,12 @@ import {
   BeforeCreate,
   BeforeUpdate,
 } from 'sequelize-typescript';
+import { BaseModel } from './base.model';
 import { Product } from './product.model';
 import { Sale } from './sale.model';
-import { BaseModel } from './base.model';
 import { User } from './user.model';
 
-@Table({ tableName: 'sales_items' })
+@Table
 export class SaleItem extends BaseModel<SaleItem> {
   @Default(1)
   @Column(DataType.FLOAT)
@@ -45,10 +45,10 @@ export class SaleItem extends BaseModel<SaleItem> {
   @BelongsTo(() => Product)
   product: Product;
 
-  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  @BelongsTo(() => User, 'createdById')
   createdBy: User;
 
-  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  @BelongsTo(() => User, 'updatedById')
   updatedBy: User;
 
   @BeforeCreate

@@ -1,16 +1,16 @@
 import {
   Table,
   Column,
-  Model,
   DataType,
   Default,
   AllowNull,
   Unique,
 } from 'sequelize-typescript';
 import { Exclude } from 'class-transformer';
+import { BaseModel } from './base.model';
 
 @Table({ tableName: 'users' })
-export class User extends Model {
+export class User extends BaseModel<User> {
   @Column(DataType.STRING)
   firstName: string;
 

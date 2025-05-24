@@ -1,24 +1,22 @@
 import {
   Table,
   Column,
-  Model,
   DataType,
   Default,
   AllowNull,
   Unique,
   HasMany,
+  BelongsTo,
 } from 'sequelize-typescript';
-import { InferAttributes, InferCreationAttributes } from 'sequelize';
+import { BaseModel } from './base.model';
 import { Sale } from './sale.model';
 import { Contact } from './contact.model';
+import { User } from './user.model';
 
 @Table({
   tableName: 'customers',
 })
-export class Customer extends Model<
-  InferAttributes<Customer>,
-  InferCreationAttributes<Customer>
-> {
+export class Customer extends BaseModel<Customer> {
   @Unique
   @Column(DataType.STRING)
   name!: string;
@@ -58,4 +56,10 @@ export class Customer extends Model<
     },
   })
   contacts?: Contact[];
+
+  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  createdBy: User;
+
+  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  updatedBy: User;
 }

@@ -52,6 +52,22 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       type: DataTypes.DATE,
       allowNull: false,
     },
+    createdById: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    },
+    updatedById: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    },
   };
 
   await queryInterface.createTable('contacts', attributes);

@@ -1,21 +1,18 @@
 import {
   Table,
   Column,
-  Model,
   DataType,
   Default,
   AllowNull,
   Unique,
-  HasMany,
+  BelongsTo,
 } from 'sequelize-typescript';
-import { InferAttributes, InferCreationAttributes } from 'sequelize';
-import { Product } from './product.model';
+import { NonAttribute } from 'sequelize';
+import { BaseModel } from './base.model';
+import { User } from './user.model';
 
 @Table({ tableName: 'vendors' })
-export class Vendor extends Model<
-  InferAttributes<Vendor>,
-  InferCreationAttributes<Vendor>
-> {
+export class Vendor extends BaseModel<Vendor> {
   @Unique
   @Column(DataType.STRING)
   name: string;
@@ -44,6 +41,9 @@ export class Vendor extends Model<
   @Column(DataType.JSON)
   settings?: Record<string, any>;
 
-  @HasMany(() => Product)
-  products: Product[];
+  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  createdBy: User;
+
+  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  updatedBy: User;
 }

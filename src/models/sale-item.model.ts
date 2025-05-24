@@ -1,7 +1,6 @@
 import {
   Table,
   Column,
-  Model,
   DataType,
   Default,
   ForeignKey,
@@ -11,9 +10,11 @@ import {
 } from 'sequelize-typescript';
 import { Product } from './product.model';
 import { Sale } from './sale.model';
+import { BaseModel } from './base.model';
+import { User } from './user.model';
 
 @Table({ tableName: 'sales_items' })
-export class SaleItem extends Model {
+export class SaleItem extends BaseModel<SaleItem> {
   @Default(1)
   @Column(DataType.FLOAT)
   quantity: number;
@@ -31,24 +32,28 @@ export class SaleItem extends Model {
   amount: number;
 
   @ForeignKey(() => Sale)
-  @Column({ type: DataType.INTEGER })
+  @Column(DataType.INTEGER)
   saleId: number;
 
   @BelongsTo(() => Sale, { onDelete: 'CASCADE' })
   sale: Sale;
 
   @ForeignKey(() => Product)
-  @Column({ type: DataType.INTEGER })
+  @Column(DataType.INTEGER)
   productId: number;
 
   @BelongsTo(() => Product)
   product: Product;
 
+  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  createdBy: User;
+
+  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  updatedBy: User;
+
   @BeforeCreate
   @BeforeUpdate
   static calculateAmount(instance: SaleItem) {
-    const total = instance.price * instance.quantity;
-    const discountAmount = total * (instance.discount / 100);
-    instance.amount = total - discountAmount;
+    instance.amount = (instance.price - instance.discount) * instance.quantity;
   }
 }

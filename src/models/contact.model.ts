@@ -1,23 +1,18 @@
 import {
   Table,
-  Model,
   Column,
   DataType,
   AllowNull,
   Default,
   IsEmail,
+  BelongsTo,
 } from 'sequelize-typescript';
-import { InferAttributes, InferCreationAttributes } from 'sequelize';
 import { IContact } from '../interfaces/contact.interface';
+import { BaseModel } from './base.model';
+import { User } from './user.model';
 
-@Table({
-  tableName: 'contacts',
-  timestamps: true,
-})
-export class Contact
-  extends Model<InferAttributes<Contact>, InferCreationAttributes<Contact>>
-  implements IContact
-{
+@Table({ tableName: 'contacts' })
+export class Contact extends BaseModel<Contact> implements IContact {
   @Column(DataType.STRING)
   firstName: string;
 
@@ -49,4 +44,10 @@ export class Contact
 
   @Column(DataType.INTEGER)
   contactableId: number;
+
+  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  createdBy: User;
+
+  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  updatedBy: User;
 }

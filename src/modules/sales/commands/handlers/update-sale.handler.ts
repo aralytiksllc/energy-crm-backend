@@ -15,7 +15,7 @@ export class UpdateSaleHandler implements ICommandHandler<UpdateSaleCommand> {
 
     if (!sale) throw new Error(`Sale with ID ${command.id} not found.`);
 
-    sale.set(command.dto);
+    sale.set(command.dto as any);
 
     await sale.save();
 

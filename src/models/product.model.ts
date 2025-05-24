@@ -1,23 +1,16 @@
 import {
   Table,
   Column,
-  Model,
   DataType,
   Default,
   AllowNull,
   Unique,
-  BelongsTo,
-  ForeignKey,
 } from 'sequelize-typescript';
-import { InferAttributes, InferCreationAttributes } from 'sequelize';
-import { Vendor } from './vendor.model';
 import { ProductUnit } from '@/enums/product-unit.enum';
+import { BaseModel } from './base.model';
 
 @Table({ tableName: 'products' })
-export class Product extends Model<
-  InferAttributes<Product>,
-  InferCreationAttributes<Product>
-> {
+export class Product extends BaseModel<Product> {
   @Column(DataType.STRING)
   name: string;
 
@@ -75,10 +68,6 @@ export class Product extends Model<
   @Column(DataType.BOOLEAN)
   isActive?: boolean;
 
-  @ForeignKey(() => Vendor)
   @Column(DataType.INTEGER)
   vendorId: number;
-
-  @BelongsTo(() => Vendor)
-  vendor: Vendor;
 }

@@ -1,7 +1,6 @@
 import {
   Table,
   Column,
-  Model,
   DataType,
   AllowNull,
   Unique,
@@ -11,11 +10,13 @@ import {
 } from 'sequelize-typescript';
 import { Customer } from './customer.model';
 import { SaleItem } from './sale-item.model';
+import { BaseModel } from './base.model';
+import { User } from './user.model';
 
 @Table({ tableName: 'sales' })
-export class Sale extends Model {
+export class Sale extends BaseModel<Sale> {
   @Unique
-  @Column({ type: DataType.INTEGER })
+  @Column(DataType.INTEGER)
   saleNumber: number;
 
   @Column(DataType.DATEONLY)
@@ -34,6 +35,12 @@ export class Sale extends Model {
 
   @HasMany(() => SaleItem)
   items?: SaleItem[];
+
+  @BelongsTo(() => User, { foreignKey: 'createdById' })
+  createdBy: User;
+
+  @BelongsTo(() => User, { foreignKey: 'updatedById' })
+  updatedBy: User;
 
   get formattedSaleNumber(): string {
     return `SALE-${this.saleNumber?.toString().padStart(5, '0')}`;

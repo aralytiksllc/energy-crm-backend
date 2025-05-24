@@ -4,7 +4,8 @@ import {
   DataType,
   Unique,
   AllowNull,
-  Default,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { Exclude } from 'class-transformer';
 import { BaseModel } from './base.model';
@@ -27,21 +28,34 @@ export class User extends BaseModel<User> {
 
   @AllowNull
   @Column(DataType.DATEONLY)
-  dateOfBirth?: string;
+  dateOfBirth: Nullable<Date>;
 
   @AllowNull
   @Column(DataType.DATEONLY)
-  dateOfJoining?: string;
+  dateOfJoining: Nullable<Date>;
 
   @AllowNull
-  @Column(DataType.JSON)
-  settings?: Record<string, any>;
+  @Column(DataType.JSONB)
+  settings: Nullable<Record<string, unknown>>;
 
   @AllowNull
   @Column(DataType.TEXT)
-  notes?: string;
+  notes: Nullable<string>;
 
-  @Default(true)
   @Column(DataType.BOOLEAN)
-  isActive?: boolean;
+  isActive: boolean;
+
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  createdById: number;
+
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  updatedById: number;
+
+  @BelongsTo(() => User)
+  createdBy: User;
+
+  @BelongsTo(() => User)
+  updatedBy: User;
 }

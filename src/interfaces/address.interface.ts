@@ -1,17 +1,17 @@
 import { AddressType } from '../enums/address-type.enum';
+import { IBase } from './base.interface';
+import { IUser } from './user.interface';
 
-export interface IAddress {
-  id?: number;
+export interface IAddress extends IBase {
   street: string;
-  streetTwo?: string;
+  street2?: string;
   city: string;
   state: string;
   country: string;
-  postalCode: string;
+  zipCode: string;
   addressType: AddressType;
-  isPrimary: boolean;
   addressableType: string;
   addressableId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdBy?: IUser;
+  updatedBy?: IUser;
 }

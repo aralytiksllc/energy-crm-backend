@@ -2,58 +2,54 @@ import {
   Table,
   Column,
   DataType,
-  Default,
+  AllowNull,
   ForeignKey,
   BelongsTo,
-  BeforeCreate,
-  BeforeUpdate,
 } from 'sequelize-typescript';
 import { BaseModel } from './base.model';
-import { Product } from './product.model';
-import { Sale } from './sale.model';
 import { User } from './user.model';
+import { Sale } from './sale.model';
+import { Product } from './product.model';
 
 @Table
 export class SaleItem extends BaseModel<SaleItem> {
-  @Default(1)
-  @Column(DataType.FLOAT)
+  @Column(DataType.INTEGER)
   quantity: number;
 
-  @Default(0)
-  @Column(DataType.FLOAT)
+  @Column(DataType.DECIMAL(10, 2))
   price: number;
 
-  @Default(0)
-  @Column(DataType.FLOAT)
+  @Column(DataType.DECIMAL(10, 2))
   discount: number;
 
-  @Default(0)
-  @Column(DataType.FLOAT)
+  @Column(DataType.DECIMAL(10, 2))
   amount: number;
 
   @ForeignKey(() => Sale)
   @Column(DataType.INTEGER)
   saleId: number;
 
-  @BelongsTo(() => Sale, { onDelete: 'CASCADE' })
-  sale: Sale;
-
   @ForeignKey(() => Product)
   @Column(DataType.INTEGER)
   productId: number;
 
-  @BelongsTo(() => Product)
-  product: Product;
+  @BelongsTo(() => Sale)
+  sale: Nullable<Sale>;
 
-  @BelongsTo(() => User, 'createdById')
+  @BelongsTo(() => Product)
+  product: Nullable<Product>;
+
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  createdById: number;
+
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  updatedById: number;
+
+  @BelongsTo(() => User)
   createdBy: User;
 
-  @BelongsTo(() => User, 'updatedById')
+  @BelongsTo(() => User)
   updatedBy: User;
-
-  @BeforeCreate
-  @BeforeUpdate
-  static calculateAmount(instance: SaleItem) {
-    instance.amount = (instance.price - instance.discount) * instance.quantity;
-  }
 }

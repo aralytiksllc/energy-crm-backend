@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { User } from '@/models/user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { DeleteUserCommand } from './commands/impl/delete-user.command';
-import { CreateUserCommand } from './commands/impl/create-user.command';
-import { UpdateUserCommand } from './commands/impl/update-user.command';
-import { GetUserByIdQuery } from './queries/impl/get-user-by-id.query';
-import { GetUsersQuery } from './queries/impl/get-users.query';
-import { User } from '@/models/user.model';
+import { DeleteUserCommand } from './commands/delete-user.command';
+import { CreateUserCommand } from './commands/create-user.command';
+import { UpdateUserCommand } from './commands/update-user.command';
+import { GetUserByIdQuery } from './queries/get-user-by-id.query';
+import { GetUsersQuery } from './queries/get-users.query';
 
 @Injectable()
 export class UsersService {

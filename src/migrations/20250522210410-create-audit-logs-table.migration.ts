@@ -21,10 +21,10 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       allowNull: true,
       references: {
         model: 'users',
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
+      onDelete: 'SET NULL',
     },
     data: {
       type: DataTypes.JSONB,
@@ -53,32 +53,28 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
       allowNull: false,
       references: {
         model: 'users',
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'RESTRICT'
+      onDelete: 'RESTRICT',
     },
     updatedById: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'RESTRICT'
-    }
+      onDelete: 'RESTRICT',
+    },
   };
 
   await queryInterface.createTable('audit_logs', attributes);
 
-  await queryInterface.addIndex(
-    'audit_logs',
-    ['resource', 'action'],
-    {
-      name: 'audit_logs_resource_action_index',
-    },
-  );
+  await queryInterface.addIndex('audit_logs', ['resource', 'action'], {
+    name: 'audit_logs_resource_action_index',
+  });
 
   await queryInterface.sequelize.query(`
     CREATE INDEX audit_logs_meta_gin_index ON audit_logs USING gin (meta);
@@ -87,4 +83,4 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
 
 export async function down(queryInterface: QueryInterface): Promise<void> {
   await queryInterface.dropTable('audit_logs');
-} 
+}

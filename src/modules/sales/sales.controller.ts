@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { Sale } from '@/models/sale.model';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
-import { Sale } from '@/models/sale.model';
 
 @Controller('sales')
 export class SalesController {

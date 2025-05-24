@@ -1,65 +1,52 @@
 import {
   Table,
-  AllowNull,
   Column,
   DataType,
-  ForeignKey,
   BelongsTo,
+  ForeignKey,
+  AllowNull,
 } from 'sequelize-typescript';
 import { BaseModel } from './base.model';
 import { User } from './user.model';
 
 @Table
 export class AuditLog extends BaseModel<AuditLog> {
-  @AllowNull(false)
   @Column(DataType.STRING)
   action: string;
 
-  @AllowNull(false)
   @Column(DataType.STRING)
   resource: string;
 
   @ForeignKey(() => User)
-  @AllowNull(true)
   @Column(DataType.INTEGER)
-  authorId: Nullable<number>;
+  authorId: number;
 
-  @BelongsTo(() => User, 'authorId')
-  author: Nullable<User>;
+  @BelongsTo(() => User)
+  author: User;
 
-  @AllowNull(true)
+  @AllowNull
   @Column(DataType.JSONB)
   data: Nullable<Record<string, unknown>>;
 
-  @AllowNull(true)
+  @AllowNull
   @Column(DataType.JSONB)
   previousData: Nullable<Record<string, unknown>>;
 
-  @AllowNull(true)
+  @AllowNull
   @Column(DataType.JSONB)
   meta: Nullable<Record<string, unknown>>;
 
-  @AllowNull(false)
-  @Column(DataType.DATE)
-  createdAt!: Date;
-
-  @AllowNull(false)
-  @Column(DataType.DATE)
-  updatedAt!: Date;
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  createdById: number;
 
   @ForeignKey(() => User)
-  @AllowNull(false)
   @Column(DataType.INTEGER)
-  createdById!: number;
+  updatedById: number;
 
-  @ForeignKey(() => User)
-  @AllowNull(false)
-  @Column(DataType.INTEGER)
-  updatedById!: number;
+  @BelongsTo(() => User)
+  createdBy: User;
 
-  @BelongsTo(() => User, 'createdById')
-  createdBy: Nullable<User>;
-
-  @BelongsTo(() => User, 'updatedById')
-  updatedBy: Nullable<User>;
-} 
+  @BelongsTo(() => User)
+  updatedBy: User;
+}

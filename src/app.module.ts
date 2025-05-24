@@ -7,89 +7,28 @@ import { VendorsModule } from './modules/vendors/vendors.module';
 import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
 import { SalesModule } from './modules/sales/sales.module';
-import { Contact } from './models/contact.model';
-import { Address } from './models/address.model';
-import { Customer } from './models/customer.model';
-import { Sale } from './models/sale.model';
-import { SaleItem } from './models/sale-item.model';
-import { Product } from './models/product.model';
-import { Vendor } from './models/vendor.model';
-import { User } from './models/user.model';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-
     AppLoggerModule,
-
     SequelizeModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const host = configService.get('DB_HOST');
-        const port = configService.get('DB_PORT');
-        const username = configService.get('DB_USERNAME');
-        const password = configService.get('DB_PASSWORD');
-        const database = configService.get('DB_NAME');
-        const environment = configService.get('NODE_ENV') || 'development';
-
-        console.log('Database Config:', {
-          host,
-          port,
-          username,
-          database,
-          environment,
-          // password hidden for security
-        });
-
-        return {
-          dialect: 'postgres',
-          host,
-          port,
-          username,
-          password,
-          database,
-          models: [
-            Contact,
-            Address,
-            Customer,
-            Sale,
-            SaleItem,
-            Product,
-            Vendor,
-            User,
-          ],
-          autoLoadModels: true,
-          synchronize: false,
-          logging: environment === 'development' ? console.log : false,
-          define: {
-            timestamps: true,
-            underscored: false,
-            freezeTableName: true,
-          },
-          retry: {
-            max: 5,
-            match: [
-              /SequelizeConnectionError/,
-              /SequelizeConnectionRefusedError/,
-              /SequelizeHostNotFoundError/,
-              /SequelizeHostNotReachableError/,
-              /SequelizeInvalidConnectionError/,
-              /SequelizeConnectionTimedOutError/,
-              /TimeoutError/,
-            ],
-          },
-          pool: {
-            max: 5,
-            min: 0,
-            acquire: 30000,
-            idle: 10000,
-          },
-        };
-      },
+      useFactory: (configService: ConfigService) => ({
+        dialect: 'postgres',
+        host: configService.get('DB_HOST'),
+        port: configService.get('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_NAME'),
+        models: ['src/models/*.model.ts'],
+        autoLoadModels: true,
+        synchronize: false,
+        logging: false,
+      }),
     }),
-
     UsersModule,
     CustomersModule,
     VendorsModule,

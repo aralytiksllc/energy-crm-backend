@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { Vendor } from '@/models/vendor.model';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
-import { DeleteVendorCommand } from './commands/impl/delete-vendor.command';
-import { CreateVendorCommand } from './commands/impl/create-vendor.command';
-import { UpdateVendorCommand } from './commands/impl/update-vendor.command';
-import { GetVendorByIdQuery } from './queries/impl/get-vendor-by-id.query';
-import { GetVendorsQuery } from './queries/impl/get-vendors.query';
-import { Vendor } from '@/models/vendor.model';
+import { GetVendorsQuery } from './queries/get-vendors.query';
+import { GetVendorByIdQuery } from './queries/get-vendor-by-id.query';
+import { DeleteVendorCommand } from './commands/delete-vendor.command';
+import { CreateVendorCommand } from './commands/create-vendor.command';
+import { UpdateVendorCommand } from './commands/update-vendor.command';
 
 @Injectable()
 export class VendorsService {

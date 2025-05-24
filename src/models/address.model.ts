@@ -3,9 +3,10 @@ import {
   Column,
   DataType,
   AllowNull,
+  ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { AddressType } from '@/enums/address-type.enum';
+import { AddressType } from '../enums/address-type.enum';
 import { BaseModel } from './base.model';
 import { User } from './user.model';
 
@@ -16,7 +17,7 @@ export class Address extends BaseModel<Address> {
 
   @AllowNull
   @Column(DataType.STRING)
-  street2?: string;
+  street2: Nullable<string>;
 
   @Column(DataType.STRING)
   city: string;
@@ -39,9 +40,17 @@ export class Address extends BaseModel<Address> {
   @Column(DataType.INTEGER)
   addressableId: number;
 
-  @BelongsTo(() => User, 'createdById')
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  createdById: number;
+
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  updatedById: number;
+
+  @BelongsTo(() => User)
   createdBy: User;
 
-  @BelongsTo(() => User, 'updatedById')
+  @BelongsTo(() => User)
   updatedBy: User;
 }

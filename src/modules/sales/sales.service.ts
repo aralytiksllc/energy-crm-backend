@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { Sale } from '@/models/sale.model';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
-import { DeleteSaleCommand } from './commands/impl/delete-sale.command';
-import { CreateSaleCommand } from './commands/impl/create-sale.command';
-import { UpdateSaleCommand } from './commands/impl/update-sale.command';
-import { GetSaleByIdQuery } from './queries/impl/get-sale-by-id.query';
-import { GetSalesQuery } from './queries/impl/get-sales.query';
-import { Sale } from '@/models/sale.model';
+import { GetSalesQuery } from './queries/get-sales.query';
+import { GetSaleByIdQuery } from './queries/get-sale-by-id.query';
+import { DeleteSaleCommand } from './commands/delete-sale.command';
+import { CreateSaleCommand } from './commands/create-sale.command';
+import { UpdateSaleCommand } from './commands/update-sale.command';
 
 @Injectable()
 export class SalesService {

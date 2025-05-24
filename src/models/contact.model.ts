@@ -3,16 +3,14 @@ import {
   Column,
   DataType,
   AllowNull,
-  Default,
-  IsEmail,
+  ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { IContact } from '../interfaces/contact.interface';
 import { BaseModel } from './base.model';
 import { User } from './user.model';
 
 @Table
-export class Contact extends BaseModel<Contact> implements IContact {
+export class Contact extends BaseModel<Contact> {
   @Column(DataType.STRING)
   firstName: string;
 
@@ -21,23 +19,21 @@ export class Contact extends BaseModel<Contact> implements IContact {
 
   @AllowNull
   @Column(DataType.STRING)
-  title: string;
+  title: Nullable<string>;
 
-  @IsEmail
   @Column(DataType.STRING)
   email: string;
 
   @AllowNull
   @Column(DataType.STRING)
-  phone: string;
+  phone: Nullable<string>;
 
-  @Default(true)
   @Column(DataType.BOOLEAN)
   isPrimary: boolean;
 
   @AllowNull
   @Column(DataType.TEXT)
-  notes: string;
+  notes: Nullable<string>;
 
   @Column(DataType.STRING)
   contactableType: string;
@@ -45,9 +41,17 @@ export class Contact extends BaseModel<Contact> implements IContact {
   @Column(DataType.INTEGER)
   contactableId: number;
 
-  @BelongsTo(() => User, 'createdById')
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  createdById: number;
+
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  updatedById: number;
+
+  @BelongsTo(() => User)
   createdBy: User;
 
-  @BelongsTo(() => User, 'updatedById')
+  @BelongsTo(() => User)
   updatedBy: User;
 }

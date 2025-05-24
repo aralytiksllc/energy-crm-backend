@@ -2,62 +2,61 @@ import {
   Table,
   Column,
   DataType,
-  Unique,
   AllowNull,
-  Default,
-  HasMany,
+  ForeignKey,
   BelongsTo,
+  HasMany,
 } from 'sequelize-typescript';
 import { BaseModel } from './base.model';
+import { User } from './user.model';
 import { Sale } from './sale.model';
 import { Contact } from './contact.model';
-import { User } from './user.model';
 
 @Table
 export class Customer extends BaseModel<Customer> {
-  @Unique
   @Column(DataType.STRING)
-  name!: string;
+  name: string;
 
   @AllowNull
   @Column(DataType.TEXT)
-  description?: string;
+  description: Nullable<string>;
 
   @AllowNull
   @Column(DataType.STRING)
-  contactEmail?: string;
+  contactEmail: Nullable<string>;
 
   @AllowNull
   @Column(DataType.STRING)
-  contactPhone?: string;
+  contactPhone: Nullable<string>;
 
   @AllowNull
   @Column(DataType.STRING)
-  website?: string;
+  website: Nullable<string>;
 
-  @Default(true)
   @Column(DataType.BOOLEAN)
-  isActive?: boolean;
+  isActive: boolean;
 
   @AllowNull
-  @Column(DataType.JSON)
-  settings?: Record<string, any>;
+  @Column(DataType.JSONB)
+  settings: Nullable<Record<string, unknown>>;
 
   @HasMany(() => Sale)
-  sales?: Sale[];
+  sales: Sale[];
 
-  @HasMany(() => Contact, {
-    foreignKey: 'contactableId',
-    constraints: false,
-    scope: {
-      contactableType: 'customer',
-    },
-  })
-  contacts?: Contact[];
+  @HasMany(() => Contact)
+  contacts: Contact[];
 
-  @BelongsTo(() => User, 'createdById')
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  createdById: number;
+
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  updatedById: number;
+
+  @BelongsTo(() => User)
   createdBy: User;
 
-  @BelongsTo(() => User, 'updatedById')
+  @BelongsTo(() => User)
   updatedBy: User;
 }

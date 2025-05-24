@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { Product } from '@/models/product.model';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { DeleteProductCommand } from './commands/impl/delete-product.command';
-import { CreateProductCommand } from './commands/impl/create-product.command';
-import { UpdateProductCommand } from './commands/impl/update-product.command';
-import { GetProductByIdQuery } from './queries/impl/get-product-by-id.query';
-import { GetProductsQuery } from './queries/impl/get-products.query';
-import { Product } from '@/models/product.model';
+import { GetProductsQuery } from './queries/get-products.query';
+import { GetProductByIdQuery } from './queries/get-product-by-id.query';
+import { DeleteProductCommand } from './commands/delete-product.command';
+import { CreateProductCommand } from './commands/create-product.command';
+import { UpdateProductCommand } from './commands/update-product.command';
 
 @Injectable()
 export class ProductsService {

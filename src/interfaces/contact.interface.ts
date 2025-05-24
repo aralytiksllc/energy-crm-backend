@@ -1,5 +1,7 @@
-export interface IContact {
-  id?: number;
+import { IBase } from './base.interface';
+import { IUser } from './user.interface';
+
+export interface IContact extends IBase {
   firstName: string;
   lastName: string;
   title?: string;
@@ -9,6 +11,6 @@ export interface IContact {
   notes?: string;
   contactableType: string;
   contactableId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdBy?: IUser;
+  updatedBy?: IUser;
 }

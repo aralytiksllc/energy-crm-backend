@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { Vendor } from '@/models/vendor.model';
 import { VendorsService } from './vendors.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
-import { Vendor } from '@/models/vendor.model';
 
 @Controller('vendors')
 export class VendorsController {

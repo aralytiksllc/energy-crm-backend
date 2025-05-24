@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { Customer } from '@/models/customer.model';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { DeleteCustomerCommand } from './commands/impl/delete-customer.command';
-import { CreateCustomerCommand } from './commands/impl/create-customer.command';
-import { UpdateCustomerCommand } from './commands/impl/update-customer.command';
-import { GetCustomerByIdQuery } from './queries/impl/get-customer-by-id.query';
-import { GetCustomersQuery } from './queries/impl/get-customers.query';
-import { Customer } from '@/models/customer.model';
+import { GetCustomersQuery } from './queries/get-customers.query';
+import { GetCustomerByIdQuery } from './queries/get-customer-by-id.query';
+import { CreateCustomerCommand } from './commands/create-customer.command';
+import { UpdateCustomerCommand } from './commands/update-customer.command';
+import { DeleteCustomerCommand } from './commands/delete-customer.command';
 
 @Injectable()
 export class CustomersService {

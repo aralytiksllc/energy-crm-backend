@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { Paging } from '@/common/paging';
 import { QueryParams } from '@/common/query/query-params';
+import { User } from '@/models/user.model';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from '@/models/user.model';
 
 @Controller('users')
 export class UsersController {

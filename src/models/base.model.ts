@@ -6,8 +6,8 @@ export abstract class BaseModel<T extends Model> extends Model<
   InferCreationAttributes<T>
 > {
   @Column(DataType.INTEGER)
-  createdById: number;
+  createdById?: number;
 
   @Column(DataType.INTEGER)
-  updatedById: number;
+  updatedById?: number;
 }

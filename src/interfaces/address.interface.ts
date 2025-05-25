@@ -4,14 +4,17 @@ import { IUser } from './user.interface';
 
 export interface IAddress extends IBase {
   street: string;
-  street2?: string;
+  streetTwo: Nullable<string>;
   city: string;
   state: string;
   country: string;
-  zipCode: string;
+  postalCode: string;
   addressType: AddressType;
+  isPrimary: boolean;
   addressableType: string;
   addressableId: number;
-  createdBy?: IUser;
-  updatedBy?: IUser;
+  createdById: number;
+  updatedById: number;
+  createdBy: IUser;
+  updatedBy: IUser;
 }

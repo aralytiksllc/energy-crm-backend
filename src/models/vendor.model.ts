@@ -22,11 +22,11 @@ export class Vendor extends BaseModel<Vendor> {
 
   @AllowNull
   @Column(DataType.STRING)
-  contactEmail: Nullable<string>;
+  email: Nullable<string>;
 
   @AllowNull
   @Column(DataType.STRING)
-  contactPhone: Nullable<string>;
+  phone: Nullable<string>;
 
   @AllowNull
   @Column(DataType.STRING)

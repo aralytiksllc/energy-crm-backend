@@ -5,19 +5,21 @@ import {
   AllowNull,
   ForeignKey,
   BelongsTo,
+  Default,
 } from 'sequelize-typescript';
+import { IAddress } from '../interfaces/address.interface';
 import { AddressType } from '../enums/address-type.enum';
 import { BaseModel } from './base.model';
 import { User } from './user.model';
 
 @Table
-export class Address extends BaseModel<Address> {
+export class Address extends BaseModel<Address> implements IAddress {
   @Column(DataType.STRING)
   street: string;
 
   @AllowNull
   @Column(DataType.STRING)
-  street2: Nullable<string>;
+  streetTwo: Nullable<string>;
 
   @Column(DataType.STRING)
   city: string;
@@ -29,10 +31,15 @@ export class Address extends BaseModel<Address> {
   country: string;
 
   @Column(DataType.STRING)
-  zipCode: string;
+  postalCode: string;
 
+  @Default(AddressType.BOTH)
   @Column(DataType.ENUM(...Object.values(AddressType)))
   addressType: AddressType;
+
+  @Default(true)
+  @Column(DataType.BOOLEAN)
+  isPrimary: boolean;
 
   @Column(DataType.STRING)
   addressableType: string;

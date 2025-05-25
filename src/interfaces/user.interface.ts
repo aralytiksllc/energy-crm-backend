@@ -5,11 +5,13 @@ export interface IUser extends IBase {
   lastName: string;
   email: string;
   password: string;
-  dateOfBirth: Date;
-  dateOfJoining: Date;
-  settings?: Record<string, unknown>;
-  notes?: string;
+  dateOfBirth: Nullable<Date>;
+  dateOfJoining: Nullable<Date>;
+  settings: Nullable<Record<string, unknown>>;
+  notes: Nullable<string>;
   isActive: boolean;
+  createdById: number;
+  updatedById: number;
   createdBy?: IUser;
   updatedBy?: IUser;
 }

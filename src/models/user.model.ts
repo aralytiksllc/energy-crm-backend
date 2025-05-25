@@ -8,10 +8,11 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { Exclude } from 'class-transformer';
+import { IUser } from '../interfaces/user.interface';
 import { BaseModel } from './base.model';
 
 @Table
-export class User extends BaseModel<User> {
+export class User extends BaseModel<User> implements IUser {
   @Column(DataType.STRING)
   firstName: string;
 

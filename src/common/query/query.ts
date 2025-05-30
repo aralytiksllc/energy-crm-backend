@@ -1,13 +1,14 @@
-import { FindOptions, Order, WhereOptions } from 'sequelize';
+import { FindOptions, WhereOptions, Order } from 'sequelize';
 import { QueryParams } from './query-params';
 import { QueryOperators } from './query-operators';
 import { QueryFilter, QuerySort } from './query.interfaces';
+import { Operator, Sort } from './query.enums';
 
 export class Query<T extends object> {
-  public readonly filters: QueryFilter<T>[] = [];
-  public readonly sorters: QuerySort<T>[] = [];
-  public readonly current: number;
-  public readonly pageSize: number;
+  private filters: QueryFilter<T>[];
+  private sorters: QuerySort<T>[];
+  private current: number;
+  private pageSize: number;
 
   constructor(params: QueryParams<T>) {
     this.filters = params.filters ?? [];
@@ -16,24 +17,27 @@ export class Query<T extends object> {
     this.pageSize = params.pageSize ?? 20;
   }
 
-  public toSequelizeOptions(): FindOptions<T> {
-    return {
-      where: this.getWhereOptions(),
-      order: this.getOrderOptions(),
-      limit: this.getTake(),
-      offset: this.getSkip(),
-    };
+  public addFilter(field: keyof T, operator: Operator, value: any): this {
+    this.filters.push({ field, operator, value } as QueryFilter<T>);
+    return this;
   }
 
-  private getSkip(): number {
-    return (this.current - 1) * this.pageSize;
+  public addSorter(field: keyof T, order: Sort): this {
+    this.sorters.push({ field, order } as QuerySort<T>);
+    return this;
   }
 
-  private getTake(): number {
-    return this.pageSize;
+  public setCurrent(current: number): this {
+    this.current = current;
+    return this;
   }
 
-  private getWhereOptions(): WhereOptions<T> {
+  public setPageSize(pageSize: number): this {
+    this.pageSize = pageSize;
+    return this;
+  }
+
+  public getWhereOptions(): WhereOptions<T> {
     const where: Record<string, any> = {};
 
     for (const filter of this.filters) {
@@ -46,7 +50,24 @@ export class Query<T extends object> {
     return where;
   }
 
-  private getOrderOptions(): Order {
-    return this.sorters.map((sort) => [sort.field, sort.order]);
+  public getOrderOptions(): Order {
+    return this.sorters.map((sorter) => [sorter.field, sorter.order]);
+  }
+
+  public getTake(): number {
+    return this.pageSize;
+  }
+
+  public getSkip(): number {
+    return (this.current - 1) * this.pageSize;
+  }
+
+  public toFindOptions(params: FindOptions<T> = {}): FindOptions<T> {
+    return Object.assign({}, params, {
+      where: this.getWhereOptions(),
+      order: this.getOrderOptions(),
+      limit: this.getTake(),
+      offset: this.getSkip(),
+    });
   }
 }

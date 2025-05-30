@@ -12,7 +12,6 @@ import { ConfigService } from '@nestjs/config';
 export class ResetPasswordHandler
   implements ICommandHandler<ResetPasswordCommand>
 {
-
   constructor(
     @InjectModel(PasswordReset)
     private readonly passwordResetModel: typeof PasswordReset,

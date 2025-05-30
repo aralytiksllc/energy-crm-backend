@@ -1,4 +1,4 @@
-export enum QueryOperator {
+export enum Operator {
   EQ = 'eq',
   NE = 'ne',
   GT = 'gt',
@@ -9,4 +9,9 @@ export enum QueryOperator {
   ILIKE = 'ilike',
   IN = 'in',
   RANGE = 'range',
+}
+
+export enum Sort {
+  ASC = 'ASC',
+  DESC = 'DESC',
 }

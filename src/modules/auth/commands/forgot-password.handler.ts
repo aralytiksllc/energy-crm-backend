@@ -1,6 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { Logger } from '@nestjs/common';
 import { Token } from '@/common/token';
 import { PasswordReset } from '@/models/password-reset.model';
 import { UsersService } from '@/modules/users/users.service';
@@ -10,8 +9,6 @@ import { ForgotPasswordCommand } from './forgot-password.command';
 export class ForgotPasswordHandler
   implements ICommandHandler<ForgotPasswordCommand>
 {
-  private readonly logger = new Logger(ForgotPasswordHandler.name);
-
   constructor(
     @InjectModel(PasswordReset)
     private readonly passwordResetModel: typeof PasswordReset,

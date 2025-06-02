@@ -8,7 +8,7 @@ export class Hash {
     return bcrypt.hash(plainText, salt);
   }
 
-  static async compare(plainText: string, hash: string): Promise<boolean> {
-    return bcrypt.compare(plainText, hash);
+  static async compare(plainText: string, hashText: string): Promise<boolean> {
+    return bcrypt.compare(plainText, hashText);
   }
 }

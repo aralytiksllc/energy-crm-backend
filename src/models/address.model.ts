@@ -9,7 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { IAddress } from '../interfaces/address.interface';
 import { AddressType } from '../enums/address-type.enum';
-import { BaseModel } from './base.model';
+import { BaseModel } from '../common/cqrs/base.model';
 import { User } from './user.model';
 
 @Table

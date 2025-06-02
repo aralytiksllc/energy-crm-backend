@@ -26,9 +26,9 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
       throw new UnauthorizedException('Invalid credentials.');
     }
 
-    const payload: TokenPayload = { sub: user.id, email: user.email };
+    const tokenPayload: TokenPayload = { sub: user.id, email: user.email };
 
-    const accessToken = await this.jwtService.signAsync(payload);
+    const accessToken = await this.jwtService.signAsync(tokenPayload);
 
     return {
       accessToken,

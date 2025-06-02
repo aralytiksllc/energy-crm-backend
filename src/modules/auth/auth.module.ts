@@ -1,32 +1,20 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { UsersModule } from '@/modules/users/users.module';
+import { SignInHandler } from './commands/sign-in.handler';
+import { ForgotPasswordHandler } from './commands/forgot-password.handler';
+import { ResetPasswordHandler } from './commands/reset-password.handler';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
-import { PasswordReset } from './entities/password-reset.entity';
-import { UtilsService } from './utils/utils.service';
-
-// Command Handlers
-import { SignInHandler } from './commands/handlers/sign-in.handler';
-import { ForgotPasswordHandler } from './commands/handlers/forgot-password.handler';
-import { ResetPasswordHandler } from './commands/handlers/reset-password.handler';
-
-const CommandHandlers = [
-  SignInHandler,
-  ForgotPasswordHandler,
-  ResetPasswordHandler,
-];
-
-const QueryHandlers = [ValidateTokenHandler];
 
 @Module({
   imports: [
     CqrsModule,
     UsersModule,
-    TypeOrmModule.forFeature([PasswordReset]),
+    SequelizeModule.forFeature([]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -39,7 +27,12 @@ const QueryHandlers = [ValidateTokenHandler];
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UtilsService, ...CommandHandlers, ...QueryHandlers],
+  providers: [
+    AuthService,
+    SignInHandler,
+    ForgotPasswordHandler,
+    ResetPasswordHandler,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

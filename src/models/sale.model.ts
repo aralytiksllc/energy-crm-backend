@@ -7,7 +7,7 @@ import {
   BelongsTo,
   HasMany,
 } from 'sequelize-typescript';
-import { BaseModel } from './base.model';
+import { BaseModel } from '../common/cqrs/base.model';
 import { User } from './user.model';
 import { Customer } from './customer.model';
 import { SaleItem } from './sale-item.model';

@@ -1,5 +1,5 @@
 import { Table, Column, DataType } from 'sequelize-typescript';
-import { BaseModel } from './base.model';
+import { BaseModel } from '../common/cqrs/base.model';
 
 @Table
 export class PasswordReset extends BaseModel<PasswordReset> {

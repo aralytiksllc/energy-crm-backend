@@ -6,7 +6,6 @@ import { Hash } from '@/common/hash';
 import { PasswordReset } from '@/models/password-reset.model';
 import { UsersService } from '@/modules/users/users.service';
 import { ResetPasswordCommand } from './reset-password.command';
-import { ConfigService } from '@nestjs/config';
 
 @CommandHandler(ResetPasswordCommand)
 export class ResetPasswordHandler

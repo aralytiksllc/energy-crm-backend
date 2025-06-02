@@ -6,7 +6,7 @@ import {
   ForeignKey,
   AllowNull,
 } from 'sequelize-typescript';
-import { BaseModel } from './base.model';
+import { BaseModel } from '../common/cqrs/base.model';
 import { User } from './user.model';
 
 @Table

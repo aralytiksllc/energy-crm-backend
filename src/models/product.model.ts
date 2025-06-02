@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { ProductUnit } from '../enums/product-unit.enum';
-import { BaseModel } from './base.model';
+import { BaseModel } from '../common/cqrs/base.model';
 import { User } from './user.model';
 import { Vendor } from './vendor.model';
 

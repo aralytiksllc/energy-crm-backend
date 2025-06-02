@@ -49,28 +49,28 @@ export class CreateCustomerDto {
   @IsOptional()
   description: string;
 
-  @IsEmail()
-  @IsOptional()
-  contactEmail: string;
+  // @IsEmail()
+  // @IsOptional()
+  // contactEmail: string;
 
-  @IsString()
-  @IsOptional()
-  contactPhone: string;
+  // @IsString()
+  // @IsOptional()
+  // contactPhone: string;
 
-  @IsUrl()
-  @IsOptional()
-  website: string;
+  // @IsUrl()
+  // @IsOptional()
+  // website: string;
 
-  @IsBoolean()
-  @IsOptional()
-  isActive?: boolean;
+  // @IsBoolean()
+  // @IsOptional()
+  // isActive?: boolean;
 
-  @IsOptional()
-  settings?: Record<string, any>;
+  // @IsOptional()
+  // settings?: Record<string, any>;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateContactDto)
-  @IsOptional()
-  contacts?: CreateContactDto[];
+  // @IsArray()
+  // @ValidateNested({ each: true })
+  // @Type(() => CreateContactDto)
+  // @IsOptional()
+  // contacts?: CreateContactDto[];
 }

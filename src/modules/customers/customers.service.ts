@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Paging } from '@/common/paging';
+import { Paging } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
 import { Customer } from '@/models/customer.model';
 import { CreateCustomerDto } from './dto/create-customer.dto';

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Paging } from '@/common/paging';
+import { Paging } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
 import { User } from '@/models/user.model';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -8,8 +8,8 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { DeleteUserCommand } from './commands/delete-user.command';
 import { CreateUserCommand } from './commands/create-user.command';
 import { UpdateUserCommand } from './commands/update-user.command';
-import { GetUserByIdQuery } from './queries/get-user-by-id.query';
-import { GetUsersQuery } from './queries/get-users.query';
+import { GetUserByIdQuery } from './queries/find-one-user.query';
+import { GetUsersQuery } from './queries/find-many-users.query';
 import { GetUserByEmailQuery } from './queries/get-user-by-email.query';
 
 @Injectable()

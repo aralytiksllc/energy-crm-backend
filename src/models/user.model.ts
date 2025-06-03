@@ -8,11 +8,10 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { Exclude } from 'class-transformer';
-import { IUser } from '../interfaces/user.interface';
 import { BaseModel } from '../common/cqrs/base.model';
 
 @Table
-export class User extends BaseModel<User> implements IUser {
+export class User extends BaseModel<User> {
   @Column(DataType.STRING)
   firstName: string;
 
@@ -55,8 +54,8 @@ export class User extends BaseModel<User> implements IUser {
   updatedById: number;
 
   @BelongsTo(() => User)
-  createdBy: User;
+  createdBy?: User;
 
   @BelongsTo(() => User)
-  updatedBy: User;
+  updatedBy?: User;
 }

@@ -5,7 +5,7 @@ import { CurrentUserService } from '@/common/current-user';
 import { BaseModel } from '@/common/cqrs/base.model';
 import { Query } from '@/common/query';
 import { Operator } from '@/common/query/query.enums';
-import { Paging } from '@/common/paging';
+import { Paging } from '@/common/paged';
 
 export abstract class BaseCommandHandler<
   TModel extends BaseModel<TModel>,

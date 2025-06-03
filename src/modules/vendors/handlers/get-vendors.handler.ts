@@ -1,6 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { Paging } from '@/common/paging';
+import { Paging } from '@/common/paged';
 import { Vendor } from '@/models/vendor.model';
 import { GetVendorsQuery } from '../impl/get-vendors.query';
 

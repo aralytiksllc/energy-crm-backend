@@ -1,6 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { Paging } from '@/common/paging';
+import { Paging } from '@/common/paged';
 import { Customer } from '@/models/customer.model';
 import { GetCustomersQuery } from '../queries/get-customers.query';
 

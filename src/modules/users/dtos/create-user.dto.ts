@@ -1,50 +1,48 @@
 import {
-  IsBoolean,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
   IsString,
-  MaxLength,
+  IsEmail,
+  IsOptional,
   IsDateString,
+  IsObject,
+  IsBoolean,
+  IsInt,
 } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(100)
   firstName: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(100)
   lastName: string;
 
   @IsEmail()
-  @IsNotEmpty()
-  @MaxLength(255)
   email: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(255)
   password: string;
 
+  @IsOptional()
   @IsDateString()
-  @IsNotEmpty()
-  dateOfBirth: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  dateOfJoining: string;
+  dateOfBirth?: Date;
 
   @IsOptional()
-  settings?: Record<string, any>;
+  @IsDateString()
+  dateOfJoining?: Date;
+
+  @IsOptional()
+  @IsObject()
+  settings?: Record<string, unknown>;
 
   @IsOptional()
   @IsString()
   notes?: string;
 
-  @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isActive: boolean;
+
+  @IsInt()
+  createdById: number;
+
+  @IsInt()
+  updatedById: number;
 }

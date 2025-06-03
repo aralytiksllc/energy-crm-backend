@@ -1,28 +1,29 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/sequelize';
 import { Hash } from '@/common/hash';
-import { UsersService } from '@/modules/users/users.service';
+import { User } from '@/models/user.model';
 import { AuthResponse, TokenPayload } from '../auth.interfaces';
 import { SignInCommand } from './sign-in.command';
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
   constructor(
+    @InjectModel(User)
+    private readonly userModel: typeof User,
+
     private readonly jwtService: JwtService,
-    private readonly usersService: UsersService,
   ) {}
 
-  async execute(command: SignInCommand): Promise<AuthResponse> {
+  public async execute(command: SignInCommand): Promise<AuthResponse> {
     const { email, password } = command.dto;
 
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.findActiveUserByEmail(email);
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials.');
-    }
+    const isPasswordValid = await Hash.compare(password, user.password);
 
-    if (!(await Hash.compare(password, user.password))) {
+    if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials.');
     }
 
@@ -34,5 +35,17 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
       accessToken,
       user,
     };
+  }
+
+  private async findActiveUserByEmail(email: string): Promise<User> {
+    const where = { email, isActive: true };
+
+    const user = await this.userModel.findOne({ where });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials.');
+    }
+
+    return user;
   }
 }

@@ -10,7 +10,4 @@ export abstract class BaseModel<T extends Model> extends Model<
 
   @Column(DataType.INTEGER)
   updatedById?: number;
-
-
-
 }

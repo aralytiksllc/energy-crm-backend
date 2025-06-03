@@ -14,8 +14,8 @@ export class CreateCustomerHandler extends BaseCommandHandler<
   CreateCustomerCommand
 > {
   private defaultOptions = {
-      include: [Contact],
-    }
+    include: [Contact],
+  };
 
   constructor(
     @InjectModel(Customer)
@@ -26,7 +26,7 @@ export class CreateCustomerHandler extends BaseCommandHandler<
   }
 
   async execute(command: CreateCustomerCommand): Promise<Customer> {
-    const options = Object.assign({}, command.dto, this.defaultOptions)
+    const options = Object.assign({}, command.dto, this.defaultOptions);
 
     const customer = await this.customerModel.create(command.dto, options);
 

@@ -1,38 +1,29 @@
 import { Module } from '@nestjs/common';
-import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { UsersModule } from '@/modules/users/users.module';
-import { SignInHandler } from './commands/sign-in.handler';
-import { ForgotPasswordHandler } from './commands/forgot-password.handler';
-import { ResetPasswordHandler } from './commands/reset-password.handler';
+import { PassportModule } from '@nestjs/passport';
+import { ConfigService, ConfigModule } from '@nestjs/config';
+import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { AuthHandlers } from './auth.handlers';
 
 @Module({
   imports: [
-    CqrsModule,
-    UsersModule,
-    SequelizeModule.forFeature([]),
+    ConfigModule,
+    PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRATION'),
+          expiresIn: configService.get<string>('JWT_EXPIRES_IN', '1d'),
         },
       }),
-      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    SignInHandler,
-    ForgotPasswordHandler,
-    ResetPasswordHandler,
-  ],
+  providers: [AuthService, AuthJwtStrategy, ...AuthHandlers],
   exports: [AuthService],
 })
 export class AuthModule {}

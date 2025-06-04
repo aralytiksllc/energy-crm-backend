@@ -1,37 +1,42 @@
 import {
   IsString,
   IsOptional,
-  IsBoolean,
-  IsNotEmpty,
   IsEmail,
-  IsUrl,
+  IsBoolean,
+  IsObject,
+  IsInt,
 } from 'class-validator';
 
 export class CreateVendorDto {
   @IsString()
-  @IsNotEmpty()
   name: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   description?: string;
 
+  @IsOptional()
   @IsEmail()
-  @IsOptional()
-  contactEmail?: string;
+  email?: string;
 
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  contactPhone?: string;
+  phone?: string;
 
-  @IsUrl()
   @IsOptional()
+  @IsString()
   website?: string;
 
   @IsBoolean()
-  @IsOptional()
-  isActive?: boolean;
+  isActive: boolean;
 
   @IsOptional()
-  settings?: Record<string, any>;
+  @IsObject()
+  settings?: Record<string, unknown>;
+
+  @IsInt()
+  createdById: number;
+
+  @IsInt()
+  updatedById: number;
 }

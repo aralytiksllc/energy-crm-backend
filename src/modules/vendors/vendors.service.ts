@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Paging } from '@/common/paged';
+import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
 import { Vendor } from '@/models/vendor.model';
-import { CreateVendorDto } from './dto/create-vendor.dto';
-import { UpdateVendorDto } from './dto/update-vendor.dto';
-import { GetVendorsQuery } from './queries/get-vendors.query';
-import { GetVendorByIdQuery } from './queries/get-vendor-by-id.query';
-import { DeleteVendorCommand } from './commands/delete-vendor.command';
+import { CreateVendorDto } from './dtos/create-vendor.dto';
+import { UpdateVendorDto } from './dtos/update-vendor.dto';
 import { CreateVendorCommand } from './commands/create-vendor.command';
 import { UpdateVendorCommand } from './commands/update-vendor.command';
+import { DeleteVendorCommand } from './commands/delete-vendor.command';
+import { FindManyVendorsQuery } from './queries/find-many-vendors.query';
+import { FindOneVendorQuery } from './queries/find-one-vendor.query';
 
 @Injectable()
 export class VendorsService {
@@ -18,23 +18,23 @@ export class VendorsService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findAll(queryParams: QueryParams<Vendor>): Promise<Paging<Vendor>> {
-    return this.queryBus.execute(new GetVendorsQuery(queryParams));
+  async findMany(queryParams: QueryParams<Vendor>): Promise<Paged<Vendor>> {
+    return this.queryBus.execute(new FindManyVendorsQuery(queryParams));
   }
 
-  async findOne(id: string): Promise<Vendor> {
-    return this.queryBus.execute(new GetVendorByIdQuery(id));
+  async findOne(id: number): Promise<Vendor> {
+    return this.queryBus.execute(new FindOneVendorQuery(id));
   }
 
   async create(dto: CreateVendorDto): Promise<Vendor> {
     return this.commandBus.execute(new CreateVendorCommand(dto));
   }
 
-  async update(id: string, dto: UpdateVendorDto): Promise<Vendor> {
+  async update(id: number, dto: UpdateVendorDto): Promise<Vendor> {
     return this.commandBus.execute(new UpdateVendorCommand(id, dto));
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: number): Promise<void> {
     return this.commandBus.execute(new DeleteVendorCommand(id));
   }
 }

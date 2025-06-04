@@ -8,25 +8,25 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { Paging } from '@/common/paged';
+import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
 import { User } from '@/models/user.model';
-import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAll(@Query() query: QueryParams<User>): Promise<Paging<User>> {
-    return this.usersService.findAll(query);
+  findMany(@Query() query: QueryParams<User>): Promise<Paged<User>> {
+    return this.usersService.findMany(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.usersService.findOne(id);
+  findOne(@Param('id') id: number): Promise<User> {
+    return this.usersService.findOne(+id);
   }
 
   @Post()
@@ -36,14 +36,14 @@ export class UsersController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    return this.usersService.update(id, updateUserDto);
+    return this.usersService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.usersService.delete(id);
+  remove(@Param('id') id: number): Promise<void> {
+    return this.usersService.delete(+id);
   }
 }

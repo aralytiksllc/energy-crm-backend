@@ -1,5 +1,8 @@
-import { CreateVendorDto } from '../../dto/create-vendor.dto';
+import { CreateCommand } from '@/common/cqrs/commands/create.command';
+import { Vendor } from '@/models/vendor.model';
+import { CreateVendorDto } from '../dtos/create-vendor.dto';
 
-export class CreateVendorCommand {
-  constructor(public readonly dto: CreateVendorDto) {}
-}
+export class CreateVendorCommand extends CreateCommand<
+  CreateVendorDto,
+  Vendor
+> {}

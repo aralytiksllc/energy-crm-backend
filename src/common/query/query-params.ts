@@ -1,4 +1,4 @@
-import { IsOptional, IsObject, IsNumber, IsAlpha } from 'class-validator';
+import { IsOptional, IsObject, IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
 import { QueryFilter, QuerySort } from './query.interfaces';
 
@@ -20,8 +20,4 @@ export class QueryParams<T> {
   @Type(() => Number)
   @IsNumber()
   pageSize?: number;
-
-  @IsOptional()
-  @IsAlpha()
-  relations?: string[];
 }

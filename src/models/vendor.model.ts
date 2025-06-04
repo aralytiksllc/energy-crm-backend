@@ -40,7 +40,7 @@ export class Vendor extends BaseModel<Vendor> {
   settings: Nullable<Record<string, unknown>>;
 
   @HasMany(() => Product)
-  products: Product[];
+  products?: Product[];
 
   @ForeignKey(() => User)
   @Column(DataType.INTEGER)
@@ -51,8 +51,8 @@ export class Vendor extends BaseModel<Vendor> {
   updatedById: number;
 
   @BelongsTo(() => User)
-  createdBy: User;
+  createdBy?: User;
 
   @BelongsTo(() => User)
-  updatedBy: User;
+  updatedBy?: User;
 }

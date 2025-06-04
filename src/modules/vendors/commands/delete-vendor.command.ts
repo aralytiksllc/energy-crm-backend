@@ -1,3 +1,4 @@
-export class DeleteVendorCommand {
-  constructor(public readonly id: string) {}
-}
+import { DeleteCommand } from '@/common/cqrs/commands/delete.command';
+import { Vendor } from '@/models/vendor.model';
+
+export class DeleteVendorCommand extends DeleteCommand<Vendor> {}

@@ -8,25 +8,25 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { Paging } from '@/common/paged';
+import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
 import { Vendor } from '@/models/vendor.model';
+import { CreateVendorDto } from './dtos/create-vendor.dto';
+import { UpdateVendorDto } from './dtos/update-vendor.dto';
 import { VendorsService } from './vendors.service';
-import { CreateVendorDto } from './dto/create-vendor.dto';
-import { UpdateVendorDto } from './dto/update-vendor.dto';
 
 @Controller('vendors')
 export class VendorsController {
   constructor(private readonly vendorsService: VendorsService) {}
 
   @Get()
-  findAll(@Query() query: QueryParams<Vendor>): Promise<Paging<Vendor>> {
-    return this.vendorsService.findAll(query);
+  findMany(@Query() query: QueryParams<Vendor>): Promise<Paged<Vendor>> {
+    return this.vendorsService.findMany(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Vendor> {
-    return this.vendorsService.findOne(id);
+  findOne(@Param('id') id: number): Promise<Vendor> {
+    return this.vendorsService.findOne(+id);
   }
 
   @Post()
@@ -36,14 +36,14 @@ export class VendorsController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateVendorDto: UpdateVendorDto,
   ): Promise<Vendor> {
-    return this.vendorsService.update(id, updateVendorDto);
+    return this.vendorsService.update(+id, updateVendorDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.vendorsService.delete(id);
+  remove(@Param('id') id: number): Promise<void> {
+    return this.vendorsService.delete(+id);
   }
 }

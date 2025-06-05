@@ -5,7 +5,7 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
 import { SignInHandler } from './commands/sign-in.handler';
 import { ForgotPasswordHandler } from './commands/forgot-password.handler';
-import { ResetPasswordHandler } from './commands/reset-password.handler';
+import { ChangePasswordHandler } from './commands/change-password.handler';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
@@ -29,7 +29,7 @@ import { AuthService } from './auth.service';
     // Command Handlers
     SignInHandler,
     ForgotPasswordHandler,
-    ResetPasswordHandler,
+    ChangePasswordHandler,
 
     // Others
     AuthJwtStrategy,

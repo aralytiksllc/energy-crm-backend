@@ -1,15 +1,20 @@
 import { QueryInterface } from 'sequelize';
 
 export async function up(queryInterface: QueryInterface): Promise<void> {
+
   await queryInterface.bulkInsert('users', [
     {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      password: 'hashedPassword123', // In real app, this should be properly hashed
-      dateOfBirth: '1990-01-01',
-      dateOfJoining: '2024-01-01',
+      firstName: 'Super',
+      lastName: 'Admin',
+      email: 'admin@example.com',
+      password: 'admin123',
+      dateOfBirth: null,
+      dateOfJoining: null,
+      settings: null,
+      notes: null,
       isActive: true,
+      createdById: null,
+      updatedById: null,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -17,5 +22,7 @@ export async function up(queryInterface: QueryInterface): Promise<void> {
 }
 
 export async function down(queryInterface: QueryInterface): Promise<void> {
-  await queryInterface.bulkDelete('users', {});
+  await queryInterface.bulkDelete('users', {
+    email: 'admin@example.com',
+  });
 }

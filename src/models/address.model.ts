@@ -7,13 +7,12 @@ import {
   BelongsTo,
   Default,
 } from 'sequelize-typescript';
-import { IAddress } from '../interfaces/address.interface';
 import { AddressType } from '../enums/address-type.enum';
 import { BaseModel } from '../common/cqrs/base.model';
 import { User } from './user.model';
 
 @Table
-export class Address extends BaseModel<Address> implements IAddress {
+export class Address extends BaseModel<Address> {
   @Column(DataType.STRING)
   street: string;
 
@@ -56,8 +55,8 @@ export class Address extends BaseModel<Address> implements IAddress {
   updatedById: number;
 
   @BelongsTo(() => User)
-  createdBy: User;
+  createdBy?: User;
 
   @BelongsTo(() => User)
-  updatedBy: User;
+  updatedBy?: User;
 }

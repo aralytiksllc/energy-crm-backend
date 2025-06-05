@@ -2,11 +2,9 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppLoggerModule } from './common/app-logger/app-logger.module';
-import { CustomersModule } from './modules/customers/customers.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { VendorsModule } from './modules/vendors/vendors.module';
-import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
-import { SalesModule } from './modules/sales/sales.module';
 
 @Module({
   imports: [
@@ -29,11 +27,9 @@ import { SalesModule } from './modules/sales/sales.module';
         logging: false,
       }),
     }),
-    UsersModule,
-    CustomersModule,
+    AuthModule,
     VendorsModule,
-    ProductsModule,
-    SalesModule,
+    UsersModule,
   ],
   providers: [],
 })

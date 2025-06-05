@@ -1,18 +1,20 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize, Op } from 'sequelize';
 import { BadRequestException } from '@nestjs/common';
-import { Hash } from '@/common/hash';
 import { User } from '@/models/user.model';
 import { PasswordReset } from '@/models/password-reset.model';
-import { ResetPasswordCommand } from './reset-password.command';
+import { PasswordChangedEvent } from '../events/password-changed.event';
+import { ChangePasswordCommand } from './change-password.command';
 
-@CommandHandler(ResetPasswordCommand)
-export class ResetPasswordHandler
-  implements ICommandHandler<ResetPasswordCommand>
+@CommandHandler(ChangePasswordCommand)
+export class ChangePasswordHandler
+  implements ICommandHandler<ChangePasswordCommand>
 {
   constructor(
     private readonly sequelize: Sequelize,
+
+    private readonly eventBus: EventBus,
 
     @InjectModel(User)
     private readonly userModel: typeof User,
@@ -21,7 +23,7 @@ export class ResetPasswordHandler
     private readonly passwordResetModel: typeof PasswordReset,
   ) {}
 
-  public async execute(command: ResetPasswordCommand): Promise<void> {
+  public async execute(command: ChangePasswordCommand): Promise<void> {
     const { email, password, token } = command.dto;
 
     const passwordReset = await this.findValidResetToken(email, token);
@@ -31,13 +33,13 @@ export class ResetPasswordHandler
     const transaction = await this.sequelize.transaction();
 
     try {
-      const hashedPassword = await Hash.make(password);
-
-      await user.update({ password: hashedPassword }, { transaction });
+      await user.update({ password }, { transaction });
 
       await passwordReset.destroy({ transaction });
 
       await transaction.commit();
+
+      this.eventBus.publish(new PasswordChangedEvent(user));
     } catch (error) {
       await transaction.rollback();
       throw error;

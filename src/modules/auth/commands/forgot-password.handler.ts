@@ -1,8 +1,9 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
 import { Token } from '@/common/token';
 import { User } from '@/models/user.model';
 import { PasswordReset } from '@/models/password-reset.model';
+import { PasswordResetCreatedEvent } from '../events/password-reset-created.event';
 import { ForgotPasswordCommand } from './forgot-password.command';
 
 @CommandHandler(ForgotPasswordCommand)
@@ -15,6 +16,7 @@ export class ForgotPasswordHandler
 
     @InjectModel(PasswordReset)
     private readonly passwordResetModel: typeof PasswordReset,
+    private readonly eventBus: EventBus,
   ) {}
 
   public async execute(command: ForgotPasswordCommand): Promise<void> {
@@ -30,7 +32,13 @@ export class ForgotPasswordHandler
 
     expiresAt.setHours(expiresAt.getHours() + 1);
 
-    await this.passwordResetModel.create({ email, token, expiresAt });
+    const passwordReset = await this.passwordResetModel.create({
+      email,
+      token,
+      expiresAt,
+    });
+
+    this.eventBus.publish(new PasswordResetCreatedEvent(user, passwordReset));
   }
 
   private async findActiveUserByEmail(email: string): Promise<Nullable<User>> {

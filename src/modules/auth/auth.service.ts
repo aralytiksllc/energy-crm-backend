@@ -4,8 +4,8 @@ import { SignInDto } from './dtos/sign-in.dto';
 import { SignInCommand } from './commands/sign-in.command';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
 import { ForgotPasswordCommand } from './commands/forgot-password.command';
-import { ResetPasswordDto } from './dtos/reset-password.dto';
-import { ResetPasswordCommand } from './commands/reset-password.command';
+import { ChangePasswordDto } from './dtos/change-password.dto';
+import { ChangePasswordCommand } from './commands/change-password.command';
 import { AuthResponse } from './auth.interfaces';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class AuthService {
     return this.commandBus.execute(new ForgotPasswordCommand(dto));
   }
 
-  async resetPassword(dto: ResetPasswordDto): Promise<void> {
-    return this.commandBus.execute(new ResetPasswordCommand(dto));
+  async resetPassword(dto: ChangePasswordDto): Promise<void> {
+    return this.commandBus.execute(new ChangePasswordCommand(dto));
   }
 }

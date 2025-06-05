@@ -6,9 +6,12 @@ import {
   AllowNull,
   ForeignKey,
   BelongsTo,
+  BeforeCreate,
+  BeforeUpdate,
 } from 'sequelize-typescript';
 import { Exclude } from 'class-transformer';
-import { BaseModel } from '../common/cqrs/base.model';
+import { BaseModel } from '@/common/cqrs/base.model';
+import { Hash } from '@/common/hash';
 
 @Table
 export class User extends BaseModel<User> {
@@ -58,4 +61,12 @@ export class User extends BaseModel<User> {
 
   @BelongsTo(() => User)
   updatedBy?: User;
+
+  @BeforeCreate
+  @BeforeUpdate
+  static async hashPassword(user: User) {
+    if (user.changed('password')) {
+      user.password = await Hash.make(user.password);
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
-import { Sequelize, Op } from 'sequelize';
+import { Op } from 'sequelize';
 import { BadRequestException } from '@nestjs/common';
 import { User } from '@/models/user.model';
 import { PasswordReset } from '@/models/password-reset.model';
@@ -12,7 +12,7 @@ export class ChangePasswordHandler
   implements ICommandHandler<ChangePasswordCommand>
 {
   constructor(
-    private readonly sequelize: Sequelize,
+    // private readonly sequelize: Sequelize
 
     private readonly eventBus: EventBus,
 
@@ -30,18 +30,18 @@ export class ChangePasswordHandler
 
     const user = await this.findActiveUserByEmail(email);
 
-    const transaction = await this.sequelize.transaction();
+    // const transaction = await this.sequelize.transaction();
 
     try {
-      await user.update({ password }, { transaction });
+      await user.update({ password });
 
-      await passwordReset.destroy({ transaction });
+      await passwordReset.destroy();
 
-      await transaction.commit();
+      // await transaction.commit();
 
       this.eventBus.publish(new PasswordChangedEvent(user));
     } catch (error) {
-      await transaction.rollback();
+      // await transaction.rollback();
       throw error;
     }
   }

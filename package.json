@@ -21,7 +21,8 @@
     "migration:generate": "sequelize-cli migration:generate --name",
     "migration:run": "sequelize-cli db:migrate",
     "migration:revert": "sequelize-cli db:migrate:undo",
-    "migration:revert:all": "sequelize-cli db:migrate:undo:all"
+    "migration:revert:all": "sequelize-cli db:migrate:undo:all",
+    "seed:all": "sequelize-cli db:seed:all"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

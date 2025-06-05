@@ -47,6 +47,8 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
 
     const user = await this.userModel.findOne({ where });
 
+    console.log(where, user);
+
     if (!user) {
       throw new UnauthorizedException('Invalid credentials.');
     }

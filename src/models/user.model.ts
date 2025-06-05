@@ -13,7 +13,7 @@ import { Exclude } from 'class-transformer';
 import { BaseModel } from '@/common/cqrs/base.model';
 import { Hash } from '@/common/hash';
 
-@Table
+@Table({ tableName: 'users', timestamps: true })
 export class User extends BaseModel<User> {
   @Column(DataType.STRING)
   firstName: string;

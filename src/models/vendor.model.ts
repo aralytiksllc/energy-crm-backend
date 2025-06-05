@@ -5,11 +5,11 @@ import {
   AllowNull,
   ForeignKey,
   BelongsTo,
-  HasMany,
+  // HasMany,
 } from 'sequelize-typescript';
 import { BaseModel } from '../common/cqrs/base.model';
 import { User } from './user.model';
-import { Product } from './product.model';
+// import { Product } from './product.model';
 
 @Table
 export class Vendor extends BaseModel<Vendor> {
@@ -39,8 +39,8 @@ export class Vendor extends BaseModel<Vendor> {
   @Column(DataType.JSONB)
   settings: Nullable<Record<string, unknown>>;
 
-  @HasMany(() => Product)
-  products?: Product[];
+  // @HasMany(() => Product)
+  // products?: Product[];
 
   @ForeignKey(() => User)
   @Column(DataType.INTEGER)

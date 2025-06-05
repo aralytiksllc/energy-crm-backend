@@ -6,14 +6,14 @@ import { ChangePasswordDto } from './dtos/change-password.dto';
 import { AuthService } from './auth.service';
 import { AuthResponse } from './auth.interfaces';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
-  @Post('login')
+  @Post('sign-in')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() dto: SignInDto): Promise<AuthResponse> {
+  async signIn(@Body() dto: SignInDto): Promise<AuthResponse> {
     return this.authService.signIn(dto);
   }
 

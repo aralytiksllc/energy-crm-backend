@@ -59,6 +59,7 @@ export class Query<T extends object> {
     options.order = this.getOrderOptions();
     options.limit = this.getLimit();
     options.offset = this.getOffset();
+    options.raw = true;
     return options;
   }
 

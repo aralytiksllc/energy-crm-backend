@@ -2,8 +2,8 @@ import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { DataSource, MoreThanOrEqual, Repository } from 'typeorm';
 import { User } from '@/entities/user.entity';
+import { PasswordReset } from '@/entities/password-reset.entity';
 import { ChangePasswordDto } from '../dtos/change-password.dto';
-import { PasswordReset } from '../../../entities/password-reset.entity';
 import { PasswordChangedEvent } from '../events/password-changed.event';
 import { ChangePasswordCommand } from './change-password.command';
 
@@ -46,11 +46,7 @@ export class ChangePasswordHandler
   ): Promise<User> {
     const { email } = dto;
 
-    const user = await repository.findOneBy({ email });
-
-    if (!user) {
-      throw new BadRequestException('User not found.');
-    }
+    const user = await repository.findOneByOrFail({ email });
 
     if (!user.isActive) {
       throw new ForbiddenException('User account is inactive.');

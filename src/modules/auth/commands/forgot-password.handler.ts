@@ -1,11 +1,10 @@
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { randomInt } from 'crypto';
 import { addHours } from 'date-fns';
 import { User } from '@/entities/user.entity';
-import { PasswordReset } from '@/entities/password-reset.entity';
+import { UsersRepository } from '@/modules/users/users.repository';
+import { PasswordResetsRepository } from '../auth.repository';
 import { CreatePasswordResetDto } from '../dtos/create-password-reset.dto';
 import { PasswordResetCreatedEvent } from '../events/password-reset-created.event';
 import { ForgotPasswordCommand } from './forgot-password.command';
@@ -15,12 +14,8 @@ export class ForgotPasswordHandler
   implements ICommandHandler<ForgotPasswordCommand>
 {
   constructor(
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
-
-    @InjectRepository(PasswordReset)
-    private readonly passwordResetsRepository: Repository<PasswordReset>,
-
+    private readonly passwordResetsRepository: PasswordResetsRepository,
+    private readonly usersRepository: UsersRepository,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -45,11 +40,7 @@ export class ForgotPasswordHandler
   }
 
   private async findActiveUserOrFail(email: string): Promise<User> {
-    const user = await this.usersRepository.findOneBy({ email });
-
-    if (!user) {
-      throw new BadRequestException('User not found.');
-    }
+    const user = await this.usersRepository.findOneByOrFail({ email });
 
     if (!user.isActive) {
       throw new ForbiddenException('User account is inactive.');

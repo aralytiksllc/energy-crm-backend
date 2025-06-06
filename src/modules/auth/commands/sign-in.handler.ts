@@ -1,9 +1,14 @@
-import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/sequelize';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Hash } from '@/common/hash';
-import { User } from '@/models/user.model';
+import { User } from '@/modules/users/entities/user.entity';
 import { AuthResponse, TokenPayload } from '../auth.interfaces';
 import { SignedInEvent } from '../events/signed-in.event';
 import { SignInCommand } from './sign-in.command';
@@ -11,18 +16,16 @@ import { SignInCommand } from './sign-in.command';
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
   constructor(
-    @InjectModel(User)
-    private readonly userModel: typeof User,
-
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
     private readonly jwtService: JwtService,
-
     private readonly eventBus: EventBus,
   ) {}
 
   public async execute(command: SignInCommand): Promise<AuthResponse> {
     const { email, password } = command.dto;
 
-    const user = await this.findActiveUserByEmail(email);
+    const user = await this.findActiveUserOrFail(email);
 
     const isPasswordValid = await Hash.compare(password, user.password);
 
@@ -42,15 +45,15 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
     };
   }
 
-  private async findActiveUserByEmail(email: string): Promise<User> {
-    const where = { email, isActive: true };
-
-    const user = await this.userModel.findOne({ where });
-
-    console.log(where, user);
+  private async findActiveUserOrFail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ email });
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials.');
+      throw new BadRequestException('User not found.');
+    }
+
+    if (!user.isActive) {
+      throw new ForbiddenException('User account is inactive.');
     }
 
     return user;

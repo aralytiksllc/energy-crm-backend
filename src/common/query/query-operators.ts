@@ -13,10 +13,7 @@ import {
 import { Operator } from './query.enums';
 
 export class QueryOperators {
-  static resolve<T, K extends keyof T>(
-    operator: Operator,
-    value: T[K],
-  ): any {
+  static resolve<T, K extends keyof T>(operator: Operator, value: T[K]): any {
     switch (operator) {
       case Operator.EQ:
         return Equal(value);

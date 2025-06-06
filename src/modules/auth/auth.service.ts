@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 import { SignInDto } from './dtos/sign-in.dto';
 import { SignInCommand } from './commands/sign-in.command';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
@@ -10,10 +10,7 @@ import { AuthResponse } from './auth.interfaces';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
-  ) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   async signIn(dto: SignInDto): Promise<AuthResponse> {
     return this.commandBus.execute(new SignInCommand(dto));
@@ -23,7 +20,7 @@ export class AuthService {
     return this.commandBus.execute(new ForgotPasswordCommand(dto));
   }
 
-  async resetPassword(dto: ChangePasswordDto): Promise<void> {
+  async changePassword(dto: ChangePasswordDto): Promise<void> {
     return this.commandBus.execute(new ChangePasswordCommand(dto));
   }
 }

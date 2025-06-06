@@ -1,9 +1,9 @@
 import {
-  IsEmail,
   IsNotEmpty,
+  IsEmail,
   IsString,
-  IsInt,
   MinLength,
+  IsInt,
 } from 'class-validator';
 
 export class ChangePasswordDto {
@@ -16,7 +16,7 @@ export class ChangePasswordDto {
   @MinLength(8)
   password: string;
 
+  @IsNotEmpty()
   @IsInt()
-  @MinLength(6)
-  code: string;
+  code: number;
 }

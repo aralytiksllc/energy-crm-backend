@@ -1,5 +1,5 @@
-import { User } from '@/models/user.model';
-import { PasswordReset } from '@/modules/auth/entities/password-reset.model';
+import { User } from '@/modules/users/entities/user.entity';
+import { PasswordReset } from '../entities/password-reset.entity';
 
 export class PasswordResetCreatedEvent {
   constructor(

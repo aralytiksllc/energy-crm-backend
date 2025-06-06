@@ -1,9 +1,9 @@
-import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { InjectModel } from '@nestjs/sequelize';
-import { Op } from 'sequelize';
-import { BadRequestException } from '@nestjs/common';
-import { User } from '@/models/user.model';
-import { PasswordReset } from '@/modules/auth/entities/password-reset.model';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { DataSource, MoreThanOrEqual, Repository } from 'typeorm';
+import { User } from '@/modules/users/entities/user.entity';
+import { ChangePasswordDto } from '../dtos/change-password.dto';
+import { PasswordReset } from '../entities/password-reset.entity';
 import { PasswordChangedEvent } from '../events/password-changed.event';
 import { ChangePasswordCommand } from './change-password.command';
 
@@ -12,62 +12,65 @@ export class ChangePasswordHandler
   implements ICommandHandler<ChangePasswordCommand>
 {
   constructor(
-    // private readonly sequelize: Sequelize
-
+    private readonly dataSource: DataSource,
     private readonly eventBus: EventBus,
-
-    @InjectModel(User)
-    private readonly userModel: typeof User,
-
-    @InjectModel(PasswordReset)
-    private readonly passwordResetModel: typeof PasswordReset,
   ) {}
 
   public async execute(command: ChangePasswordCommand): Promise<void> {
-    const { email, password, token } = command.dto;
+    const { dto } = command;
 
-    const passwordReset = await this.findValidResetToken(email, token);
+    await this.dataSource.transaction(async (manager) => {
+      const passwordResetsRepository = manager.getRepository(PasswordReset);
+      const usersRepository = manager.getRepository(User);
 
-    const user = await this.findActiveUserByEmail(email);
+      const passwordReset = await this.findValidPasswordResetOrFail(
+        passwordResetsRepository,
+        dto,
+      );
 
-    // const transaction = await this.sequelize.transaction();
+      const user = await this.findActiveUserOrFail(usersRepository, dto);
 
-    try {
-      await user.update({ password });
+      user.password = dto.password;
 
-      await passwordReset.destroy();
+      await usersRepository.save(user);
 
-      // await transaction.commit();
+      await passwordResetsRepository.remove(passwordReset);
 
       this.eventBus.publish(new PasswordChangedEvent(user));
-    } catch (error) {
-      // await transaction.rollback();
-      throw error;
-    }
+    });
   }
 
-  private async findActiveUserByEmail(email: string): Promise<User> {
-    const where = { email, isActive: true };
+  private async findActiveUserOrFail(
+    repository: Repository<User>,
+    dto: ChangePasswordDto,
+  ): Promise<User> {
+    const { email } = dto;
 
-    const user = await this.userModel.findOne({ where });
+    const user = await repository.findOneBy({ email });
 
     if (!user) {
-      throw new BadRequestException('User not found or inactive.');
+      throw new BadRequestException('User not found.');
+    }
+
+    if (!user.isActive) {
+      throw new ForbiddenException('User account is inactive.');
     }
 
     return user;
   }
 
-  private async findValidResetToken(
-    email: string,
-    token: string,
+  private async findValidPasswordResetOrFail(
+    repository: Repository<PasswordReset>,
+    dto: ChangePasswordDto,
   ): Promise<PasswordReset> {
-    const where = { email, token, expiresAt: { [Op.gte]: new Date() } };
+    const { email, code } = dto;
 
-    const passwordReset = await this.passwordResetModel.findOne({ where });
+    const where = { email, code, expiresAt: MoreThanOrEqual(new Date()) };
+
+    const passwordReset = await repository.findOneBy(where);
 
     if (!passwordReset) {
-      throw new BadRequestException('Invalid or expired reset token.');
+      throw new BadRequestException('Invalid or expired reset code.');
     }
 
     return passwordReset;

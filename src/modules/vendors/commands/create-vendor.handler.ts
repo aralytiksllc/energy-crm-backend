@@ -10,15 +10,17 @@ export class CreateVendorHandler
   implements ICommandHandler<CreateVendorCommand>
 {
   constructor(
-    @InjectModel(Vendor)
-    private readonly vendorModel: typeof Vendor,
+    @InjectRepository(Vendor)
+    private readonly vendorRepository: Repository<Vendor>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateVendorCommand): Promise<Vendor> {
-    const { dto, options } = command;
+    const { dto } = command;
 
-    const vendor = await this.vendorModel.create(dto, options);
+    const entity = this.vendorRepository.create(dto);
+
+    const vendor = await this.vendorRepository.save(entity);
 
     this.eventBus.publish(new VendorCreatedEvent(vendor));
 

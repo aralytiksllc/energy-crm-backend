@@ -25,7 +25,7 @@ import { UsersModule } from './modules/users/users.module';
         migrations: ['src/migrations/*.ts'],
         migrationsTableName: 'migrations',
         autoLoadEntities: true,
-        synchronize: false,
+        synchronize: true,
         logging: true,
       }),
     }),

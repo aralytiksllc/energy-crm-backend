@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
-import { User } from '@/models/user.model';
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { CreateUserCommand } from './commands/create-user.command';

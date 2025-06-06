@@ -1,30 +1,37 @@
-import { QueryInterface } from 'sequelize';
+import { DataSource } from 'typeorm';
 import { Hash } from '../common/hash';
+import { User } from '../modules/users/entities/user.entity';
 
-export async function up(queryInterface: QueryInterface): Promise<void> {
-  const hashedPassword = await Hash.make('admin123');
+export class SeedSuperAdmin {
+  public static async up(dataSource: DataSource): Promise<void> {
+    const queryRunner = dataSource.createQueryRunner();
+    await queryRunner.connect();
 
-  await queryInterface.bulkInsert('users', [
-    {
+    const hashedPassword = await Hash.make('admin123');
+
+    await queryRunner.manager.insert(User, {
       firstName: 'Super',
       lastName: 'Admin',
       email: 'admin@example.com',
       password: hashedPassword,
       dateOfBirth: new Date('1990-01-01'),
       dateOfJoining: new Date('2020-01-01'),
-      settings: JSON.stringify({ theme: 'dark' }),
+      settings: { theme: 'dark' },
       notes: 'Initial super admin user',
       isActive: true,
-      createdById: null,
-      updatedById: null,
       createdAt: new Date(),
       updatedAt: new Date(),
-    },
-  ]);
-}
+    });
 
-export async function down(queryInterface: QueryInterface): Promise<void> {
-  await queryInterface.bulkDelete('users', {
-    email: 'admin@example.com',
-  });
+    await queryRunner.release();
+  }
+
+  public static async down(dataSource: DataSource): Promise<void> {
+    const queryRunner = dataSource.createQueryRunner();
+    await queryRunner.connect();
+
+    await queryRunner.manager.delete(User, { email: 'admin@example.com' });
+
+    await queryRunner.release();
+  }
 }

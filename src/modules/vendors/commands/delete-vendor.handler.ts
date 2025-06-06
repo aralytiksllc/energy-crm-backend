@@ -1,29 +1,30 @@
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { InjectModel } from '@nestjs/sequelize';
-import { Vendor } from '@/models/vendor.model';
-import { DeleteVendorCommand } from './delete-vendor.command';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Vendor } from '../entities/vendor.entity';
 import { VendorDeletedEvent } from '../events/vendor-deleted.event';
+import { DeleteVendorCommand } from './delete-vendor.command';
 
 @CommandHandler(DeleteVendorCommand)
 export class DeleteVendorHandler
   implements ICommandHandler<DeleteVendorCommand>
 {
   constructor(
-    @InjectModel(Vendor)
-    private readonly vendorModel: typeof Vendor,
+    @InjectRepository(Vendor)
+    private readonly vendorRepository: Repository<Vendor>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: DeleteVendorCommand): Promise<Vendor> {
     const { id, options } = command;
 
-    const vendor = await this.vendorModel.findByPk(id);
+    const vendor = await this.vendorRepository.findOne({ where: { id } });
 
     if (!vendor) {
       throw new Error(`Vendor with id ${id} not found`);
     }
 
-    await vendor.destroy(options);
+    await this.vendorRepository.remove(vendor);
 
     this.eventBus.publish(new VendorDeletedEvent(vendor));
 

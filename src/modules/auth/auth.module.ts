@@ -4,6 +4,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from '@/modules/users/users.module';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
 import { PasswordReset } from './entities/password-reset.entity';
 import { ChangePasswordHandler } from './commands/change-password.handler';
@@ -28,6 +29,7 @@ import { AuthService } from './auth.service';
         },
       }),
     }),
+    UsersModule,
   ],
   controllers: [AuthController],
   providers: [

@@ -1,16 +1,9 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-} from 'typeorm';
+import { Entity, Column } from 'typeorm';
+import { BaseEntity } from '@/common/cqrs/base.entity';
 import { HistoryAction } from '../enums/history-action.enum';
 
 @Entity('histories')
-export class History {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class History extends BaseEntity {
   @Column({ type: 'enum', enum: HistoryAction })
   action: HistoryAction;
 
@@ -22,10 +15,4 @@ export class History {
 
   @Column('jsonb')
   entityData: any;
-
-  @Column({ nullable: true })
-  createdById?: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
 }

@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
-import { Vendor } from '@/models/vendor.model';
+import { Vendor } from './entities/vendor.entity';
 import { CreateVendorDto } from './dtos/create-vendor.dto';
 import { UpdateVendorDto } from './dtos/update-vendor.dto';
 import { VendorsService } from './vendors.service';

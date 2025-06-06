@@ -1,57 +1,28 @@
-import {
-  Table,
-  Column,
-  DataType,
-  AllowNull,
-  ForeignKey,
-  BelongsTo,
-} from 'sequelize-typescript';
-import { BaseModel } from '../common/cqrs/base.model';
-import { User } from './user.model';
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 
-@Table
-export class Contact extends BaseModel<Contact> {
-  @Column(DataType.STRING)
+@Entity()
+export class Contact extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: 'varchar' })
   firstName: string;
 
-  @Column(DataType.STRING)
+  @Column({ type: 'varchar' })
   lastName: string;
 
-  @AllowNull
-  @Column(DataType.STRING)
-  title: Nullable<string>;
+  @Column({ type: 'varchar', nullable: true })
+  title?: string;
 
-  @Column(DataType.STRING)
+  @Column({ type: 'varchar' })
   email: string;
 
-  @AllowNull
-  @Column(DataType.STRING)
-  phone: Nullable<string>;
+  @Column({ type: 'varchar', nullable: true })
+  phone?: string;
 
-  @Column(DataType.BOOLEAN)
+  @Column({ type: 'boolean' })
   isPrimary: boolean;
 
-  @AllowNull
-  @Column(DataType.TEXT)
-  notes: Nullable<string>;
-
-  @Column(DataType.STRING)
-  contactableType: string;
-
-  @Column(DataType.INTEGER)
-  contactableId: number;
-
-  @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
-  createdById: number;
-
-  @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
-  updatedById: number;
-
-  @BelongsTo(() => User)
-  createdBy: User;
-
-  @BelongsTo(() => User)
-  updatedBy: User;
+  @Column({ type: 'text', nullable: true })
+  notes?: string;
 }

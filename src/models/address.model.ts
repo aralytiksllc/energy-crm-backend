@@ -1,62 +1,42 @@
-import {
-  Table,
-  Column,
-  DataType,
-  AllowNull,
-  ForeignKey,
-  BelongsTo,
-  Default,
-} from 'sequelize-typescript';
+import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 import { AddressType } from '../enums/address-type.enum';
-import { BaseModel } from '../common/cqrs/base.model';
-import { User } from './user.model';
 
-@Table
-export class Address extends BaseModel<Address> {
-  @Column(DataType.STRING)
+@Entity()
+export abstract class Address extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: 'varchar' })
   street: string;
 
-  @AllowNull
-  @Column(DataType.STRING)
-  streetTwo: Nullable<string>;
+  @Column({ type: 'varchar', nullable: true })
+  streetTwo?: string;
 
-  @Column(DataType.STRING)
+  @Column({ type: 'varchar' })
   city: string;
 
-  @Column(DataType.STRING)
+  @Column({ type: 'varchar' })
   state: string;
 
-  @Column(DataType.STRING)
+  @Column({ type: 'varchar' })
   country: string;
 
-  @Column(DataType.STRING)
+  @Column({ type: 'varchar' })
   postalCode: string;
 
-  @Default(AddressType.BOTH)
-  @Column(DataType.ENUM(...Object.values(AddressType)))
+  @Column({
+    type: 'enum',
+    enum: AddressType,
+    default: AddressType.BOTH,
+  })
   addressType: AddressType;
 
-  @Default(true)
-  @Column(DataType.BOOLEAN)
+  @Column({ type: 'boolean', default: true })
   isPrimary: boolean;
 
-  @Column(DataType.STRING)
+  @Column({ type: 'varchar' })
   addressableType: string;
 
-  @Column(DataType.INTEGER)
+  @Column({ type: 'int' })
   addressableId: number;
-
-  @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
-  createdById: number;
-
-  @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
-  updatedById: number;
-
-  @BelongsTo(() => User)
-  createdBy?: User;
-
-  @BelongsTo(() => User)
-  updatedBy?: User;
 }

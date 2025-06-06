@@ -1,29 +1,25 @@
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { User } from '@/entities/user.entity';
 import { UserDeletedEvent } from '../events/user-deleted.event';
+import { UsersRepository } from '../users.repository';
 import { DeleteUserCommand } from './delete-user.command';
 
 @CommandHandler(DeleteUserCommand)
 export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
   constructor(
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    private readonly usersRepository: UsersRepository,
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: DeleteUserCommand): Promise<void> {
+  async execute(command: DeleteUserCommand): Promise<User> {
     const { id } = command;
 
-    const user = await this.usersRepository.findOneBy({ id });
+    const existingUser = await this.usersRepository.findOneByOrFail({ id });
 
-    if (!user) {
-      throw new Error('User not found');
-    }
+    const removedUser = await this.usersRepository.remove(existingUser);
 
-    await this.usersRepository.remove(user);
+    this.eventBus.publish(new UserDeletedEvent(removedUser));
 
-    this.eventBus.publish(new UserDeletedEvent(user));
+    return removedUser;
   }
 }

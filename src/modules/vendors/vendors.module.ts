@@ -8,6 +8,7 @@ import { CreateVendorHandler } from './commands/create-vendor.handler';
 import { UpdateVendorHandler } from './commands/update-vendor.handler';
 import { DeleteVendorHandler } from './commands/delete-vendor.handler';
 import { VendorsController } from './vendors.controller';
+import { VendorsRepository } from './vendors.repository';
 import { VendorsService } from './vendors.service';
 
 @Module({
@@ -24,6 +25,12 @@ import { VendorsService } from './vendors.service';
     DeleteVendorHandler,
 
     // Others
+    VendorsRepository,
+    VendorsService,
+  ],
+  exports: [
+    // Others
+    VendorsRepository,
     VendorsService,
   ],
 })

@@ -1,18 +1,14 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Paged } from '@/common/paged';
 import { History } from '@/entities/history.entity';
+import { HistoriesRepository } from '../histories.repository';
 import { FindManyHistoriesQuery } from './find-many-histories.query';
 
 @QueryHandler(FindManyHistoriesQuery)
 export class FindManyHistoriesHandler
   implements IQueryHandler<FindManyHistoriesQuery>
 {
-  constructor(
-    @InjectRepository(History)
-    private readonly historiesRepository: Repository<History>,
-  ) {}
+  constructor(private readonly historiesRepository: HistoriesRepository) {}
 
   async execute(query: FindManyHistoriesQuery): Promise<Paged<History>> {
     const options = query.toFindManyOptions();

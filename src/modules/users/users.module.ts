@@ -28,6 +28,10 @@ import { UsersService } from './users.service';
     UsersRepository,
     UsersService,
   ],
-  exports: [UsersService],
+  exports: [
+    // Others
+    UsersRepository,
+    UsersService,
+  ],
 })
 export class UsersModule {}

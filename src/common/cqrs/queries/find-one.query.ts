@@ -1,11 +1,8 @@
-import { Model, FindOptions, InferAttributes } from 'sequelize';
+import { FindOneOptions } from 'typeorm';
 
-export class FindOneQuery<TModel extends Model> {
+export class FindOneQuery<TEntity> {
   constructor(
     public readonly id: number,
-    public readonly options: Omit<
-      FindOptions<InferAttributes<TModel>>,
-      'where'
-    > = { raw: true },
+    public readonly options: Omit<FindOneOptions<TEntity>, 'where'> = {},
   ) {}
 }

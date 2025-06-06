@@ -1,7 +1,8 @@
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { InjectModel } from '@nestjs/sequelize';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Paged } from '@/common/paged';
-import { Vendor } from '@/models/vendor.model';
+import { Vendor } from '../entities/vendor.entity';
 import { FindManyVendorsQuery } from './find-many-vendors.query';
 
 @QueryHandler(FindManyVendorsQuery)
@@ -9,15 +10,15 @@ export class FindManyVendorsHandler
   implements IQueryHandler<FindManyVendorsQuery>
 {
   constructor(
-    @InjectModel(Vendor)
-    private readonly vendorModel: typeof Vendor,
+    @InjectRepository(Vendor)
+    private readonly vendorRepository: Repository<Vendor>,
   ) {}
 
   async execute(query: FindManyVendorsQuery): Promise<Paged<Vendor>> {
-    const findOptions = query.toFindOptions();
+    const options = query.toFindManyOptions();
 
-    const result = await this.vendorModel.findAndCountAll(findOptions);
+    const [rows, count] = await this.vendorRepository.findAndCount(options);
 
-    return new Paged(result.rows, result.count, query.current, query.pageSize);
+    return new Paged(rows, count, query.current, query.pageSize);
   }
 }

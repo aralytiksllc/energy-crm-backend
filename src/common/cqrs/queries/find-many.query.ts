@@ -1,8 +1,8 @@
-import { Model } from 'sequelize';
+import { BaseEntity } from '@/common/cqrs/base.entity';
 import { Query, QueryParams } from '@/common/query';
 
-export class FindManyQuery<TModel extends Model> extends Query<TModel> {
-  constructor(params: QueryParams<TModel>) {
+export class FindManyQuery<TEntity extends BaseEntity> extends Query<TEntity> {
+  constructor(params: QueryParams<TEntity>) {
     super(params);
   }
 }

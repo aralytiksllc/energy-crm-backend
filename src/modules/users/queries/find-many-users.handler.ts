@@ -1,21 +1,22 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { InjectModel } from '@nestjs/sequelize';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Paged } from '@/common/paged';
-import { User } from '@/models/user.model';
+import { User } from '../entities/user.entity';
 import { FindManyUsersQuery } from './find-many-users.query';
 
 @QueryHandler(FindManyUsersQuery)
 export class FindManyUsersHandler implements IQueryHandler<FindManyUsersQuery> {
   constructor(
-    @InjectModel(User)
-    private readonly userModel: typeof User,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
   ) {}
 
   async execute(query: FindManyUsersQuery): Promise<Paged<User>> {
-    const findOptions = query.toFindOptions();
+    const options = query.toFindManyOptions();
 
-    const result = await this.userModel.findAndCountAll(findOptions);
+    const [rows, count] = await this.usersRepository.findAndCount(options);
 
-    return new Paged(result.rows, result.count, query.current, query.pageSize);
+    return new Paged(rows, count, query.current, query.pageSize);
   }
 }

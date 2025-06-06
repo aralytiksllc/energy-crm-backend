@@ -1,19 +1,14 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigService, ConfigModule } from '@nestjs/config';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { Sequelize } from 'sequelize';
-import { User } from '@/models/user.model';
-import { PasswordReset } from '@/modules/auth/entities/password-reset.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
-import { SignInHandler } from './commands/sign-in.handler';
-import { ForgotPasswordHandler } from './commands/forgot-password.handler';
+import { PasswordReset } from './entities/password-reset.entity';
 import { ChangePasswordHandler } from './commands/change-password.handler';
-import { SignedInEvent } from './events/signed-in.event';
-import { PasswordChangedEvent } from './events/password-changed.event';
-import { PasswordResetCreatedEvent } from './events/password-reset-created.event';
+import { ForgotPasswordHandler } from './commands/forgot-password.handler';
+import { SignInHandler } from './commands/sign-in.handler';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
@@ -22,14 +17,14 @@ import { AuthService } from './auth.service';
     CqrsModule,
     ConfigModule,
     PassportModule,
-    SequelizeModule.forFeature([User, PasswordReset]),
+    TypeOrmModule.forFeature([PasswordReset]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN', '1d'),
+          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
         },
       }),
     }),
@@ -40,11 +35,6 @@ import { AuthService } from './auth.service';
     SignInHandler,
     ForgotPasswordHandler,
     ChangePasswordHandler,
-
-    // Events
-    SignedInEvent,
-    PasswordChangedEvent,
-    PasswordResetCreatedEvent,
 
     // Others
     AuthJwtStrategy,

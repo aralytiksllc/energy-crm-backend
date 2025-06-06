@@ -1,8 +1,8 @@
-import { Model, DestroyOptions, InferAttributes } from 'sequelize';
+import { RemoveOptions } from 'typeorm';
 
-export class DeleteCommand<TModel extends Model> {
+export class DeleteCommand {
   constructor(
     public readonly id: number,
-    public readonly options?: DestroyOptions<InferAttributes<TModel>>,
+    public readonly options?: RemoveOptions,
   ) {}
 }

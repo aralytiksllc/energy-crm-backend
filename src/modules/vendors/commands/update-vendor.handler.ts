@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { InjectModel } from '@nestjs/sequelize';
-import { Vendor } from '@/models/vendor.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Vendor } from '../entities/vendor.entity';
 import { VendorUpdatedEvent } from '../events/vendor-updated.event';
 import { UpdateVendorCommand } from './update-vendor.command';
 
@@ -9,24 +10,26 @@ export class UpdateVendorHandler
   implements ICommandHandler<UpdateVendorCommand>
 {
   constructor(
-    @InjectModel(Vendor)
-    private readonly vendorModel: typeof Vendor,
+    @InjectRepository(Vendor)
+    private readonly vendorRepository: Repository<Vendor>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: UpdateVendorCommand): Promise<Vendor> {
-    const { id, dto, options } = command;
+    const { id, dto } = command;
 
-    const vendor = await this.vendorModel.findByPk(id);
+    const vendor = await this.vendorRepository.findOneBy({ id });
 
     if (!vendor) {
       throw new Error(`Vendor with id ${id} not found`);
     }
 
-    await vendor.update(dto, options);
+    const updatedVendor = this.vendorRepository.merge(vendor, dto);
 
-    this.eventBus.publish(new VendorUpdatedEvent(vendor));
+    await this.vendorRepository.save(updatedVendor);
 
-    return vendor;
+    this.eventBus.publish(new VendorUpdatedEvent(updatedVendor));
+
+    return updatedVendor;
   }
 }

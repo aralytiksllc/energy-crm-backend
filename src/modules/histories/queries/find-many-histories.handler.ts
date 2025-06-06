@@ -15,10 +15,9 @@ export class FindManyHistoriesHandler
   ) {}
 
   async execute(query: FindManyHistoriesQuery): Promise<Paged<History>> {
-    const findOptions = query.toFindOptions();
+    const options = query.toFindManyOptions();
 
-    const [rows, count] =
-      await this.historyRepository.findAndCount(findOptions);
+    const [rows, count] = await this.historyRepository.findAndCount(options);
 
     return new Paged(rows, count, query.current, query.pageSize);
   }

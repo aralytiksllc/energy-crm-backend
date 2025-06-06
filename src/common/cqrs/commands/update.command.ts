@@ -1,9 +1,9 @@
-import { Model, UpdateOptions, InferAttributes } from 'sequelize';
+import { SaveOptions } from 'typeorm';
 
-export class UpdateCommand<TDto, TModel extends Model> {
+export class UpdateCommand<TDto> {
   constructor(
     public readonly id: number,
     public readonly dto: TDto,
-    public readonly options?: UpdateOptions<InferAttributes<TModel>>,
+    public readonly options?: SaveOptions,
   ) {}
 }

@@ -10,6 +10,7 @@ import { UsersModule } from './modules/users/users.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
 
     TypeOrmModule.forRootAsync({
@@ -21,12 +22,13 @@ import { UsersModule } from './modules/users/users.module';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: ['src/entities/*.ts'],
-        migrations: ['src/migrations/*.ts'],
-        migrationsTableName: 'migrations',
+        // entities: ['src/entities/*.ts'],
+        // migrations: ['src/migrations/*.ts'],
+        // migrationsTableName: 'migrations',
         autoLoadEntities: true,
         synchronize: true,
         logging: true,
+        ssl: false,
       }),
     }),
 

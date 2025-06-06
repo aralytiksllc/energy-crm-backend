@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/sequelize';
 import { Token } from '@/common/token';
 import { User } from '@/models/user.model';
-import { PasswordReset } from '@/models/password-reset.model';
+import { PasswordReset } from '@/modules/auth/entities/password-reset.model';
 import { PasswordResetCreatedEvent } from '../events/password-reset-created.event';
 import { ForgotPasswordCommand } from './forgot-password.command';
 

@@ -1,24 +1,30 @@
 import {
+  IsNotEmpty,
   IsString,
   IsEmail,
+  MinLength,
   IsOptional,
   IsDateString,
   IsObject,
   IsBoolean,
-  IsInt,
 } from 'class-validator';
 
 export class CreateUserDto {
+  @IsNotEmpty()
   @IsString()
   firstName: string;
 
+  @IsNotEmpty()
   @IsString()
   lastName: string;
 
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
+  @IsNotEmpty()
   @IsString()
+  @MinLength(8)
   password: string;
 
   @IsOptional()
@@ -39,10 +45,4 @@ export class CreateUserDto {
 
   @IsBoolean()
   isActive: boolean;
-
-  @IsInt()
-  createdById: number;
-
-  @IsInt()
-  updatedById: number;
 }

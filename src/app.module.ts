@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService, ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppLoggerModule } from './common/app-logger/app-logger.module';
-import { User } from './models/user.model';
-import { Vendor } from './models/vendor.model';
 import { AuthModule } from './modules/auth/auth.module';
 import { VendorsModule } from './modules/vendors/vendors.module';
 import { UsersModule } from './modules/users/users.module';
@@ -13,27 +11,34 @@ import { UsersModule } from './modules/users/users.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    AppLoggerModule,
-    SequelizeModule.forRootAsync({
+
+    TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        dialect: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-        models: [User, Vendor],
-        autoLoadModels: true,
-        synchronize: true,
-        logging: false,
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+        entities: ['src/**/*.entity.ts'],
+        migrations: ['src/migrations/*.ts'],
+        migrationsTableName: 'migrations',
+        autoLoadEntities: true,
+        synchronize: false,
+        logging: true,
       }),
     }),
+
+    AppLoggerModule,
+
     AuthModule,
+
     VendorsModule,
+
     UsersModule,
   ],
-  exports: [SequelizeModule],
+  exports: [],
   providers: [],
 })
 export class AppModule {}

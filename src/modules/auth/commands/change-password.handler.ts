@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { BadRequestException } from '@nestjs/common';
 import { User } from '@/models/user.model';
-import { PasswordReset } from '@/models/password-reset.model';
+import { PasswordReset } from '@/modules/auth/entities/password-reset.model';
 import { PasswordChangedEvent } from '../events/password-changed.event';
 import { ChangePasswordCommand } from './change-password.command';
 

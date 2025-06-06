@@ -6,7 +6,7 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize';
 import { User } from '@/models/user.model';
-import { PasswordReset } from '@/models/password-reset.model';
+import { PasswordReset } from '@/modules/auth/entities/password-reset.model';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
 import { SignInHandler } from './commands/sign-in.handler';
 import { ForgotPasswordHandler } from './commands/forgot-password.handler';

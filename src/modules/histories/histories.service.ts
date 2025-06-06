@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
-import { History } from './entities/history.entity';
+import { History } from '@/entities/history.entity';
 import { CreateHistoryDto } from './dtos/create-history.dto';
 import { FindManyHistoriesQuery } from './queries/find-many-histories.query';
 import { CreateHistoryCommand } from './commands/create-history.command';

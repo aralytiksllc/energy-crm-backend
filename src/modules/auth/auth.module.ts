@@ -6,7 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from '@/modules/users/users.module';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
-import { PasswordReset } from './entities/password-reset.entity';
+import { PasswordReset } from '../../entities/password-reset.entity';
 import { ChangePasswordHandler } from './commands/change-password.handler';
 import { ForgotPasswordHandler } from './commands/forgot-password.handler';
 import { SignInHandler } from './commands/sign-in.handler';

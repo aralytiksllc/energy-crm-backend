@@ -2,7 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Paged } from '@/common/paged';
-import { Vendor } from '../entities/vendor.entity';
+import { Vendor } from '@/entities/vendor.entity';
 import { FindManyVendorsQuery } from './find-many-vendors.query';
 
 @QueryHandler(FindManyVendorsQuery)

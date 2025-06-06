@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { History } from '../entities/history.entity';
+import { History } from '@/entities/history.entity';
 import { CreateHistoryCommand } from './create-history.command';
 import { HistoryCreatedEvent } from '../events/history-created.event';
 

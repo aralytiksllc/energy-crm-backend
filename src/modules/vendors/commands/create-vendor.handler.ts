@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Vendor } from '../entities/vendor.entity';
+import { Vendor } from '@/entities/vendor.entity';
 import { VendorCreatedEvent } from '../events/vendor-created.event';
 import { CreateVendorCommand } from './create-vendor.command';
 

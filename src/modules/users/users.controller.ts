@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
-import { User } from './entities/user.entity';
+import { User } from '@/entities/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';

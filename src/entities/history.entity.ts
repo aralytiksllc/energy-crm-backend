@@ -1,6 +1,6 @@
 import { Entity, Column } from 'typeorm';
 import { BaseEntity } from '@/common/cqrs/base.entity';
-import { HistoryAction } from '../enums/history-action.enum';
+import { HistoryAction } from '@/enums/history-action.enum';
 
 @Entity('histories')
 export class History extends BaseEntity {

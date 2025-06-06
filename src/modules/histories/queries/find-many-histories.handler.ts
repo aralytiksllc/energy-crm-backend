@@ -2,7 +2,7 @@ import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Paged } from '@/common/paged';
-import { History } from '../entities/history.entity';
+import { History } from '@/entities/history.entity';
 import { FindManyHistoriesQuery } from './find-many-histories.query';
 
 @QueryHandler(FindManyHistoriesQuery)

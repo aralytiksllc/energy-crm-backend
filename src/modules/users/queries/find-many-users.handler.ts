@@ -2,7 +2,7 @@ import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Paged } from '@/common/paged';
-import { User } from '../entities/user.entity';
+import { User } from '@/entities/user.entity';
 import { FindManyUsersQuery } from './find-many-users.query';
 
 @QueryHandler(FindManyUsersQuery)

@@ -1,9 +1,9 @@
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { DataSource, MoreThanOrEqual, Repository } from 'typeorm';
-import { User } from '@/modules/users/entities/user.entity';
+import { User } from '@/entities/user.entity';
 import { ChangePasswordDto } from '../dtos/change-password.dto';
-import { PasswordReset } from '../entities/password-reset.entity';
+import { PasswordReset } from '../../../entities/password-reset.entity';
 import { PasswordChangedEvent } from '../events/password-changed.event';
 import { ChangePasswordCommand } from './change-password.command';
 

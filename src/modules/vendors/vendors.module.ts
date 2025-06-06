@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Vendor } from './entities/vendor.entity';
+import { Vendor } from '@/entities/vendor.entity';
 import { FindManyVendorsHandler } from './queries/find-many-vendors.handler';
 import { FindOneVendorHandler } from './queries/find-one-vendor.handler';
 import { CreateVendorHandler } from './commands/create-vendor.handler';

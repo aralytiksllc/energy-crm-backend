@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOneOptions } from 'typeorm';
-import { Vendor } from '../entities/vendor.entity';
+import { Vendor } from '@/entities/vendor.entity';
 import { FindOneVendorQuery } from './find-one-vendor.query';
 
 @QueryHandler(FindOneVendorQuery)

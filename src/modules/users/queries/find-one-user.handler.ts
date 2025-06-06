@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '@/modules/users/entities/user.entity';
+import { User } from '@/entities/user.entity';
 import { FindOneUserQuery } from './find-one-user.query';
 
 @QueryHandler(FindOneUserQuery)

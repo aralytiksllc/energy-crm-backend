@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { User } from '@/entities/user.entity';
 import { UserUpdatedEvent } from '../events/user-updated.event';
 import { UpdateUserCommand } from './update-user.command';
 

@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { Hash } from '../common/hash';
-import { User } from '../modules/users/entities/user.entity';
+import { Hash } from '@/common/hash';
+import { User } from '@/entities/user.entity';
 
 export class SeedSuperAdmin {
   public static async up(dataSource: DataSource): Promise<void> {

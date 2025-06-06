@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
-import { Vendor } from './entities/vendor.entity';
+import { Vendor } from '@/entities/vendor.entity';
 import { CreateVendorDto } from './dtos/create-vendor.dto';
 import { UpdateVendorDto } from './dtos/update-vendor.dto';
 import { CreateVendorCommand } from './commands/create-vendor.command';

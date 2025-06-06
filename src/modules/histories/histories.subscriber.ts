@@ -1,16 +1,15 @@
 import {
   EntitySubscriberInterface,
+  DataSource,
   InsertEvent,
   UpdateEvent,
   RemoveEvent,
   SoftRemoveEvent,
   RecoverEvent,
-  DataSource,
-  EntityMetadata,
   ObjectLiteral,
+  EntityMetadata,
 } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { ClsService } from 'nestjs-cls';
 import { BaseEntity } from '@/common/cqrs/base.entity';
 import { HistoryAction } from './enums/history-action.enum';
 import { CreateHistoryDto } from './dtos/create-history.dto';
@@ -21,7 +20,6 @@ export abstract class HistoriesSubscriber<TEntity extends BaseEntity>
 {
   constructor(
     @InjectDataSource() dataSource: DataSource,
-    protected readonly clsService: ClsService,
     protected readonly historiesService: HistoriesService,
   ) {
     dataSource.subscribers.push(this);
@@ -64,8 +62,6 @@ export abstract class HistoriesSubscriber<TEntity extends BaseEntity>
       dto.entityName = metadata.tableName;
 
       dto.entityData = entity;
-
-      dto.createdById = this.clsService.get('userId');
 
       this.historiesService.create(dto);
     }

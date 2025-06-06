@@ -1,10 +1,4 @@
-import {
-  IsEnum,
-  IsNumber,
-  IsString,
-  IsNotEmpty,
-  IsOptional,
-} from 'class-validator';
+import { IsEnum, IsNumber, IsString, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
 import { HistoryAction } from '../enums/history-action.enum';
 
@@ -22,9 +16,4 @@ export class CreateHistoryDto {
 
   @IsNotEmpty()
   entityData: any;
-
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  createdById?: number;
 }

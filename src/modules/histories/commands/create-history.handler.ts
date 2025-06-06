@@ -18,9 +18,9 @@ export class CreateHistoryHandler
   async execute(command: CreateHistoryCommand): Promise<History> {
     const { dto } = command;
 
-    const history = this.historiesRepository.create(dto);
+    const entity = this.historiesRepository.create(dto);
 
-    await this.historiesRepository.save(history);
+    const history = await this.historiesRepository.save(entity);
 
     this.eventBus.publish(new HistoryCreatedEvent(history));
 

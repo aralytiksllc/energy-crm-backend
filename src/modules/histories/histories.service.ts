@@ -14,11 +14,11 @@ export class HistoriesService {
     private readonly queryBus: QueryBus,
   ) {}
 
-  async findMany(queryParams: QueryParams<History>): Promise<Paged<History>> {
-    return await this.queryBus.execute(new FindManyHistoriesQuery(queryParams));
+  public findMany(queryParams: QueryParams<History>): Promise<Paged<History>> {
+    return this.queryBus.execute(new FindManyHistoriesQuery(queryParams));
   }
 
-  async create(dto: CreateHistoryDto): Promise<History> {
-    return await this.commandBus.execute(new CreateHistoryCommand(dto));
+  public create(dto: CreateHistoryDto): Promise<History> {
+    return this.commandBus.execute(new CreateHistoryCommand(dto));
   }
 }

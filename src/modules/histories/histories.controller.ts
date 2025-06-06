@@ -9,7 +9,9 @@ export class HistoriesController {
   constructor(private readonly historiesService: HistoriesService) {}
 
   @Get()
-  findMany(@Query() query: QueryParams<History>): Promise<Paged<History>> {
-    return this.historiesService.findMany(query);
+  findMany(
+    @Query() queryParams: QueryParams<History>,
+  ): Promise<Paged<History>> {
+    return this.historiesService.findMany(queryParams);
   }
 }

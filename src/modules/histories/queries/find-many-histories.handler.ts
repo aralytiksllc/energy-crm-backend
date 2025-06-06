@@ -11,13 +11,13 @@ export class FindManyHistoriesHandler
 {
   constructor(
     @InjectRepository(History)
-    private readonly historyRepository: Repository<History>,
+    private readonly historiesRepository: Repository<History>,
   ) {}
 
   async execute(query: FindManyHistoriesQuery): Promise<Paged<History>> {
     const options = query.toFindManyOptions();
 
-    const [rows, count] = await this.historyRepository.findAndCount(options);
+    const [rows, count] = await this.historiesRepository.findAndCount(options);
 
     return new Paged(rows, count, query.current, query.pageSize);
   }

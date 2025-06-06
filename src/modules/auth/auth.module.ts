@@ -17,6 +17,7 @@ import { AuthService } from './auth.service';
   imports: [
     CqrsModule,
     ConfigModule,
+    UsersModule,
     PassportModule,
     TypeOrmModule.forFeature([PasswordReset]),
     JwtModule.registerAsync({
@@ -29,7 +30,6 @@ import { AuthService } from './auth.service';
         },
       }),
     }),
-    UsersModule,
   ],
   controllers: [AuthController],
   providers: [

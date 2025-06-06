@@ -1,4 +1,4 @@
-import { FindOptions, WhereOptions, Order } from 'sequelize';
+import { FindManyOptions, FindOptionsWhere, FindOptionsOrder } from 'typeorm';
 import { QueryOperators } from './query-operators';
 import { QueryParams } from './query-params';
 import { Operator, Sort } from './query.enums';
@@ -53,31 +53,38 @@ export class Query<T extends object> {
     return this;
   }
 
-  public toFindOptions(params: FindOptions<T> = {}): FindOptions<T> {
-    const options: FindOptions<T> = Object.assign({}, params);
+  public toFindManyOptions(
+    params: FindManyOptions<T> = {},
+  ): FindManyOptions<T> {
+    const options: FindManyOptions<T> = Object.assign({}, params);
     options.where = this.getWhereOptions();
     options.order = this.getOrderOptions();
-    options.limit = this.getLimit();
-    options.offset = this.getOffset();
-    options.raw = true;
+    options.skip = this.getOffset();
+    options.take = this.getLimit();
     return options;
   }
 
-  private getWhereOptions(): WhereOptions<T> {
+  private getWhereOptions(): FindOptionsWhere<T> {
     const where: Record<string, any> = {};
 
     for (const filter of this._filters) {
-      where[filter.field] = QueryOperators.resolve(
+      where[filter.field as string] = QueryOperators.resolve(
         filter.operator,
         filter.value,
       );
     }
 
-    return where;
+    return where as FindOptionsWhere<T>;
   }
 
-  private getOrderOptions(): Order {
-    return this._sorters.map((sorter) => [sorter.field, sorter.order]);
+  private getOrderOptions(): FindOptionsOrder<T> {
+    const order: Record<string, any> = {};
+
+    for (const sorter of this._sorters) {
+      order[sorter.field as string] = sorter.order.toLowerCase();
+    }
+
+    return order as FindOptionsOrder<T>;
   }
 
   private getLimit(): number {

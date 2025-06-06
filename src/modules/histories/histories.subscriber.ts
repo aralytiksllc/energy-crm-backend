@@ -12,11 +12,11 @@ import {
 import { InjectDataSource } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
 import { BaseEntity } from '@/common/cqrs/base.entity';
-import { HistoryAction } from '../enums/history-action.enum';
-import { CreateHistoryDto } from '../dtos/create-history.dto';
-import { HistoriesService } from '../histories.service';
+import { HistoryAction } from './enums/history-action.enum';
+import { CreateHistoryDto } from './dtos/create-history.dto';
+import { HistoriesService } from './histories.service';
 
-export abstract class HistorySubscriber<TEntity extends BaseEntity>
+export abstract class HistoriesSubscriber<TEntity extends BaseEntity>
   implements EntitySubscriberInterface<TEntity>
 {
   constructor(
@@ -67,7 +67,7 @@ export abstract class HistorySubscriber<TEntity extends BaseEntity>
 
       dto.createdById = this.clsService.get('userId');
 
-      this.historiesService.createHistory(dto);
+      this.historiesService.create(dto);
     }
   }
 }

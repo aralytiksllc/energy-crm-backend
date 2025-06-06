@@ -1,50 +1,61 @@
-import { Op } from 'sequelize';
+import {
+  Equal,
+  Not,
+  MoreThan,
+  MoreThanOrEqual,
+  LessThan,
+  LessThanOrEqual,
+  Like,
+  ILike,
+  In,
+  Between,
+} from 'typeorm';
 import { Operator } from './query.enums';
 
 export class QueryOperators {
   static resolve<T, K extends keyof T>(
     operator: Operator,
     value: T[K],
-  ): Record<string, any> {
+  ): any {
     switch (operator) {
       case Operator.EQ:
-        return { [Op.eq]: value };
+        return Equal(value);
 
       case Operator.NE:
-        return { [Op.ne]: value };
+        return Not(Equal(value));
 
       case Operator.GT:
-        return { [Op.gt]: value };
+        return MoreThan(value);
 
       case Operator.GTE:
-        return { [Op.gte]: value };
+        return MoreThanOrEqual(value);
 
       case Operator.LT:
-        return { [Op.lt]: value };
+        return LessThan(value);
 
       case Operator.LTE:
-        return { [Op.lte]: value };
+        return LessThanOrEqual(value);
 
       case Operator.LIKE:
-        return { [Op.like]: value };
+        return Like(value as string);
 
       case Operator.ILIKE:
-        return { [Op.iLike]: value };
+        return ILike(value as string);
 
       case Operator.IN:
-        return { [Op.in]: value };
+        return In(value as any[]);
 
       case Operator.RANGE: {
         if (typeof value === 'string' && value.includes(',')) {
           const [start, end] = value.split(',').map((v) => v.trim());
-          return { [Op.between]: [start, end] };
+          return Between(start, end);
         }
 
-        return { [Op.eq]: value };
+        return Equal(value);
       }
 
       default:
-        return { [Op.eq]: value };
+        return Equal(value);
     }
   }
 }

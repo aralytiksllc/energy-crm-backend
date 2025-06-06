@@ -11,13 +11,13 @@ import { ChangePasswordHandler } from './commands/change-password.handler';
 import { ForgotPasswordHandler } from './commands/forgot-password.handler';
 import { SignInHandler } from './commands/sign-in.handler';
 import { AuthController } from './auth.controller';
+import { PasswordResetsRepository } from './auth.repository';
 import { AuthService } from './auth.service';
 
 @Module({
   imports: [
     CqrsModule,
     ConfigModule,
-    UsersModule,
     PassportModule,
     TypeOrmModule.forFeature([PasswordReset]),
     JwtModule.registerAsync({
@@ -30,6 +30,7 @@ import { AuthService } from './auth.service';
         },
       }),
     }),
+    UsersModule,
   ],
   controllers: [AuthController],
   providers: [
@@ -40,6 +41,7 @@ import { AuthService } from './auth.service';
 
     // Others
     AuthJwtStrategy,
+    PasswordResetsRepository,
     AuthService,
   ],
   exports: [AuthService],

@@ -21,7 +21,7 @@ import { UsersModule } from './modules/users/users.module';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: ['src/**/*.entity.ts'],
+        entities: ['src/entities/*.ts'],
         migrations: ['src/migrations/*.ts'],
         migrationsTableName: 'migrations',
         autoLoadEntities: true,

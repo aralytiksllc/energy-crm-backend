@@ -1,17 +1,24 @@
-version: '3.7'
+version: '3.8'
 services:
   postgres:
-    image: postgres:latest
-    container_name: postgres
-    restart: always
+    container_name: core_flow_postgres
+    image: postgres
     environment:
-      POSTGRES_PASSWORD: root
-      POSTGRES_USER: root
-      POSTGRES_DB: tt-core-flow
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: core_flow_db_username
+      POSTGRES_PASSWORD: core_flow_db_password
+      POSTGRES_DB: core_flow_db_name
+      PGDATA: /data/postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-
+      - postgres:/data/postgres
+    expose:
+      - '5480'
+    ports:
+      - '5480:5480'
+    command: -p 5480
+    restart: unless-stopped
+    networks:
+      - core_flow
 volumes:
-  postgres_data:
+  postgres:
+networks:
+  core_flow:

@@ -11,7 +11,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
-  @Post('sign-in')
+  @Post('login')
   @HttpCode(HttpStatus.OK)
   async signIn(@Body() dto: SignInDto): Promise<AuthResponse> {
     return this.authService.signIn(dto);

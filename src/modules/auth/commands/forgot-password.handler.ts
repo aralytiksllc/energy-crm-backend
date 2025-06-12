@@ -1,7 +1,7 @@
 import { ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { randomInt } from 'crypto';
 import { addHours } from 'date-fns';
+import { Hash } from '@/common/hash';
 import { User } from '@/entities/user.entity';
 import { UsersRepository } from '@/modules/users/users.repository';
 import { PasswordResetsRepository } from '../auth.repository';
@@ -28,7 +28,7 @@ export class ForgotPasswordHandler
 
     dto.email = email;
 
-    dto.code = randomInt(100000, 999999);
+    dto.token = await Hash.make(email);
 
     dto.expiresAt = addHours(new Date(), 1);
 

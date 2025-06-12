@@ -15,9 +15,7 @@ async function bootstrap() {
   });
 
   // Enable CORS for frontend
-  app.enableCors({
-    origin: 'http://localhost:5173',
-  });
+  app.enableCors();
 
   // Global validation pipe
   app.useGlobalPipes(
@@ -37,7 +35,7 @@ async function bootstrap() {
   );
 
   // Global guards
-  app.useGlobalGuards(new AuthJwtGuard(reflector));
+  // app.useGlobalGuards(new AuthJwtGuard(reflector));
 
   // Use qs parser for query strings
   const expressApp = app.getHttpAdapter().getInstance();

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, IsInt, Min, Max, IsDate } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString, IsDate } from 'class-validator';
 
 export class CreatePasswordResetDto {
   @IsNotEmpty()
@@ -6,10 +6,8 @@ export class CreatePasswordResetDto {
   email: string;
 
   @IsNotEmpty()
-  @IsInt()
-  @Min(100000)
-  @Max(999999)
-  code: number;
+  @IsString()
+  token: string;
 
   @IsNotEmpty()
   @IsDate()

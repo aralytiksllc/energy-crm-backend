@@ -28,7 +28,7 @@ export class ChangePasswordHandler
         dto,
       );
 
-      const user = await this.findActiveUserOrFail(usersRepository, dto);
+      const user = await this.findActiveUserOrFail(usersRepository, passwordReset);
 
       user.password = dto.password;
 
@@ -42,9 +42,9 @@ export class ChangePasswordHandler
 
   private async findActiveUserOrFail(
     repository: Repository<User>,
-    dto: ChangePasswordDto,
+    passwordReset: PasswordReset,
   ): Promise<User> {
-    const { email } = dto;
+    const { email } = passwordReset;
 
     const user = await repository.findOneByOrFail({ email });
 
@@ -59,9 +59,9 @@ export class ChangePasswordHandler
     repository: Repository<PasswordReset>,
     dto: ChangePasswordDto,
   ): Promise<PasswordReset> {
-    const { email, code } = dto;
+    const { token } = dto;
 
-    const where = { email, code, expiresAt: MoreThanOrEqual(new Date()) };
+    const where = { token, expiresAt: MoreThanOrEqual(new Date()) };
 
     const passwordReset = await repository.findOneBy(where);
 

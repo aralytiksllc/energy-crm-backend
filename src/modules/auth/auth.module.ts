@@ -4,12 +4,14 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EmailModule } from "@/common/email/email.module"
 import { UsersModule } from '@/modules/users/users.module';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
 import { PasswordReset } from '../../entities/password-reset.entity';
-import { ChangePasswordHandler } from './commands/change-password.handler';
-import { ForgotPasswordHandler } from './commands/forgot-password.handler';
 import { SignInHandler } from './commands/sign-in.handler';
+import { ForgotPasswordHandler } from './commands/forgot-password.handler';
+import { ChangePasswordHandler } from './commands/change-password.handler';
+import { PasswordResetCreatedHandler } from './events/password-reset-created.handler';
 import { AuthController } from './auth.controller';
 import { PasswordResetsRepository } from './auth.repository';
 import { AuthService } from './auth.service';
@@ -30,6 +32,7 @@ import { AuthService } from './auth.service';
         },
       }),
     }),
+    EmailModule,
     UsersModule,
   ],
   controllers: [AuthController],
@@ -38,6 +41,9 @@ import { AuthService } from './auth.service';
     SignInHandler,
     ForgotPasswordHandler,
     ChangePasswordHandler,
+
+    // Event Handlers
+    PasswordResetCreatedHandler,
 
     // Others
     AuthJwtStrategy,

@@ -24,6 +24,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", ".sequelizerc"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

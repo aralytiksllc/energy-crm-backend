@@ -5,18 +5,18 @@ import { Hash } from '@/common/hash';
 import { User } from '@/entities/user.entity';
 import { UsersRepository } from '@/modules/users/users.repository';
 import { AuthResponse, TokenPayload } from '../auth.interfaces';
-import { SignedInEvent } from '../events/signed-in.event';
-import { SignInCommand } from './sign-in.command';
+import { LoggedInEvent } from '../events/logged-in.event';
+import { LoginCommand } from './login.command';
 
-@CommandHandler(SignInCommand)
-export class SignInHandler implements ICommandHandler<SignInCommand> {
+@CommandHandler(LoginCommand)
+export class LoginHandler implements ICommandHandler<LoginCommand> {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly jwtService: JwtService,
     private readonly eventBus: EventBus,
   ) {}
 
-  public async execute(command: SignInCommand): Promise<AuthResponse> {
+  public async execute(command: LoginCommand): Promise<AuthResponse> {
     const { email, password } = command.dto;
 
     const user = await this.findActiveUserOrFail(email);
@@ -31,7 +31,7 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
 
     const accessToken = await this.jwtService.signAsync(tokenPayload);
 
-    this.eventBus.publish(new SignedInEvent(user));
+    this.eventBus.publish(new LoggedInEvent(user));
 
     return {
       accessToken,

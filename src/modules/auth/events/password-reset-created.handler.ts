@@ -21,10 +21,11 @@ export class PasswordResetCreatedHandler
         htmlBody: `<p>Click <a href="${link}">here</a> to reset your password.</p>`,
       });
     } catch (error) {
-      console.error('[PasswordResetCreatedHandler] Failed to send email:', error);
+      console.error(
+        '[PasswordResetCreatedHandler] Failed to send email:',
+        error,
+      );
       // Opsionale: logim me logger-in e NestJS në vend të console
     }
   }
 }
-
-

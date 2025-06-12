@@ -1,8 +1,8 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { Public } from '@/common/auth';
-import { SignInDto } from './dtos/sign-in.dto';
+import { LoginDto } from './dtos/login.dto';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
-import { ChangePasswordDto } from './dtos/change-password.dto';
+import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { AuthService } from './auth.service';
 import { AuthResponse } from './auth.interfaces';
 
@@ -13,8 +13,8 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async signIn(@Body() dto: SignInDto): Promise<AuthResponse> {
-    return this.authService.signIn(dto);
+  async Login(@Body() dto: LoginDto): Promise<AuthResponse> {
+    return this.authService.Login(dto);
   }
 
   @Public()
@@ -25,9 +25,9 @@ export class AuthController {
   }
 
   @Public()
-  @Post('change-password')
+  @Post('update-password')
   @HttpCode(HttpStatus.OK)
-  async changePassword(@Body() dto: ChangePasswordDto) {
+  async changePassword(@Body() dto: UpdatePasswordDto) {
     return this.authService.changePassword(dto);
   }
 }

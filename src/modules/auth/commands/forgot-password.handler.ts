@@ -1,4 +1,4 @@
-import { ForbiddenException } from '@nestjs/common';
+import { NotFoundException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { addHours } from 'date-fns';
 import { Token } from '@/common/token';
@@ -35,7 +35,11 @@ export class ForgotPasswordHandler
   }
 
   private async getActiveUserOrThrow(email: string): Promise<User> {
-    const user = await this.users.findOneByOrFail({ email });
+    const user = await this.users.findOneBy({ email });
+
+    if (!user) {
+      throw new NotFoundException('User with this email does not exist.');
+    }
 
     if (!user.isActive) {
       throw new ForbiddenException('User account is inactive.');

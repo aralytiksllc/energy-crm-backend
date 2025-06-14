@@ -13,7 +13,7 @@ export class PasswordResetCreatedHandler
     try {
       const { user, passwordReset } = event;
 
-      const link = `http://localhost:5173/update-password?token=${passwordReset.token}`;
+      const link = `http://localhost:5173/update-password/${passwordReset.token}`;
 
       await this.emailService.sendWithRetryAsync({
         to: [user.email],

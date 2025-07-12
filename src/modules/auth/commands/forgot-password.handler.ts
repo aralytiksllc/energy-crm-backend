@@ -1,10 +1,13 @@
+// External dependencies
 import { NotFoundException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Repository } from 'typeorm';
 import { addHours } from 'date-fns';
+
+// Internal dependencies
 import { Token } from '@/common/token';
-import { User } from '@/entities/user.entity';
-import { UsersRepository } from '@/modules/users/users.repository';
-import { PasswordResetsRepository } from '../auth.repository';
+import { User } from '@/modules/users/entities/user.entity';
+import { PasswordReset } from '../entities/password-reset.entity';
 import { PasswordResetCreatedEvent } from '../events/password-reset-created.event';
 import { ForgotPasswordCommand } from './forgot-password.command';
 
@@ -13,8 +16,8 @@ export class ForgotPasswordHandler
   implements ICommandHandler<ForgotPasswordCommand>
 {
   constructor(
-    private readonly passwordResets: PasswordResetsRepository,
-    private readonly users: UsersRepository,
+    private readonly passwordResetRepository: Repository<PasswordReset>,
+    private readonly userRepository: Repository<User>,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -23,19 +26,19 @@ export class ForgotPasswordHandler
 
     const user = await this.getActiveUserOrThrow(dto.email);
 
-    const resetRequest = this.passwordResets.create({
+    const entity = this.passwordResetRepository.create({
       email: user.email,
       token: Token.generate(),
       expiresAt: addHours(new Date(), 1),
     });
 
-    await this.passwordResets.save(resetRequest);
+    const resetRequest = await this.passwordResetRepository.save(entity);
 
     this.eventBus.publish(new PasswordResetCreatedEvent(user, resetRequest));
   }
 
   private async getActiveUserOrThrow(email: string): Promise<User> {
-    const user = await this.users.findOneBy({ email });
+    const user = await this.userRepository.findOneBy({ email });
 
     if (!user) {
       throw new NotFoundException('User with this email does not exist.');

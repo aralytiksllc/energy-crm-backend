@@ -1,4 +1,7 @@
+// External dependencies
 import { IsNotEmpty, IsString } from 'class-validator';
+
+// Internal dependencies
 
 export class UpdatePasswordDto {
   @IsString()

@@ -1,5 +1,8 @@
+// External dependencies
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
+
+// Internal dependencies
 import { LoginDto } from './dtos/login.dto';
 import { LoginCommand } from './commands/login.command';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';

@@ -1,9 +1,12 @@
+// External dependencies
+
+// Internal dependencies
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
+import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Hash } from '@/common/hash';
-import { User } from '@/entities/user.entity';
-import { UsersRepository } from '@/modules/users/users.repository';
+import { User } from '@/modules/users/entities/user.entity';
 import { AuthResponse, TokenPayload } from '../auth.interfaces';
 import { LoggedInEvent } from '../events/logged-in.event';
 import { LoginCommand } from './login.command';
@@ -11,7 +14,7 @@ import { LoginCommand } from './login.command';
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<LoginCommand> {
   constructor(
-    private readonly usersRepository: UsersRepository,
+    private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly eventBus: EventBus,
   ) {}
@@ -40,7 +43,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
   }
 
   private async findActiveUserOrFail(email: string): Promise<User> {
-    const user = await this.usersRepository.findOneByOrFail({ email });
+    const user = await this.userRepository.findOneByOrFail({ email });
 
     if (!user.isActive) {
       throw new ForbiddenException('User account is inactive.');

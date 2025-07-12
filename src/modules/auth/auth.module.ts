@@ -1,19 +1,21 @@
+// External dependencies
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+// Internal dependencies
 import { EmailModule } from '@/common/email/email.module';
 import { UsersModule } from '@/modules/users/users.module';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
-import { PasswordReset } from '../../entities/password-reset.entity';
+import { PasswordReset } from './entities/password-reset.entity';
 import { LoginHandler } from './commands/login.handler';
 import { ForgotPasswordHandler } from './commands/forgot-password.handler';
 import { UpdatePasswordHandler } from './commands/update-password.handler';
 import { PasswordResetCreatedHandler } from './events/password-reset-created.handler';
 import { AuthController } from './auth.controller';
-import { PasswordResetsRepository } from './auth.repository';
 import { AuthService } from './auth.service';
 
 @Module({
@@ -47,7 +49,6 @@ import { AuthService } from './auth.service';
 
     // Others
     AuthJwtStrategy,
-    PasswordResetsRepository,
     AuthService,
   ],
   exports: [AuthService],

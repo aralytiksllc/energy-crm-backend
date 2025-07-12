@@ -1,8 +1,11 @@
+// External dependencies
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { DataSource, MoreThanOrEqual, EntityManager } from 'typeorm';
-import { User } from '@/entities/user.entity';
-import { PasswordReset } from '@/entities/password-reset.entity';
+
+// Internal dependencies
+import { User } from '@/modules/users/entities/user.entity';
+import { PasswordReset } from '../entities/password-reset.entity';
 import { PasswordUpdatedEvent } from '../events/password-updated.event';
 import { UpdatePasswordCommand } from './update-password.command';
 

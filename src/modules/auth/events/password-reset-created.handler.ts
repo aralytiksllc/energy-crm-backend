@@ -1,4 +1,7 @@
+// External dependencies
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+
+// Internal dependencies
 import { PasswordResetCreatedEvent } from './password-reset-created.event';
 import { EmailService } from '@/common/email/email.service';
 import { EmailRequest } from '@/common/email/email.interfaces';

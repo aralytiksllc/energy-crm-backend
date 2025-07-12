@@ -1,4 +1,7 @@
+// External dependencies
 import { IsNotEmpty, IsEmail, IsString, MinLength } from 'class-validator';
+
+// Internal dependencies
 
 export class LoginDto {
   @IsNotEmpty()

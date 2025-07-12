@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { BaseEntity } from '@/common/cqrs/base.entity';
-import { HistoryAction } from '../../enums/history-action.enum';
+import { HistoryAction } from '../sales/enums/history-action.enum';
 import { CreateHistoryDto } from './dtos/create-history.dto';
 import { HistoriesService } from './histories.service';
 

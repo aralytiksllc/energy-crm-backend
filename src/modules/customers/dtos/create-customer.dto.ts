@@ -1,42 +1,6 @@
-import {
-  IsString,
-  IsOptional,
-  IsEmail,
-  IsBoolean,
-  IsObject,
-  IsInt,
-} from 'class-validator';
+// External dependencies
 
-export class CreateCustomerDto {
-  @IsString()
-  name: string;
+// Internal dependencies
+import { CreatePartnerDto } from '@/common/partner/dtos/create-partner.dto';
 
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @IsOptional()
-  @IsEmail()
-  email?: string;
-
-  @IsOptional()
-  @IsString()
-  phone?: string;
-
-  @IsOptional()
-  @IsString()
-  website?: string;
-
-  @IsBoolean()
-  isActive: boolean;
-
-  @IsOptional()
-  @IsObject()
-  settings?: Record<string, unknown>;
-
-  @IsInt()
-  createdById: number;
-
-  @IsInt()
-  updatedById: number;
-}
+export class CreateCustomerDto extends CreatePartnerDto {}

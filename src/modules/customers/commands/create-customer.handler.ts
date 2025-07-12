@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // Internal dependencies
-import { Customer } from '../entities/customer.entity';
+import { Customer } from '@/modules/customers/entities/customer.entity';
 import { CustomerCreatedEvent } from '../events/customer-created.event';
 import { CreateCustomerCommand } from './create-customer.command';
 

@@ -1,5 +1,8 @@
+// External dependencies
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { History } from '@/entities/history.entity';
+
+// Internal dependencies
+import { History } from '@/modules/histories/entities/history.entity';
 import { HistoryCreatedEvent } from '../events/history-created.event';
 import { HistoriesRepository } from '../histories.repository';
 import { CreateHistoryCommand } from './create-history.command';

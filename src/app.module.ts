@@ -1,11 +1,13 @@
+// External dependencies
 import { Module } from '@nestjs/common';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppLoggerModule } from './common/app-logger/app-logger.module';
-import { EmailModule } from './common/email/email.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { VendorsModule } from './modules/vendors/vendors.module';
-import { UsersModule } from './modules/users/users.module';
+
+// Internal dependencies
+import { AppLoggerModule } from '@/common/app-logger/app-logger.module';
+import { EmailModule } from '@/common/email/email.module';
+import { AuthModule } from '@/modules/auth/auth.module';
+import { UsersModule } from '@/modules/users/users.module';
 
 @Module({
   imports: [
@@ -38,8 +40,6 @@ import { UsersModule } from './modules/users/users.module';
     EmailModule,
 
     AuthModule,
-
-    VendorsModule,
 
     UsersModule,
   ],

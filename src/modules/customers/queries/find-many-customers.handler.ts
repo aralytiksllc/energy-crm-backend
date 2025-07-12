@@ -1,8 +1,11 @@
+// External dependencies
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+// Internal dependencies
 import { Paged } from '@/common/paged';
-import { Customer } from '../entities/customer.entity';
+import { Customer } from '@/modules/customers/entities/customer.entity';
 import { FindManyCustomersQuery } from './find-many-customers.query';
 
 @QueryHandler(FindManyCustomersQuery)

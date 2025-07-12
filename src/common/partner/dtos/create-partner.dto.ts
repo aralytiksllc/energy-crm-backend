@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsEmail, Length } from 'class-validator';
 
-export abstract class PartnerDto {
+export abstract class CreatePartnerDto {
   @IsString()
   @Length(1, 255)
   name: string;

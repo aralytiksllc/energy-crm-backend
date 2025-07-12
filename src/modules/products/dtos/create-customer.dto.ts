@@ -1,3 +1,4 @@
+// External dependencies
 import {
   IsString,
   IsOptional,
@@ -6,6 +7,8 @@ import {
   IsObject,
   IsInt,
 } from 'class-validator';
+
+// Internal dependencies
 
 export class CreateCustomerDto {
   @IsString()

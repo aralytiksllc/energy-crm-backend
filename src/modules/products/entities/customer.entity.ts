@@ -1,8 +1,10 @@
+// External dependencies
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
+
+// Internal dependencies
 import { BaseEntity } from '@/common/cqrs/base.entity';
-import { Hash } from '@/common/hash';
-import { User } from './user.entity';
+import { User } from '@/modules/users/entities/user.entity';
 
 @Entity('products')
 export class Customer extends BaseEntity {

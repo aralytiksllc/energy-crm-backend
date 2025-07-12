@@ -1,8 +1,11 @@
+// External dependencies
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
+// Internal dependencies
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
-import { History } from '@/entities/history.entity';
+import { History } from '@/modules/histories/entities/history.entity';
 import { CreateHistoryDto } from './dtos/create-history.dto';
 import { FindManyHistoriesQuery } from './queries/find-many-histories.query';
 import { CreateHistoryCommand } from './commands/create-history.command';

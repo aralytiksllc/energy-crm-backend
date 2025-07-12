@@ -1,6 +1,9 @@
+// External dependencies
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SaveOptions, RemoveOptions } from 'typeorm';
+
+// Internal dependencies
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
 import { Customer } from './entities/customer.entity';

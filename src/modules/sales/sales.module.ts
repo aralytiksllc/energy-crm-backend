@@ -1,7 +1,10 @@
+// External dependencies
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Customer } from '@/entities/customer.entity';
+
+// Internal dependencies
+import { Customer } from '@/modules/sales/entities/customer.entity';
 import { FindManySalesHandler } from './queries/find-many-sales.handler';
 import { FindOneCustomerHandler } from './queries/find-one-customer.handler';
 import { CreateCustomerHandler } from './commands/create-customer.handler';

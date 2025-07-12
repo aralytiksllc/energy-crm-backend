@@ -1,3 +1,4 @@
+// External dependencies
 import {
   IsNotEmpty,
   IsString,
@@ -8,6 +9,8 @@ import {
   IsObject,
   IsBoolean,
 } from 'class-validator';
+
+// Internal dependencies
 
 export class CreateUserDto {
   @IsNotEmpty()

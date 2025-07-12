@@ -1,7 +1,10 @@
+// External dependencies
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Customer } from '@/entities/customer.entity';
+
+// Internal dependencies
+import { Customer } from '@/modules/sales/entities/customer.entity';
 import { CustomerCreatedEvent } from '../events/customer-created.event';
 import { CreateCustomerCommand } from './create-customer.command';
 

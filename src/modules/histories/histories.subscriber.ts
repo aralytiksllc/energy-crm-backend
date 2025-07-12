@@ -1,3 +1,4 @@
+// External dependencies
 import {
   EntitySubscriberInterface,
   DataSource,
@@ -10,8 +11,10 @@ import {
   EntityMetadata,
 } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
+
+// Internal dependencies
 import { BaseEntity } from '@/common/cqrs/base.entity';
-import { HistoryAction } from '../sales/enums/history-action.enum';
+import { HistoryAction } from '@/modules/histories/enums/history-action.enum';
 import { CreateHistoryDto } from './dtos/create-history.dto';
 import { HistoriesService } from './histories.service';
 

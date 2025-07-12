@@ -1,7 +1,10 @@
+// External dependencies
 import { Controller, Get, Query } from '@nestjs/common';
+
+// Internal dependencies
 import { QueryParams } from '@/common/query/query-params';
 import { Paged } from '@/common/paged';
-import { History } from '@/entities/history.entity';
+import { History } from '@/modules/histories/entities/history.entity';
 import { HistoriesService } from './histories.service';
 
 @Controller('histories')

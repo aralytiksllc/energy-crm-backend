@@ -1,6 +1,9 @@
+// External dependencies
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+
+// Internal dependencies
 import { Paged } from '@/common/paged';
-import { History } from '@/entities/history.entity';
+import { History } from '@/modules/histories/entities/history.entity';
 import { HistoriesRepository } from '../histories.repository';
 import { FindManyHistoriesQuery } from './find-many-histories.query';
 

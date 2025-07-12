@@ -1,8 +1,11 @@
+// External dependencies
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
+// Internal dependencies
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
-import { Customer } from '@/entities/customer.entity';
+import { Customer } from '@/modules/sales/entities/customer.entity';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { CreateCustomerCommand } from './commands/create-customer.command';

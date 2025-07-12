@@ -1,16 +1,19 @@
+// External dependencies
 import {
   Controller,
   Get,
   Post,
   Body,
-  Put,
+  Patch,
   Param,
   Delete,
   Query,
 } from '@nestjs/common';
+
+// Internal dependencies
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
-import { Customer } from './entities/customer.entity';
+import { Customer } from '@/modules/customers/entities/customer.entity';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { CustomerService } from './customer.service';
@@ -34,7 +37,7 @@ export class CustomerController {
     return this.customerService.create(createCustomerDto);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(
     @Param('id') id: number,
     @Body() updateCustomerDto: UpdateCustomerDto,

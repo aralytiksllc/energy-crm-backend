@@ -1,3 +1,6 @@
+// External dependencies
+
+// Internal dependencies
 import { CreateHistoryDto } from '../dtos/create-history.dto';
 
 export class CreateHistoryCommand {

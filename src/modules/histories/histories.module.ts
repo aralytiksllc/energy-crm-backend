@@ -1,7 +1,10 @@
+// External dependencies
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CqrsModule } from '@nestjs/cqrs';
-import { History } from '@/entities/history.entity';
+
+// Internal dependencies
+import { History } from '@/modules/histories/entities/history.entity';
 import { FindManyHistoriesHandler } from './queries/find-many-histories.handler';
 import { CreateHistoryHandler } from './commands/create-history.handler';
 import { HistoriesController } from './histories.controller';

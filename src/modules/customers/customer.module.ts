@@ -1,6 +1,9 @@
+// External dependencies
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+// Internal dependencies
 import { Customer } from './entities/customer.entity';
 import { FindManyCustomersHandler } from './queries/find-many-customers.handler';
 import { FindOneCustomerHandler } from './queries/find-one-customer.handler';

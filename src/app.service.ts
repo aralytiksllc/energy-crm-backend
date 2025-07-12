@@ -1,4 +1,7 @@
+// External dependencies
 import { Injectable } from '@nestjs/common';
+
+// Internal dependencies
 
 @Injectable()
 export class AppService {

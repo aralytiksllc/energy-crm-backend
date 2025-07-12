@@ -1,5 +1,8 @@
+// External dependencies
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { User } from '@/entities/user.entity';
+
+// Internal dependencies
+import { User } from '@/modules/users/entities/user.entity';
 import { UserDeletedEvent } from '../events/user-deleted.event';
 import { UsersRepository } from '../users.repository';
 import { DeleteUserCommand } from './delete-user.command';

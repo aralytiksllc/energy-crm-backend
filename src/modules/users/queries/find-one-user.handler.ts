@@ -1,5 +1,8 @@
+// External dependencies
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { User } from '@/entities/user.entity';
+
+// Internal dependencies
+import { User } from '@/modules/users/entities/user.entity';
 import { UsersRepository } from '../users.repository';
 import { FindOneUserQuery } from './find-one-user.query';
 

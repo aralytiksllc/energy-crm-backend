@@ -1,11 +1,14 @@
+// External dependencies
 import { NestFactory } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
 import { parse } from 'qs';
-import { appLoggerConfig } from './common/app-logger/app-logger.config';
-import { AppLoggerInterceptor } from './common/app-logger/app-logger.interceptor';
-import { AuthJwtGuard } from './common/auth';
+
+// Internal dependencies
+import { appLoggerConfig } from '@/common/app-logger/app-logger.config';
+import { AppLoggerInterceptor } from '@/common/app-logger/app-logger.interceptor';
+import { AuthJwtGuard } from '@/common/auth';
 import { AppModule } from './app.module';
 
 async function bootstrap() {

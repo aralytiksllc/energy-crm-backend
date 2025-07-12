@@ -1,3 +1,4 @@
+// External dependencies
 import {
   Entity,
   Column,
@@ -7,6 +8,8 @@ import {
   BeforeUpdate,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+
+// Internal dependencies
 import { BaseEntity } from '@/common/cqrs/base.entity';
 import { Hash } from '@/common/hash';
 

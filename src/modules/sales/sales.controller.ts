@@ -1,3 +1,4 @@
+// External dependencies
 import {
   Controller,
   Get,
@@ -8,9 +9,11 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
+
+// Internal dependencies
 import { Paged } from '@/common/paged';
 import { QueryParams } from '@/common/query/query-params';
-import { Customer } from '@/entities/customer.entity';
+import { Customer } from '@/modules/sales/entities/customer.entity';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { SalesService } from './sales.service';

@@ -1,7 +1,10 @@
 // External dependencies
+import { Prisma } from '@prisma/client';
 
 // Internal dependencies
 import { FindManyQuery } from '@/common/cqrs/queries/find-many.query';
-import { History } from '@/modules/histories/entities/history.entity';
 
-export class FindManyHistoriesQuery extends FindManyQuery<History> {}
+export class FindManyHistoriesQuery extends FindManyQuery<
+  Prisma.HistoryWhereInput,
+  Prisma.HistoryOrderByWithRelationInput
+> {}

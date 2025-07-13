@@ -1,8 +1,11 @@
-import { BaseEntity } from '@/common/cqrs/base.entity';
-import { Query, QueryParams } from '@/common/query';
+import { Query } from '@/common/query/query.impl';
+import { QueryParamsDto } from '@/common/query/dtos/query-params.dto';
 
-export class FindManyQuery<TEntity extends BaseEntity> extends Query<TEntity> {
-  constructor(params: QueryParams<TEntity>) {
-    super(params);
+export class FindManyQuery<WhereInput, OrderByInput> extends Query<
+  WhereInput,
+  OrderByInput
+> {
+  constructor(dto: QueryParamsDto) {
+    super(dto);
   }
 }

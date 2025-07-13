@@ -6,15 +6,15 @@ import { WinstonModule } from 'nest-winston';
 import { parse } from 'qs';
 
 // Internal dependencies
-import { appLoggerConfig } from '@/common/app-logger/app-logger.config';
-import { AppLoggerInterceptor } from '@/common/app-logger/app-logger.interceptor';
+// import { appLoggerConfig } from '@/common/app-logger/app-logger.config';
+// import { AppLoggerInterceptor } from '@/common/app-logger/app-logger.interceptor';
 import { AuthJwtGuard } from '@/common/auth';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   // Create Nest app with Winston logger
   const app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger(appLoggerConfig),
+    // logger: WinstonModule.createLogger(appLoggerConfig),
   });
 
   // Enable CORS for frontend
@@ -34,7 +34,7 @@ async function bootstrap() {
   // Global interceptors
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(reflector),
-    app.get(AppLoggerInterceptor),
+    // app.get(AppLoggerInterceptor),
   );
 
   // Global guards

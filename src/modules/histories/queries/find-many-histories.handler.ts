@@ -1,23 +1,26 @@
 // External dependencies
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { History } from '@prisma/client';
 
 // Internal dependencies
-import { Paged } from '@/common/paged';
-import { History } from '@/modules/histories/entities/history.entity';
-import { HistoriesRepository } from '../histories.repository';
+import { PrismaService } from '@/prisma/prisma.service';
+import { Paged } from '@/common/paged/paged.impl';
 import { FindManyHistoriesQuery } from './find-many-histories.query';
 
 @QueryHandler(FindManyHistoriesQuery)
 export class FindManyHistoriesHandler
   implements IQueryHandler<FindManyHistoriesQuery>
 {
-  constructor(private readonly historiesRepository: HistoriesRepository) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async execute(query: FindManyHistoriesQuery): Promise<Paged<History>> {
-    const options = query.toFindManyOptions();
+    const queryOptions = query.toQueryOptions();
 
-    const [rows, count] = await this.historiesRepository.findAndCount(options);
+    const [items, total] = await Promise.all([
+      this.prismaService.history.findMany(queryOptions),
+      this.prismaService.history.count({ where: queryOptions.where }),
+    ]);
 
-    return new Paged(rows, count, query.current, query.pageSize);
+    return new Paged(items, total, query.current, query.pageSize);
   }
 }

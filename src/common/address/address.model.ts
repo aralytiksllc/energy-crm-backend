@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
-import { AddressType } from '../common/address/address-type.enum';
+import { AddressType } from './address-type.enum';
 
 @Entity()
 export abstract class Address extends BaseEntity {

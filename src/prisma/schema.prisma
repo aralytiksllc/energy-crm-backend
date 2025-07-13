@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  firstName String
+  lastName  String
+  email     String @unique
+  password  String
+
+  dateOfBirth   DateTime?
+  dateOfJoining DateTime?
+
+  settings Json?
+  notes    String?
+  isActive Boolean @default(true)
+
+  createdById Int?
+  createdBy   User?    @relation("UserCreatedBy", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  updatedById Int?
+  updatedBy   User?    @relation("UserUpdatedBy", fields: [updatedById], references: [id])
+  updatedAt   DateTime @updatedAt
+
+  // Hidden inverses required by Prisma
+  UserCreatedBy_User     User[]          @relation("UserCreatedBy")
+  UserUpdatedBy_User     User[]          @relation("UserUpdatedBy")
+  CustomerCreatedBy      Customer[]      @relation("CustomerCreatedBy")
+  CustomerUpdatedBy      Customer[]      @relation("CustomerUpdatedBy")
+  PasswordResetCreatedBy PasswordReset[] @relation("PasswordResetCreatedBy")
+  PasswordResetUpdatedBy PasswordReset[] @relation("PasswordResetUpdatedBy")
+}
+
+model Customer {
+  id Int @id @default(autoincrement())
+
+  name         String
+  businessName String?
+  email        String?
+  phone        String?
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  state        String?
+  zip          String?
+  country      String?
+
+  createdById Int?
+  createdBy   User?    @relation("CustomerCreatedBy", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  updatedById Int?
+  updatedBy   User?    @relation("CustomerUpdatedBy", fields: [updatedById], references: [id])
+  updatedAt   DateTime @updatedAt
+}
+
+model PasswordReset {
+  id Int @id @default(autoincrement())
+
+  email     String
+  token     String
+  expiresAt DateTime
+
+  createdById Int?
+  createdBy   User?    @relation("PasswordResetCreatedBy", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  updatedById Int?
+  updatedBy   User?    @relation("PasswordResetUpdatedBy", fields: [updatedById], references: [id])
+  updatedAt   DateTime @updatedAt
+}
+
+model History {
+  id          Int           @id @default(autoincrement())
+  createdById Int?
+  updatedById Int?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  action      HistoryAction
+  entityId    Int
+  entityName  String
+  entityData  Json
+}
+
+enum HistoryAction {
+  create
+  update
+  delete
+}

@@ -1,21 +1,24 @@
 // External dependencies
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { User } from '@prisma/client';
 
 // Internal dependencies
-import { Paged } from '@/common/paged';
-import { User } from '@/modules/users/entities/user.entity';
-import { UsersRepository } from '../users.repository';
+import { Paged } from '@/common/paged/paged.impl';
+import { PrismaService } from '@/prisma/prisma.service';
 import { FindManyUsersQuery } from './find-many-users.query';
 
 @QueryHandler(FindManyUsersQuery)
 export class FindManyUsersHandler implements IQueryHandler<FindManyUsersQuery> {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async execute(query: FindManyUsersQuery): Promise<Paged<User>> {
-    const options = query.toFindManyOptions();
+    const options = query.toQueryOptions();
 
-    const [rows, count] = await this.usersRepository.findAndCount(options);
+    const [items, total] = await Promise.all([
+      this.prismaService.user.findMany(options),
+      this.prismaService.user.count({ where: options.where }),
+    ]);
 
-    return new Paged(rows, count, query.current, query.pageSize);
+    return new Paged(items, total, query.current, query.pageSize);
   }
 }

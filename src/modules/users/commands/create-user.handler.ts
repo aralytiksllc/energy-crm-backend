@@ -1,28 +1,33 @@
 // External dependencies
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
+import { Prisma, User } from '@prisma/client';
 
 // Internal dependencies
-import { User } from '@/modules/users/entities/user.entity';
-import { UserCreatedEvent } from '../events/user-created.event';
-import { UsersRepository } from '../users.repository';
+import { PrismaService } from '@/prisma/prisma.service';
+import { Hash } from '@/common/hash/hash.impl';
 import { CreateUserCommand } from './create-user.command';
+import { UserCreatedEvent } from '../events/user-created.event';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
-    private readonly usersRepository: UsersRepository,
+    private readonly prisma: PrismaService,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateUserCommand): Promise<User> {
-    const { dto, options } = command;
+    const { dto } = command;
 
-    const newUser = this.usersRepository.create(dto);
+    if (dto.password) {
+      dto.password = await Hash.make(dto.password);
+    }
 
-    const savedUser = await this.usersRepository.save(newUser, options);
+    const user = await this.prisma.user.create({
+      data: dto as Prisma.UserCreateInput,
+    });
 
-    this.eventBus.publish(new UserCreatedEvent(savedUser));
+    this.eventBus.publish(new UserCreatedEvent(user));
 
-    return savedUser;
+    return user;
   }
 }

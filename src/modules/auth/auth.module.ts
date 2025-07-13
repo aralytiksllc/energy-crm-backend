@@ -4,13 +4,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 // Internal dependencies
+import { PrismaService } from '@/prisma/prisma.service';
 import { EmailModule } from '@/common/email/email.module';
-import { UsersModule } from '@/modules/users/users.module';
+import { UserModule } from '@/modules/users/user.module';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
-import { PasswordReset } from './entities/password-reset.entity';
 import { LoginHandler } from './commands/login.handler';
 import { ForgotPasswordHandler } from './commands/forgot-password.handler';
 import { UpdatePasswordHandler } from './commands/update-password.handler';
@@ -23,7 +22,6 @@ import { AuthService } from './auth.service';
     CqrsModule,
     ConfigModule,
     PassportModule,
-    TypeOrmModule.forFeature([PasswordReset]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -35,10 +33,12 @@ import { AuthService } from './auth.service';
       }),
     }),
     EmailModule,
-    UsersModule,
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [
+    PrismaService,
+
     // Command Handlers
     LoginHandler,
     ForgotPasswordHandler,

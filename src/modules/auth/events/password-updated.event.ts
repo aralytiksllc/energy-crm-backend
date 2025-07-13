@@ -1,7 +1,7 @@
 // External dependencies
+import { User } from '@prisma/client';
 
 // Internal dependencies
-import { User } from '@/modules/users/entities/user.entity';
 
 export class PasswordUpdatedEvent {
   constructor(public readonly user: User) {}

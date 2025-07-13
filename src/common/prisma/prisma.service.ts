@@ -1,6 +1,8 @@
+// External dependencies
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { Hash } from '@/common/hash/hash.impl';
+
+// Internal dependencies
 
 @Injectable()
 export class PrismaService

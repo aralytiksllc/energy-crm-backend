@@ -3,7 +3,7 @@ import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 // Internal dependencies
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
 import { Hash } from '@/common/hash/hash.impl';
 import { PasswordUpdatedEvent } from '../events/password-updated.event';
 import { UpdatePasswordCommand } from './update-password.command';

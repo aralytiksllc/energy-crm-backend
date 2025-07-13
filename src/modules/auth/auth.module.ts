@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
 // Internal dependencies
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
 import { EmailModule } from '@/common/email/email.module';
 import { UserModule } from '@/modules/users/user.module';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';

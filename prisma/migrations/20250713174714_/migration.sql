@@ -1,8 +1,9 @@
+-- CreateEnum
+CREATE TYPE "HistoryAction" AS ENUM ('create', 'update', 'delete');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -13,7 +14,9 @@ CREATE TABLE "User" (
     "notes" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdById" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedById" INTEGER,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -21,8 +24,6 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Customer" (
     "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
     "businessName" TEXT,
     "email" TEXT,
@@ -34,7 +35,9 @@ CREATE TABLE "Customer" (
     "zip" TEXT,
     "country" TEXT,
     "createdById" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedById" INTEGER,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Customer_pkey" PRIMARY KEY ("id")
 );
@@ -42,15 +45,30 @@ CREATE TABLE "Customer" (
 -- CreateTable
 CREATE TABLE "PasswordReset" (
     "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "email" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expiresAt" TIMESTAMP(3) NOT NULL,
     "createdById" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedById" INTEGER,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "PasswordReset_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "History" (
+    "id" SERIAL NOT NULL,
+    "createdById" INTEGER,
+    "updatedById" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "action" "HistoryAction" NOT NULL,
+    "entityId" INTEGER NOT NULL,
+    "entityName" TEXT NOT NULL,
+    "entityData" JSONB NOT NULL,
+
+    CONSTRAINT "History_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

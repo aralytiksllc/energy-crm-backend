@@ -4,7 +4,7 @@ import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 
 // Internal dependencies
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
 import { Hash } from '@/common/hash/hash.impl';
 import { AuthResponse, TokenPayload } from '../auth.interfaces';
 import { LoggedInEvent } from '../events/logged-in.event';

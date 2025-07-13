@@ -3,7 +3,7 @@ import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { History } from '@prisma/client';
 
 // Internal dependencies
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
 import { HistoryCreatedEvent } from '../events/history-created.event';
 import { CreateHistoryCommand } from './create-history.command';
 
@@ -12,14 +12,14 @@ export class CreateHistoryHandler
   implements ICommandHandler<CreateHistoryCommand>
 {
   constructor(
-    private readonly prisma: PrismaService,
+    private readonly prismaService: PrismaService,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateHistoryCommand): Promise<History> {
     const { dto } = command;
 
-    const savedHistory = await this.prisma.history.create({
+    const savedHistory = await this.prismaService.history.create({
       data: dto,
     });
 

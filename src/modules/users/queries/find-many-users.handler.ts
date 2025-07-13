@@ -3,8 +3,8 @@ import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { User } from '@prisma/client';
 
 // Internal dependencies
+import { PrismaService } from '@/common/prisma/prisma.service';
 import { Paged } from '@/common/paged/paged.impl';
-import { PrismaService } from '@/prisma/prisma.service';
 import { FindManyUsersQuery } from './find-many-users.query';
 
 @QueryHandler(FindManyUsersQuery)

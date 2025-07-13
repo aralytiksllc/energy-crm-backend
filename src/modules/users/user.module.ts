@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 // Internal dependencies
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
 import { FindManyUsersHandler } from './queries/find-many-users.handler';
 import { FindOneUserHandler } from './queries/find-one-user.handler';
 import { CreateUserHandler } from './commands/create-user.handler';

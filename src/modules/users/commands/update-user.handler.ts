@@ -3,7 +3,7 @@ import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { Prisma, User } from '@prisma/client';
 
 // Internal dependencies
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
 import { Hash } from '@/common/hash/hash.impl';
 import { UpdateUserCommand } from './update-user.command';
 import { UserUpdatedEvent } from '../events/user-updated.event';

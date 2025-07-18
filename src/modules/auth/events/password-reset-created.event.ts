@@ -1,7 +1,8 @@
 // External dependencies
-import { User, PasswordReset } from '@prisma/client';
 
 // Internal dependencies
+import { User } from '@/modules/users/entities/user.entity';
+import { PasswordReset } from '../entities/password-reset.entity';
 
 export class PasswordResetCreatedEvent {
   constructor(

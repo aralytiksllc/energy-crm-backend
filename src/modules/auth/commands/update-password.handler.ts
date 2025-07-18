@@ -1,10 +1,11 @@
 // External dependencies
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { DataSource, MoreThanOrEqual, EntityManager } from 'typeorm';
 
 // Internal dependencies
-import { PrismaService } from '@/common/prisma/prisma.service';
-import { Hash } from '@/common/hash/hash.impl';
+import { User } from '@/modules/users/entities/user.entity';
+import { PasswordReset } from '../entities/password-reset.entity';
 import { PasswordUpdatedEvent } from '../events/password-updated.event';
 import { UpdatePasswordCommand } from './update-password.command';
 
@@ -13,48 +14,70 @@ export class UpdatePasswordHandler
   implements ICommandHandler<UpdatePasswordCommand>
 {
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly dataSource: DataSource,
     private readonly eventBus: EventBus,
   ) {}
 
   public async execute(command: UpdatePasswordCommand): Promise<void> {
     const { dto } = command;
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    await this.prismaService.$transaction(async (tx) => {
-      const passwordReset = await tx.passwordReset.findFirst({
-        where: { token: dto.token, expiresAt: { gte: new Date() } },
-      });
+    try {
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
 
-      if (!passwordReset) {
-        throw new BadRequestException('Invalid or expired reset token.');
-      }
+      const passwordReset = await this.findValidPasswordResetOrFail(
+        queryRunner.manager,
+        dto.token,
+      );
 
-      const user = await tx.user.findUnique({
-        where: { email: passwordReset.email },
-      });
+      const user = await this.findActiveUserOrFail(
+        queryRunner.manager,
+        passwordReset.email,
+      );
 
-      if (!user) {
-        throw new BadRequestException('User with this email does not exist.');
-      }
+      user.password = dto.password;
+      await queryRunner.manager.save(user);
+      await queryRunner.manager.remove(passwordReset);
 
-      if (!user.isActive) {
-        throw new ForbiddenException('User account is inactive.');
-      }
-
-      if (dto.password) {
-        dto.password = await Hash.make(dto.password);
-      }
-
-      await tx.user.update({
-        where: { id: user.id },
-        data: { password: dto.password },
-      });
-
-      await tx.passwordReset.delete({
-        where: { id: passwordReset.id },
-      });
+      await queryRunner.commitTransaction();
 
       this.eventBus.publish(new PasswordUpdatedEvent(user));
-    });
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  private async findValidPasswordResetOrFail(
+    manager: EntityManager,
+    token: string,
+  ): Promise<PasswordReset> {
+    const where = { token, expiresAt: MoreThanOrEqual(new Date()) };
+
+    const passwordReset = await manager.findOneBy(PasswordReset, where);
+
+    if (!passwordReset) {
+      throw new BadRequestException('Invalid or expired reset token.');
+    }
+
+    return passwordReset;
+  }
+
+  private async findActiveUserOrFail(
+    manager: EntityManager,
+    email: string,
+  ): Promise<User> {
+    const where = { email };
+
+    const user = await manager.findOneByOrFail(User, where);
+
+    if (!user.isActive) {
+      throw new ForbiddenException('User account is inactive.');
+    }
+
+    return user;
   }
 }

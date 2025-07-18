@@ -1,27 +1,16 @@
 // External dependencies
-import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { User } from '@prisma/client';
 
 // Internal dependencies
-import { PrismaService } from '@/common/prisma/prisma.service';
+import { User } from '@/modules/users/entities/user.entity';
+import { UsersRepository } from '../users.repository';
 import { FindOneUserQuery } from './find-one-user.query';
 
 @QueryHandler(FindOneUserQuery)
 export class FindOneUserHandler implements IQueryHandler<FindOneUserQuery> {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   async execute(query: FindOneUserQuery): Promise<User> {
-    const { id } = query;
-
-    const user = await this.prismaService.user.findUnique({
-      where: { id },
-    });
-
-    if (!user) {
-      throw new NotFoundException(`User with id ${id} not found.`);
-    }
-
-    return user;
+    return this.usersRepository.findOneByIdOrFail(query.id, query.options);
   }
 }

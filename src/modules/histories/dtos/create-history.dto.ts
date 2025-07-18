@@ -3,7 +3,7 @@ import { IsEnum, IsNumber, IsString, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
 
 // Internal dependencies
-import { HistoryAction } from '../enums/history-action.enum';
+import { HistoryAction } from '@/modules/histories/enums/history-action.enum';
 
 export class CreateHistoryDto {
   @IsEnum(HistoryAction)

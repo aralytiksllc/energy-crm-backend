@@ -16,21 +16,21 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() dto: LoginDto): Promise<AuthResponse> {
-    return this.authService.login(dto);
+  async Login(@Body() dto: LoginDto): Promise<AuthResponse> {
+    return this.authService.Login(dto);
   }
 
   @Public()
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
-  forgotPassword(@Body() dto: ForgotPasswordDto) {
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto);
   }
 
   @Public()
   @Post('update-password')
   @HttpCode(HttpStatus.OK)
-  updatePassword(@Body() dto: UpdatePasswordDto) {
-    return this.authService.updatePassword(dto);
+  async changePassword(@Body() dto: UpdatePasswordDto) {
+    return this.authService.changePassword(dto);
   }
 }

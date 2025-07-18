@@ -1,41 +1,14 @@
-// External dependencies
+import { Operator, Sort } from './query.enums';
 
-// Internal dependencies
-export type QueryOperator =
-  | 'eq'
-  | 'ne'
-  | 'gt'
-  | 'gte'
-  | 'lt'
-  | 'lte'
-  | 'like'
-  | 'ilike'
-  | 'in'
-  | 'range';
+type StringKeyOf<T> = Extract<keyof T, string>;
 
-export type QueryOrder = 'ASC' | 'DESC';
+export type QueryFilter<T, K extends StringKeyOf<T> = StringKeyOf<T>> = {
+  field: K;
+  operator: Operator;
+  value: T[K];
+};
 
-export interface QueryFilter<WhereInput> {
-  field: keyof WhereInput;
-  operator: QueryOperator;
-  value: unknown;
-}
-
-export interface QuerySort<OrderByInput> {
-  field: keyof OrderByInput;
-  order: QueryOrder;
-}
-
-export interface QueryParams<WhereInput, OrderByInput> {
-  filters?: QueryFilter<WhereInput>[];
-  sorters?: QuerySort<OrderByInput>[];
-  current?: number;
-  pageSize?: number;
-}
-
-export interface QueryOptions<WhereInput, OrderByInput> {
-  where: WhereInput;
-  orderBy: OrderByInput[];
-  skip: number;
-  take: number;
-}
+export type QuerySort<T, K extends StringKeyOf<T> = StringKeyOf<T>> = {
+  field: K;
+  order: Sort;
+};

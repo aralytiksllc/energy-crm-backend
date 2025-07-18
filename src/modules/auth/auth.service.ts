@@ -15,18 +15,15 @@ import { AuthResponse } from './auth.interfaces';
 export class AuthService {
   constructor(private readonly commandBus: CommandBus) {}
 
-  async login(dto: LoginDto): Promise<AuthResponse> {
-    const command = new LoginCommand(dto);
-    return this.commandBus.execute(command);
+  async Login(dto: LoginDto): Promise<AuthResponse> {
+    return this.commandBus.execute(new LoginCommand(dto));
   }
 
   async forgotPassword(dto: ForgotPasswordDto): Promise<void> {
-    const command = new ForgotPasswordCommand(dto);
-    return this.commandBus.execute(command);
+    return this.commandBus.execute(new ForgotPasswordCommand(dto));
   }
 
-  async updatePassword(dto: UpdatePasswordDto): Promise<void> {
-    const command = new UpdatePasswordCommand(dto);
-    return this.commandBus.execute(command);
+  async changePassword(dto: UpdatePasswordDto): Promise<void> {
+    return this.commandBus.execute(new UpdatePasswordCommand(dto));
   }
 }

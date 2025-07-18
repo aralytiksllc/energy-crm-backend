@@ -4,6 +4,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 // Internal dependencies
 import { PasswordResetCreatedEvent } from './password-reset-created.event';
 import { EmailService } from '@/common/email/email.service';
+import { EmailRequest } from '@/common/email/email.interfaces';
 
 @EventsHandler(PasswordResetCreatedEvent)
 export class PasswordResetCreatedHandler
@@ -27,6 +28,7 @@ export class PasswordResetCreatedHandler
         '[PasswordResetCreatedHandler] Failed to send email:',
         error,
       );
+      // Opsionale: logim me logger-in e NestJS në vend të console
     }
   }
 }

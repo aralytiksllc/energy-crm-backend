@@ -19,7 +19,7 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: DeleteUserCommand): Promise<User> {
+  async execute(command: DeleteUserCommand): Promise<void> {
     const { id } = command;
 
     const user = await this.userRepository.findOneOrFail({ id });
@@ -27,7 +27,5 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
     await this.entityManager.removeAndFlush(user);
 
     this.eventBus.publish(new UserDeletedEvent(user));
-
-    return user;
   }
 }

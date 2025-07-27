@@ -1,21 +1,21 @@
 // External dependencies
-import { Entity, Column } from 'typeorm';
+import { Entity, Property } from '@mikro-orm/postgresql';
 
 // Internal dependencies
 import { BaseEntity } from '@/common/cqrs/base.entity';
-import { HistoryAction } from '@/modules/histories/enums/history-action.enum';
+import { HistoryAction } from '../enums/history-action.enum';
 
-@Entity('histories')
+@Entity({ tableName: 'histories' })
 export class History extends BaseEntity {
-  @Column({ type: 'enum', enum: HistoryAction })
-  action: HistoryAction;
+  @Property({ type: 'enum' })
+  action!: HistoryAction;
 
-  @Column()
-  entityId: number;
+  @Property()
+  entityId!: number;
 
-  @Column()
-  entityName: string;
+  @Property()
+  entityName!: string;
 
-  @Column('jsonb')
-  entityData: any;
+  @Property({ type: 'json' })
+  entityData!: any;
 }

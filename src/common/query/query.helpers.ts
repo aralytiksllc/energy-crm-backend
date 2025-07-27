@@ -7,33 +7,33 @@ export class QueryHelpers {
   static resolveOperator(operator: QueryOperator, value: unknown): unknown {
     switch (operator) {
       case 'eq':
-        return { equals: value };
+        return { $eq: value };
 
       case 'ne':
-        return { not: value };
+        return { $ne: value };
 
       case 'gt':
-        return { gt: value };
+        return { $gt: value };
 
       case 'gte':
-        return { gte: value };
+        return { $gte: value };
 
       case 'lt':
-        return { lt: value };
+        return { $lt: value };
 
       case 'lte':
-        return { lte: value };
+        return { $lte: value };
 
       case 'like':
       case 'ilike':
-        return { contains: value, mode: 'insensitive' };
+        return { $like: `%${value}%` };
 
       case 'in':
-        return { in: Array.isArray(value) ? value : [value] };
+        return { $in: Array.isArray(value) ? value : [value] };
 
       case 'range': {
         if (Array.isArray(value) && value.length === 2) {
-          return { gte: value[0], lte: value[1] };
+          return { $gte: value[0], $lte: value[1] };
         }
         throw new Error(
           `Invalid range value: expected array with 2 elements, got ${JSON.stringify(value)}`,
@@ -41,7 +41,7 @@ export class QueryHelpers {
       }
 
       default:
-        return { equals: value };
+        return { $eq: value };
     }
   }
 }

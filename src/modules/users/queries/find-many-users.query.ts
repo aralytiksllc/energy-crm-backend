@@ -2,6 +2,6 @@
 
 // Internal dependencies
 import { FindManyQuery } from '@/common/cqrs/queries/find-many.query';
-import { User } from '@/modules/users/entities/user.entity';
+import { User } from '../entities/user.entity';
 
-export class FindManyUsersQuery extends FindManyQuery<User> {}
+export class FindManyUserQuery extends FindManyQuery<User> {}

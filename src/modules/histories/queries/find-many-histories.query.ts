@@ -2,6 +2,6 @@
 
 // Internal dependencies
 import { FindManyQuery } from '@/common/cqrs/queries/find-many.query';
-import { History } from '@/modules/histories/entities/history.entity';
+import { History } from '../entities/history.entity';
 
-export class FindManyHistoriesQuery extends FindManyQuery<History> {}
+export class FindManyHistoryQuery extends FindManyQuery<History> {}

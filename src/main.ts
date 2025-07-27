@@ -2,20 +2,15 @@
 import { NestFactory } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { WinstonModule } from 'nest-winston';
 import { parse } from 'qs';
 
 // Internal dependencies
-import { appLoggerConfig } from '@/common/app-logger/app-logger.config';
-import { AppLoggerInterceptor } from '@/common/app-logger/app-logger.interceptor';
-import { AuthJwtGuard } from '@/common/auth';
+// import { AuthJwtGuard } from '@/common/auth';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   // Create Nest app with Winston logger
-  const app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger(appLoggerConfig),
-  });
+  const app = await NestFactory.create(AppModule);
 
   // Enable CORS for frontend
   app.enableCors();
@@ -32,10 +27,7 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
 
   // Global interceptors
-  app.useGlobalInterceptors(
-    new ClassSerializerInterceptor(reflector),
-    app.get(AppLoggerInterceptor),
-  );
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   // Global guards
   // app.useGlobalGuards(new AuthJwtGuard(reflector));

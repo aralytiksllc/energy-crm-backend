@@ -2,28 +2,27 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
-import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { JwtModule } from '@nestjs/jwt';
 
 // Internal dependencies
 import { EmailModule } from '@/common/email/email.module';
-import { UsersModule } from '@/modules/users/users.module';
+import { UserModule } from '@/modules/users/user.module';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
-import { PasswordReset } from './entities/password-reset.entity';
 import { LoginHandler } from './commands/login.handler';
 import { ForgotPasswordHandler } from './commands/forgot-password.handler';
-import { UpdatePasswordHandler } from './commands/update-password.handler';
+import { ChangePasswordHandler } from './commands/change-password.handler';
 import { PasswordResetCreatedHandler } from './events/password-reset-created.handler';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 @Module({
   imports: [
-    CqrsModule,
     ConfigModule,
+    CqrsModule,
     PassportModule,
-    TypeOrmModule.forFeature([PasswordReset]),
+    MikroOrmModule.forFeature([]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -35,14 +34,14 @@ import { AuthService } from './auth.service';
       }),
     }),
     EmailModule,
-    UsersModule,
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [
     // Command Handlers
     LoginHandler,
     ForgotPasswordHandler,
-    UpdatePasswordHandler,
+    ChangePasswordHandler,
 
     // Event Handlers
     PasswordResetCreatedHandler,

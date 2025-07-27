@@ -4,26 +4,29 @@ import { CommandBus } from '@nestjs/cqrs';
 
 // Internal dependencies
 import { LoginDto } from './dtos/login.dto';
-import { LoginCommand } from './commands/login.command';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
+import { ChangePasswordDto } from './dtos/change-password.dto';
+import { LoginCommand } from './commands/login.command';
 import { ForgotPasswordCommand } from './commands/forgot-password.command';
-import { UpdatePasswordDto } from './dtos/update-password.dto';
-import { UpdatePasswordCommand } from './commands/update-password.command';
+import { ChangePasswordCommand } from './commands/change-password.command';
 import { AuthResponse } from './auth.interfaces';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly commandBus: CommandBus) {}
 
-  async Login(dto: LoginDto): Promise<AuthResponse> {
-    return this.commandBus.execute(new LoginCommand(dto));
+  public login(dto: LoginDto): Promise<AuthResponse> {
+    const command = new LoginCommand(dto);
+    return this.commandBus.execute(command);
   }
 
-  async forgotPassword(dto: ForgotPasswordDto): Promise<void> {
-    return this.commandBus.execute(new ForgotPasswordCommand(dto));
+  public forgotPassword(dto: ForgotPasswordDto): Promise<void> {
+    const command = new ForgotPasswordCommand(dto);
+    return this.commandBus.execute(command);
   }
 
-  async changePassword(dto: UpdatePasswordDto): Promise<void> {
-    return this.commandBus.execute(new UpdatePasswordCommand(dto));
+  public changePassword(dto: ChangePasswordDto): Promise<void> {
+    const command = new ChangePasswordCommand(dto);
+    return this.commandBus.execute(command);
   }
 }

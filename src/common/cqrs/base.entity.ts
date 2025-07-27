@@ -1,23 +1,21 @@
-import {
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+// External dependencies
+import { PrimaryKey, Property } from '@mikro-orm/postgresql';
+
+// Internal dependencies
 
 export abstract class BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryKey()
+  id!: number;
 
-  @Column({ nullable: true })
-  createdById?: number;
+  // @Property({ nullable: true })
+  // createdById?: number;
 
-  @Column({ nullable: true })
-  updatedById?: number;
+  // @Property({ nullable: true })
+  // updatedById?: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  // @Property({ onCreate: () => new Date() })
+  // createdAt?: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  // @Property({ onCreate: () => new Date(), onUpdate: () => new Date() })
+  // updatedAt?: Date;
 }

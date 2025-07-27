@@ -9,18 +9,20 @@ import type {
 } from './query.interfaces';
 
 export class Query<WhereInput, OrderByInput> {
-  private readonly _filters: QueryFilter<WhereInput>[];
-  private readonly _sorters: QuerySort<OrderByInput>[];
+  private readonly _filters: QueryFilter<WhereInput>[] = [];
+  private readonly _sorters: QuerySort<OrderByInput>[] = [];
   private _current: number;
   private _pageSize: number;
 
   constructor(params: QueryParamsDto) {
+    // @ts-ignore
     this._filters = (params.filters ?? []).map((filter) => ({
       field: filter.field as keyof WhereInput,
       operator: filter.operator,
       value: filter.value,
     }));
 
+    // @ts-ignore
     this._sorters = (params.sorters ?? []).map((sorter) => ({
       field: sorter.field as keyof OrderByInput,
       order: sorter.order,
@@ -51,11 +53,13 @@ export class Query<WhereInput, OrderByInput> {
     operator: QueryOperator,
     value: unknown,
   ): this {
+    // @ts-ignore
     this._filters.push({ field, operator, value });
     return this;
   }
 
   public addSorter(field: keyof OrderByInput, order: QueryOrder): this {
+    // @ts-ignore
     this._sorters.push({ field, order });
     return this;
   }
@@ -73,9 +77,10 @@ export class Query<WhereInput, OrderByInput> {
   public toQueryOptions(): QueryOptions<WhereInput, OrderByInput> {
     return {
       where: this.getWhereOptions(),
+      // @ts-ignore
       orderBy: this.getOrderOptions(),
-      skip: this.getOffset(),
-      take: this.getLimit(),
+      offset: this.getOffset(),
+      limit: this.getLimit(),
     };
   }
 
@@ -92,10 +97,14 @@ export class Query<WhereInput, OrderByInput> {
     return where as WhereInput;
   }
 
-  private getOrderOptions(): OrderByInput[] {
-    return this._sorters.map((sorter) => ({
-      [sorter.field as string]: sorter.order.toLowerCase(),
-    })) as OrderByInput[];
+  private getOrderOptions(): OrderByInput {
+    return this._sorters.reduce(
+      (acc, sorter) => {
+        acc[sorter.field as string] = sorter.order.toLowerCase();
+        return acc;
+      },
+      {} as Record<string, any>,
+    ) as OrderByInput;
   }
 
   private getLimit(): number {

@@ -1,13 +1,11 @@
 // External dependencies
-import { NotFoundException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { Repository } from 'typeorm';
-import { addHours } from 'date-fns';
+import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
+import { InjectRepository } from '@mikro-orm/nestjs';
 
 // Internal dependencies
-import { Token } from '@/common/token';
 import { User } from '@/modules/users/entities/user.entity';
-import { PasswordReset } from '../entities/password-reset.entity';
+import { PasswordReset } from '@/modules/users/entities/password-reset.entity';
 import { PasswordResetCreatedEvent } from '../events/password-reset-created.event';
 import { ForgotPasswordCommand } from './forgot-password.command';
 
@@ -16,38 +14,28 @@ export class ForgotPasswordHandler
   implements ICommandHandler<ForgotPasswordCommand>
 {
   constructor(
-    private readonly passwordResetRepository: Repository<PasswordReset>,
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly userRepository: EntityRepository<User>,
+
+    @InjectRepository(PasswordReset)
+    private readonly passwordResetRepository: EntityRepository<PasswordReset>,
+
+    private readonly entityManager: EntityManager,
+
     private readonly eventBus: EventBus,
   ) {}
 
   public async execute(command: ForgotPasswordCommand): Promise<void> {
-    const { dto } = command;
+    const { email } = command.dto;
 
-    const user = await this.getActiveUserOrThrow(dto.email);
+    const user = await this.userRepository.findOneOrFail({ email });
 
-    const entity = this.passwordResetRepository.create({
-      email: user.email,
-      token: Token.generate(),
-      expiresAt: addHours(new Date(), 1),
-    });
+    const passwordReset = this.passwordResetRepository.create({ user });
 
-    const resetRequest = await this.passwordResetRepository.save(entity);
+    user.passwordResets.add(passwordReset);
 
-    this.eventBus.publish(new PasswordResetCreatedEvent(user, resetRequest));
-  }
+    await this.entityManager.flush();
 
-  private async getActiveUserOrThrow(email: string): Promise<User> {
-    const user = await this.userRepository.findOneBy({ email });
-
-    if (!user) {
-      throw new NotFoundException('User with this email does not exist.');
-    }
-
-    if (!user.isActive) {
-      throw new ForbiddenException('User account is inactive.');
-    }
-
-    return user;
+    this.eventBus.publish(new PasswordResetCreatedEvent(user, passwordReset));
   }
 }

@@ -1,30 +1,35 @@
 // External dependencies
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 
 // Internal dependencies
-import { User } from '@/modules/users/entities/user.entity';
+import { User } from '../entities/user.entity';
 import { UserUpdatedEvent } from '../events/user-updated.event';
-import { UsersRepository } from '../users.repository';
 import { UpdateUserCommand } from './update-user.command';
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   constructor(
-    private readonly usersRepository: UsersRepository,
+    @InjectRepository(User)
+    private readonly userRepository: EntityRepository<User>,
+
+    private readonly entityManager: EntityManager,
+
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: UpdateUserCommand): Promise<User> {
-    const { id, dto, options } = command;
+    const { id, dto } = command;
 
-    const existingUser = await this.usersRepository.findOneByOrFail({ id });
+    const user = await this.userRepository.findOneOrFail({ id });
 
-    const updatedUser = this.usersRepository.merge(existingUser, dto);
+    this.userRepository.assign(user, dto);
 
-    const savedUser = await this.usersRepository.save(updatedUser, options);
+    await this.entityManager.persistAndFlush(user);
 
-    this.eventBus.publish(new UserUpdatedEvent(savedUser));
+    this.eventBus.publish(new UserUpdatedEvent(user));
 
-    return savedUser;
+    return user;
   }
 }

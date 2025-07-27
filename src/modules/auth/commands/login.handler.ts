@@ -1,54 +1,56 @@
 // External dependencies
+import { UnauthorizedException } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { EntityRepository } from '@mikro-orm/postgresql';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { JwtService } from '@nestjs/jwt';
 
 // Internal dependencies
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { Hash } from '@/common/hash';
+import { Hash } from '@/common/hash/hash.impl';
 import { User } from '@/modules/users/entities/user.entity';
-import { AuthResponse, TokenPayload } from '../auth.interfaces';
 import { LoggedInEvent } from '../events/logged-in.event';
+import { AuthResponse, TokenPayload } from '../auth.interfaces';
 import { LoginCommand } from './login.command';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<LoginCommand> {
   constructor(
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly userRepository: EntityRepository<User>,
+
     private readonly jwtService: JwtService,
+
     private readonly eventBus: EventBus,
   ) {}
 
   public async execute(command: LoginCommand): Promise<AuthResponse> {
     const { email, password } = command.dto;
 
-    const user = await this.findActiveUserOrFail(email);
+    const user = await this.userRepository.findOneOrFail({ email });
 
-    const isPasswordValid = await Hash.compare(password, user.password);
+    await this.verifyPasswordOrThrow(password, user.password);
 
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials.');
-    }
-
-    const tokenPayload: TokenPayload = { sub: user.id, email: user.email };
-
-    const accessToken = await this.jwtService.signAsync(tokenPayload);
+    const accessToken = await this.generateAccessToken(user);
 
     this.eventBus.publish(new LoggedInEvent(user));
 
-    return {
-      accessToken,
-      user,
-    };
+    return { accessToken, user };
   }
 
-  private async findActiveUserOrFail(email: string): Promise<User> {
-    const user = await this.userRepository.findOneByOrFail({ email });
+  private async verifyPasswordOrThrow(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<void> {
+    const isValid = await Hash.compare(plainPassword, hashedPassword);
 
-    if (!user.isActive) {
-      throw new ForbiddenException('User account is inactive.');
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid credentials.');
     }
+  }
 
-    return user;
+  private async generateAccessToken(user: User): Promise<string> {
+    const payload: TokenPayload = { sub: user.id, email: user.email };
+
+    return this.jwtService.signAsync(payload);
   }
 }

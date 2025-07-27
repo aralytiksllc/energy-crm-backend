@@ -2,7 +2,7 @@
 
 // Internal dependencies
 import { User } from '@/modules/users/entities/user.entity';
-import { PasswordReset } from '../entities/password-reset.entity';
+import { PasswordReset } from '@/modules/users/entities/password-reset.entity';
 
 export class PasswordResetCreatedEvent {
   constructor(

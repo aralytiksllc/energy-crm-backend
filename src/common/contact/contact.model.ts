@@ -1,28 +1,31 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
+// External dependencies
+import { Entity, Property, PrimaryKey } from '@mikro-orm/postgresql';
+
+// Internal dependencies
 
 @Entity()
-export class Contact extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class Contact {
+  @PrimaryKey()
+  id!: number;
 
-  @Column({ type: 'varchar' })
-  firstName: string;
+  @Property()
+  firstName!: string;
 
-  @Column({ type: 'varchar' })
-  lastName: string;
+  @Property()
+  lastName!: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Property({ nullable: true })
   title?: string;
 
-  @Column({ type: 'varchar' })
-  email: string;
+  @Property()
+  email!: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Property({ nullable: true })
   phone?: string;
 
-  @Column({ type: 'boolean' })
-  isPrimary: boolean;
+  @Property()
+  isPrimary!: boolean;
 
-  @Column({ type: 'text', nullable: true })
+  @Property({ type: 'text', nullable: true })
   notes?: string;
 }

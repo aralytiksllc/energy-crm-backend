@@ -1,61 +1,53 @@
 // External dependencies
 import {
   Entity,
-  Column,
-  ManyToOne,
-  JoinColumn,
-  BeforeInsert,
-  BeforeUpdate,
-} from 'typeorm';
+  Property,
+  Unique,
+  OneToMany,
+  Collection,
+  PrimaryKey,
+} from '@mikro-orm/postgresql';
 import { Exclude } from 'class-transformer';
 
 // Internal dependencies
 import { BaseEntity } from '@/common/cqrs/base.entity';
-import { Hash } from '@/common/hash';
+import { PasswordReset } from './password-reset.entity';
 
-@Entity('users')
-export class User extends BaseEntity {
-  @Column()
+@Entity({ tableName: 'users' })
+export class User {
+  @PrimaryKey()
+  id!: number;
+
+  @Property()
   firstName: string;
 
-  @Column()
+  @Property()
   lastName: string;
 
-  @Column({ unique: true })
+  @Property()
+  @Unique()
   email: string;
 
   @Exclude()
-  @Column()
+  @Property()
   password: string;
 
-  @Column({ type: 'date', nullable: true })
-  dateOfBirth: Nullable<Date>;
+  @Property({ type: 'date', nullable: true })
+  dateOfBirth?: Date;
 
-  @Column({ type: 'date', nullable: true })
-  dateOfJoining: Nullable<Date>;
+  @Property({ type: 'date', nullable: true })
+  dateOfJoining?: Date;
 
-  @Column({ type: 'jsonb', nullable: true })
-  settings: Nullable<Record<string, unknown>>;
+  @Property({ type: 'json', nullable: true })
+  settings?: Record<string, unknown>;
 
-  @Column({ type: 'text', nullable: true })
-  notes: Nullable<string>;
+  @Property({ type: 'text', nullable: true })
+  notes?: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @Property({ default: true })
+  isActive?: boolean;
 
-  @ManyToOne(() => User, { nullable: true })
-  @JoinColumn({ name: 'createdById' })
-  createdBy: Nullable<User>;
-
-  @ManyToOne(() => User, { nullable: true })
-  @JoinColumn({ name: 'updatedById' })
-  updatedBy: Nullable<User>;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword(): Promise<void> {
-    if (this.password) {
-      this.password = await Hash.make(this.password);
-    }
-  }
+  @Exclude()
+  @OneToMany(() => PasswordReset, (passwordReset) => passwordReset.user)
+  passwordResets = new Collection<PasswordReset>(this);
 }

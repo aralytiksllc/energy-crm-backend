@@ -1,18 +1,18 @@
 // External dependencies
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { User } from '@prisma/client';
 
 // Internal dependencies
-import { Paged } from '@/common/paged/paged.impl';
-import { QueryParamsDto } from '@/common/query/dtos/query-params.dto';
+import { Paged } from '@/common/paged';
+import { QueryParams } from '@/common/query/query-params';
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { FindManyUserQuery } from './queries/find-many-users.query';
+import { FindOneUserQuery } from './queries/find-one-user.query';
 import { CreateUserCommand } from './commands/create-user.command';
 import { UpdateUserCommand } from './commands/update-user.command';
 import { DeleteUserCommand } from './commands/delete-user.command';
-import { FindManyUsersQuery } from './queries/find-many-users.query';
-import { FindOneUserQuery } from './queries/find-one-user.query';
 
 @Injectable()
 export class UserService {
@@ -21,8 +21,8 @@ export class UserService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(dto: QueryParamsDto): Promise<Paged<User>> {
-    const query = new FindManyUsersQuery(dto);
+  async findMany(queryParams: QueryParams<User>): Promise<Paged<User>> {
+    const query = new FindManyUserQuery(queryParams);
     return this.queryBus.execute(query);
   }
 

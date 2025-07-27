@@ -1,8 +1,7 @@
-import { RemoveOptions } from 'typeorm';
+// External dependencies
+
+// Internal dependencies
 
 export class DeleteCommand {
-  constructor(
-    public readonly id: number,
-    public readonly options?: RemoveOptions,
-  ) {}
+  constructor(public readonly id: number) {}
 }

@@ -1,3 +1,7 @@
+// External dependencies
+
+// Internal dependencies
+
 export enum HistoryAction {
   Create = 'create',
   Update = 'update',

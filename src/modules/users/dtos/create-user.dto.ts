@@ -1,45 +1,40 @@
 // External dependencies
 import {
-  IsNotEmpty,
-  IsString,
   IsEmail,
-  MinLength,
   IsOptional,
+  IsString,
+  MinLength,
   IsDateString,
-  IsObject,
   IsBoolean,
 } from 'class-validator';
 
 // Internal dependencies
 
 export class CreateUserDto {
-  @IsNotEmpty()
   @IsString()
+  @MinLength(2)
   firstName: string;
 
-  @IsNotEmpty()
   @IsString()
+  @MinLength(2)
   lastName: string;
 
-  @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @IsNotEmpty()
   @IsString()
   @MinLength(8)
   password: string;
 
   @IsOptional()
   @IsDateString()
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
 
   @IsOptional()
   @IsDateString()
-  dateOfJoining?: Date;
+  dateOfJoining?: string;
 
   @IsOptional()
-  @IsObject()
   settings?: Record<string, unknown>;
 
   @IsOptional()
@@ -47,5 +42,5 @@ export class CreateUserDto {
   notes?: string;
 
   @IsBoolean()
-  isActive: boolean;
+  isActive: boolean = true;
 }

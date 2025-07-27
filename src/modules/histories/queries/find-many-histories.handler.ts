@@ -1,22 +1,24 @@
 // External dependencies
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/postgresql';
 
 // Internal dependencies
 import { Paged } from '@/common/paged';
-import { History } from '@/modules/histories/entities/history.entity';
-import { HistoriesRepository } from '../histories.repository';
-import { FindManyHistoriesQuery } from './find-many-histories.query';
+import { History } from '../entities/history.entity';
+import { FindManyHistoryQuery } from './find-many-histories.query';
 
-@QueryHandler(FindManyHistoriesQuery)
-export class FindManyHistoriesHandler
-  implements IQueryHandler<FindManyHistoriesQuery>
+@QueryHandler(FindManyHistoryQuery)
+export class FindManyHistoryHandler
+  implements IQueryHandler<FindManyHistoryQuery>
 {
-  constructor(private readonly historiesRepository: HistoriesRepository) {}
+  constructor(
+    @InjectRepository(History)
+    private readonly historyRepository: EntityRepository<History>,
+  ) {}
 
-  async execute(query: FindManyHistoriesQuery): Promise<Paged<History>> {
-    const options = query.toFindManyOptions();
-
-    const [rows, count] = await this.historiesRepository.findAndCount(options);
+  async execute(query: FindManyHistoryQuery): Promise<Paged<History>> {
+    const [rows, count] = await this.historyRepository.findAndCount({}, {});
 
     return new Paged(rows, count, query.current, query.pageSize);
   }

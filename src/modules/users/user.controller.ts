@@ -2,18 +2,18 @@
 import {
   Controller,
   Get,
-  Query,
-  Param,
   Post,
-  Body,
   Put,
   Delete,
+  Query,
+  Param,
+  Body,
 } from '@nestjs/common';
-import { User } from '@prisma/client';
 
 // Internal dependencies
-import { Paged } from '@/common/paged/paged.impl';
-import { QueryParamsDto } from '@/common/query/dtos/query-params.dto';
+import { Paged } from '@/common/paged';
+import { QueryParams } from '@/common/query/query-params';
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserService } from './user.service';
@@ -23,8 +23,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  findMany(@Query() dto: QueryParamsDto): Promise<Paged<User>> {
-    return this.userService.findMany(dto);
+  findMany(@Query() query: QueryParams<User>): Promise<Paged<User>> {
+    return this.userService.findMany(query);
   }
 
   @Get(':id')

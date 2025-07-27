@@ -1,42 +1,41 @@
-import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
-import { AddressType } from '../common/address/address-type.enum';
+// External dependencies
+import { Entity, PrimaryKey, Property } from '@mikro-orm/postgresql';
 
-@Entity()
-export abstract class Address extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+// Internal dependencies
+import { AddressType } from './address-type.enum';
 
-  @Column({ type: 'varchar' })
-  street: string;
+@Entity({ abstract: true })
+export abstract class Address {
+  @PrimaryKey()
+  id!: number;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Property()
+  street!: string;
+
+  @Property({ nullable: true })
   streetTwo?: string;
 
-  @Column({ type: 'varchar' })
-  city: string;
+  @Property()
+  city!: string;
 
-  @Column({ type: 'varchar' })
-  state: string;
+  @Property()
+  state!: string;
 
-  @Column({ type: 'varchar' })
-  country: string;
+  @Property()
+  country!: string;
 
-  @Column({ type: 'varchar' })
-  postalCode: string;
+  @Property()
+  postalCode!: string;
 
-  @Column({
-    type: 'enum',
-    enum: AddressType,
-    default: AddressType.BOTH,
-  })
-  addressType: AddressType;
+  @Property({ default: AddressType.BOTH })
+  addressType: AddressType = AddressType.BOTH;
 
-  @Column({ type: 'boolean', default: true })
-  isPrimary: boolean;
+  @Property({ default: true })
+  isPrimary: boolean = true;
 
-  @Column({ type: 'varchar' })
-  addressableType: string;
+  @Property()
+  addressableType!: string;
 
-  @Column({ type: 'int' })
-  addressableId: number;
+  @Property()
+  addressableId!: number;
 }

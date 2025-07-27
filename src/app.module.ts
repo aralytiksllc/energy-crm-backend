@@ -1,13 +1,13 @@
 // External dependencies
 import { Module } from '@nestjs/common';
-import { ConfigService, ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 // Internal dependencies
-import { AppLoggerModule } from '@/common/app-logger/app-logger.module';
-import { EmailModule } from '@/common/email/email.module';
-import { AuthModule } from '@/modules/auth/auth.module';
-import { UsersModule } from '@/modules/users/users.module';
+import { EmailModule } from './common/email/email.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/users/user.module';
 
 @Module({
   imports: [
@@ -16,32 +16,25 @@ import { UsersModule } from '@/modules/users/users.module';
       envFilePath: '.env',
     }),
 
-    TypeOrmModule.forRootAsync({
+    MikroOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        driver: PostgreSqlDriver,
         host: configService.get<string>('DB_HOST'),
         port: parseInt(configService.get<string>('DB_PORT')!, 10),
-        username: configService.get<string>('DB_USERNAME'),
+        user: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_NAME'),
-        // entities: ['src/entities/*.ts'],
-        // migrations: ['src/migrations/*.ts'],
-        // migrationsTableName: 'migrations',
+        dbName: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
-        synchronize: true,
-        logging: true,
-        ssl: false,
+        debug: true,
       }),
     }),
-
-    AppLoggerModule,
 
     EmailModule,
 
     AuthModule,
 
-    UsersModule,
+    UserModule,
   ],
   exports: [],
   providers: [],

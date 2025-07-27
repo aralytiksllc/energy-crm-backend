@@ -1,13 +1,13 @@
 // External dependencies
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { History } from '@prisma/client';
 
 // Internal dependencies
-import { Paged } from '@/common/paged/paged.impl';
-import { QueryParamsDto } from '@/common/query/dtos/query-params.dto';
+import { Paged } from '@/common/paged';
+import { QueryParams } from '@/common/query/query-params';
+import { History } from './entities/history.entity';
 import { CreateHistoryDto } from './dtos/create-history.dto';
-import { FindManyHistoriesQuery } from './queries/find-many-histories.query';
+import { FindManyHistoryQuery } from './queries/find-many-histories.query';
 import { CreateHistoryCommand } from './commands/create-history.command';
 
 @Injectable()
@@ -17,8 +17,8 @@ export class HistoryService {
     private readonly queryBus: QueryBus,
   ) {}
 
-  public findMany(dto: QueryParamsDto): Promise<Paged<History>> {
-    const query = new FindManyHistoriesQuery(dto);
+  public findMany(queryParams: QueryParams<History>): Promise<Paged<History>> {
+    const query = new FindManyHistoryQuery(queryParams);
     return this.queryBus.execute(query);
   }
 

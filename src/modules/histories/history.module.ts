@@ -1,22 +1,21 @@
 // External dependencies
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 
 // Internal dependencies
-import { PrismaService } from '@/common/prisma/prisma.service';
-import { FindManyHistoriesHandler } from './queries/find-many-histories.handler';
+import { History } from './entities/history.entity';
+import { FindManyHistoryHandler } from './queries/find-many-histories.handler';
 import { CreateHistoryHandler } from './commands/create-history.handler';
 import { HistoryController } from './history.controller';
 import { HistoryService } from './history.service';
 
 @Module({
-  imports: [CqrsModule],
+  imports: [MikroOrmModule.forFeature([History]), CqrsModule],
   controllers: [HistoryController],
   providers: [
-    PrismaService,
-
     // Query Handlers
-    FindManyHistoriesHandler,
+    FindManyHistoryHandler,
 
     // Command Handlers
     CreateHistoryHandler,
@@ -25,4 +24,4 @@ import { HistoryService } from './history.service';
     HistoryService,
   ],
 })
-export class HistoriesModule {}
+export class HistoryModule {}

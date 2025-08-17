@@ -11,7 +11,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "nest start",
+    "start": "node dist/main.js", 
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -29,7 +29,9 @@
     "db:deploy": "prisma migrate deploy",
     "db:reset": "prisma migrate reset --force --skip-seed",
     "db:seed": "prisma db seed",
-    "db:setup": "npm run prisma:format && npm run prisma:generate && npm run db:migrate"
+    "db:setup": "npm run prisma:format && npm run prisma:generate && npm run db:migrate",
+    "postinstall": "prisma generate",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "@casl/ability": "^6.7.3",

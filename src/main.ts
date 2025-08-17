@@ -37,7 +37,7 @@ async function bootstrap() {
   expressApp.set('query parser', (str: string) => parse(str));
 
   // Start listening
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ? Number(process.env.PORT) : 3000);
 }
 
 bootstrap();

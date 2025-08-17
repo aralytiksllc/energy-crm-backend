@@ -1,22 +1,21 @@
-// External dependencies
+// External
+import { Transform } from 'class-transformer';
 import {
+  IsBoolean,
   IsEmail,
+  IsInt,
   IsOptional,
   IsString,
   MinLength,
-  IsDateString,
-  IsBoolean,
 } from 'class-validator';
 
-// Internal dependencies
+// Internal
 
 export class CreateUserDto {
   @IsString()
-  @MinLength(2)
   firstName: string;
 
   @IsString()
-  @MinLength(2)
   lastName: string;
 
   @IsEmail()
@@ -26,21 +25,14 @@ export class CreateUserDto {
   @MinLength(8)
   password: string;
 
-  @IsOptional()
-  @IsDateString()
-  dateOfBirth?: string;
-
-  @IsOptional()
-  @IsDateString()
-  dateOfJoining?: string;
-
-  @IsOptional()
-  settings?: Record<string, unknown>;
-
-  @IsOptional()
-  @IsString()
-  notes?: string;
-
   @IsBoolean()
-  isActive: boolean = true;
+  @IsOptional()
+  isActive?: boolean;
+
+  @IsInt()
+  roleId: number;
+
+  @IsInt()
+  @IsOptional()
+  departmentId?: number;
 }

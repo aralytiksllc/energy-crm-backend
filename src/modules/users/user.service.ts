@@ -1,18 +1,18 @@
-// External dependencies
-import { Injectable } from '@nestjs/common';
+// External
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { Injectable } from '@nestjs/common';
 
-// Internal dependencies
-import { Paged } from '@/common/paged';
-import { QueryParams } from '@/common/query/query-params';
-import { User } from './entities/user.entity';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
-import { FindManyUserQuery } from './queries/find-many-users.query';
-import { FindOneUserQuery } from './queries/find-one-user.query';
+// Internal
+import { Paged } from '@/common/paged/paged.impl';
+import type { User } from '@/prisma/prisma.client';
 import { CreateUserCommand } from './commands/create-user.command';
-import { UpdateUserCommand } from './commands/update-user.command';
+import { CreateUserDto } from './dtos/create-user.dto';
 import { DeleteUserCommand } from './commands/delete-user.command';
+import { FindManyUsersDto } from './dtos/find-many-users.dto';
+import { FindManyUsersQuery } from './queries/find-many-users.query';
+import { FindOneUserQuery } from './queries/find-one-user.query';
+import { UpdateUserCommand } from './commands/update-user.command';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -21,8 +21,8 @@ export class UserService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(queryParams: QueryParams<User>): Promise<Paged<User>> {
-    const query = new FindManyUserQuery(queryParams);
+  async findMany(dto: FindManyUsersDto): Promise<Paged<User>> {
+    const query = new FindManyUsersQuery(dto);
     return this.queryBus.execute(query);
   }
 
@@ -41,7 +41,7 @@ export class UserService {
     return this.commandBus.execute(command);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number): Promise<User> {
     const command = new DeleteUserCommand(id);
     return this.commandBus.execute(command);
   }

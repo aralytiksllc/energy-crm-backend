@@ -1,6 +1,6 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 import { ForgotPasswordDto } from '../dtos/forgot-password.dto';
 
 export class ForgotPasswordCommand {

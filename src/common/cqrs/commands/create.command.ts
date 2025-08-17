@@ -1,6 +1,6 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 
 export class CreateCommand<TDto> {
   constructor(public readonly dto: TDto) {}

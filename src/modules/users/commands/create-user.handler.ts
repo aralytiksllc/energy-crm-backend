@@ -1,30 +1,36 @@
-// External dependencies
-import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
+// External
+import { ConflictException } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
-// Internal dependencies
-import { User } from '../entities/user.entity';
+// Internal
+import type { User } from '@/prisma/prisma.client';
+import { PrismaService } from '@/prisma/prisma.service';
 import { UserCreatedEvent } from '../events/user-created.event';
 import { CreateUserCommand } from './create-user.command';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: EntityRepository<User>,
-
-    private readonly entityManager: EntityManager,
-
+    private readonly prismaService: PrismaService,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateUserCommand): Promise<User> {
-    const { dto } = command;
+    const exists = await this.prismaService.user.findUnique({
+      where: { email: command.dto.email },
+    });
 
-    const user = this.userRepository.create(dto);
+    if (exists) {
+      throw new ConflictException('A user with this email already exists.');
+    }
 
-    await this.entityManager.persistAndFlush(user);
+    const user = await this.prismaService.user.create({
+      data: { ...command.dto },
+      include: {
+        role: { include: { permissions: true } },
+        department: true,
+      },
+    });
 
     this.eventBus.publish(new UserCreatedEvent(user));
 

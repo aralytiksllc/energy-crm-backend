@@ -1,10 +1,10 @@
-// External dependencies
+// External
 import { NestFactory } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { parse } from 'qs';
 
-// Internal dependencies
+// Internal
 // import { AuthJwtGuard } from '@/common/auth';
 import { AppModule } from './app.module';
 

@@ -1,7 +1,7 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 import { FindOneQuery } from '@/common/cqrs/queries/find-one.query';
-import { User } from '../entities/user.entity';
+import type { Prisma } from '@/prisma/prisma.client';
 
-export class FindOneUserQuery extends FindOneQuery<User> {}
+export class FindOneUserQuery extends FindOneQuery<Prisma.UserWhereInput> {}

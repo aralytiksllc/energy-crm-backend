@@ -1,6 +1,6 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 import { LoginDto } from '../dtos/login.dto';
 
 export class LoginCommand {

@@ -1,35 +1,32 @@
-// External dependencies
-import { Module } from '@nestjs/common';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
+// External
 import { CqrsModule } from '@nestjs/cqrs';
+import { Module } from '@nestjs/common';
 
-// Internal dependencies
-import { User } from './entities/user.entity';
-import { PasswordReset } from './entities/password-reset.entity';
-import { FindManyUserHandler } from './queries/find-many-users.handler';
-import { FindOneUserHandler } from './queries/find-one-user.handler';
+// Internal
 import { CreateUserHandler } from './commands/create-user.handler';
-import { UpdateUserHandler } from './commands/update-user.handler';
 import { DeleteUserHandler } from './commands/delete-user.handler';
+import { FindManyUsersPipe } from './pipes/find-many-users.pipe';
+import { FindManyUsersHandler } from './queries/find-many-users.handler';
+import { FindOneUserHandler } from './queries/find-one-user.handler';
+import { PrismaModule } from '@/prisma/prisma.module';
+import { UpdateUserHandler } from './commands/update-user.handler';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { UserSeed } from './user.seed';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([User, PasswordReset]), CqrsModule],
+  imports: [CqrsModule, PrismaModule],
   controllers: [UserController],
   providers: [
-    // Query Handlers
-    FindManyUserHandler,
+    FindManyUsersPipe,
+    FindManyUsersHandler,
     FindOneUserHandler,
-
-    // Command Handlers
     CreateUserHandler,
     UpdateUserHandler,
     DeleteUserHandler,
-
-    // Others
     UserService,
+    UserSeed,
   ],
-  exports: [UserService, MikroOrmModule],
+  exports: [UserService],
 })
 export class UserModule {}

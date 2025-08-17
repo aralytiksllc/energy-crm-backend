@@ -1,6 +1,6 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 import { CreateCommand } from '@/common/cqrs/commands/create.command';
 import { CreateUserDto } from '../dtos/create-user.dto';
 

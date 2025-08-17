@@ -1,6 +1,6 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 
 export interface AuthJwtPayload {
   email: string;

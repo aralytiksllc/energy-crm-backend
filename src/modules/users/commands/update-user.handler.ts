@@ -1,32 +1,25 @@
-// External dependencies
-import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
+// External
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
-// Internal dependencies
-import { User } from '../entities/user.entity';
+// Internal
+import type { User } from '@/prisma/prisma.client';
+import { PrismaService } from '@/prisma/prisma.service';
 import { UserUpdatedEvent } from '../events/user-updated.event';
 import { UpdateUserCommand } from './update-user.command';
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: EntityRepository<User>,
-
-    private readonly entityManager: EntityManager,
-
+    private readonly prismaService: PrismaService,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: UpdateUserCommand): Promise<User> {
-    const { id, dto } = command;
-
-    const user = await this.userRepository.findOneOrFail({ id });
-
-    this.userRepository.assign(user, dto);
-
-    await this.entityManager.persistAndFlush(user);
+    const user = await this.prismaService.user.update({
+      where: { id: command.id },
+      data: command.dto,
+      include: { role: { include: { permissions: true } }, department: true },
+    });
 
     this.eventBus.publish(new UserUpdatedEvent(user));
 

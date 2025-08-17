@@ -1,7 +1,7 @@
-// External dependencies
+// External
 import { PartialType } from '@nestjs/mapped-types';
 
-// Internal dependencies
+// Internal
 import { CreateUserDto } from './create-user.dto';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

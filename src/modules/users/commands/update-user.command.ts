@@ -1,6 +1,6 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 import { UpdateCommand } from '@/common/cqrs/commands/update.command';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 

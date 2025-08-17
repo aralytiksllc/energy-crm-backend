@@ -1,6 +1,6 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 import { ChangePasswordDto } from '../dtos/change-password.dto';
 
 export class ChangePasswordCommand {

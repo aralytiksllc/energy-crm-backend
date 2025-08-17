@@ -1,7 +1,7 @@
-// External dependencies
+// External
 import { IsNotEmpty, IsEmail } from 'class-validator';
 
-// Internal dependencies
+// Internal
 
 export class ForgotPasswordDto {
   @IsNotEmpty()

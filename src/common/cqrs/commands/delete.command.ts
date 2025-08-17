@@ -1,6 +1,6 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 
 export class DeleteCommand {
   constructor(public readonly id: number) {}

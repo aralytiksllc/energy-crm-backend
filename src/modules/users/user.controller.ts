@@ -1,21 +1,22 @@
-// External dependencies
+// External
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
-  Delete,
   Query,
-  Param,
-  Body,
 } from '@nestjs/common';
 
-// Internal dependencies
-import { Paged } from '@/common/paged';
-import { QueryParams } from '@/common/query/query-params';
-import { User } from './entities/user.entity';
+// Internal
+import { Paged } from '@/common/paged/paged.impl';
+import type { User } from '@/prisma/prisma.client';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { FindManyUsersDto } from './dtos/find-many-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { FindManyUsersPipe } from './pipes/find-many-users.pipe';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -23,8 +24,10 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  findMany(@Query() query: QueryParams<User>): Promise<Paged<User>> {
-    return this.userService.findMany(query);
+  findMany(
+    @Query(FindManyUsersPipe) dto: FindManyUsersDto,
+  ): Promise<Paged<User>> {
+    return this.userService.findMany(dto);
   }
 
   @Get(':id')
@@ -43,7 +46,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<void> {
+  remove(@Param('id') id: number): Promise<User> {
     return this.userService.delete(+id);
   }
 }

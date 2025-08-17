@@ -1,11 +1,11 @@
-// External dependencies
+// External
+import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
-import { InjectRepository } from '@mikro-orm/nestjs';
 
-// Internal dependencies
-import { User } from '@/modules/users/entities/user.entity';
-import { PasswordReset } from '@/modules/users/entities/password-reset.entity';
+// Internal
+import { Token } from '@/common/token/token.impl';
+import { DateTime } from '@/common/datetime/datetime.impl';
+import { PrismaService } from '@/prisma/prisma.service';
 import { PasswordResetCreatedEvent } from '../events/password-reset-created.event';
 import { ForgotPasswordCommand } from './forgot-password.command';
 
@@ -14,27 +14,24 @@ export class ForgotPasswordHandler
   implements ICommandHandler<ForgotPasswordCommand>
 {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: EntityRepository<User>,
-
-    @InjectRepository(PasswordReset)
-    private readonly passwordResetRepository: EntityRepository<PasswordReset>,
-
-    private readonly entityManager: EntityManager,
-
+    private readonly prismaService: PrismaService,
     private readonly eventBus: EventBus,
   ) {}
 
   public async execute(command: ForgotPasswordCommand): Promise<void> {
-    const { email } = command.dto;
+    const user = await this.prismaService.user.findUnique({
+      where: { email: command.dto.email },
+    });
 
-    const user = await this.userRepository.findOneOrFail({ email });
+    if (!user) throw new NotFoundException('User not found.');
 
-    const passwordReset = this.passwordResetRepository.create({ user });
-
-    user.passwordResets.add(passwordReset);
-
-    await this.entityManager.flush();
+    const passwordReset = await this.prismaService.passwordReset.create({
+      data: {
+        userId: user.id,
+        token: Token.generate(),
+        expiresAt: DateTime.expiresInHours(15),
+      },
+    });
 
     this.eventBus.publish(new PasswordResetCreatedEvent(user, passwordReset));
   }

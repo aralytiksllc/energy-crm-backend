@@ -1,12 +1,12 @@
-// External dependencies
+// External
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { PassportModule } from '@nestjs/passport';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { JwtModule } from '@nestjs/jwt';
 
-// Internal dependencies
+// Internal
+import { PrismaModule } from '@/prisma/prisma.module';
 import { EmailModule } from '@/common/email/email.module';
 import { UserModule } from '@/modules/users/user.module';
 import { AuthJwtStrategy } from './strategies/auth-jwt.strategy';
@@ -22,15 +22,13 @@ import { AuthService } from './auth.service';
     ConfigModule,
     CqrsModule,
     PassportModule,
-    MikroOrmModule.forFeature([]),
+    PrismaModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
-        },
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: config.get<string>('JWT_EXPIRES_IN') },
       }),
     }),
     EmailModule,

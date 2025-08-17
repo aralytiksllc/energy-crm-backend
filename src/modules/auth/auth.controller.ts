@@ -1,8 +1,8 @@
-// External dependencies
+// External
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 
-// Internal dependencies
-import { Public } from '@/common/auth';
+// Internal
+import { Public } from '@/common/auth/auth.decorator';
 import { LoginDto } from './dtos/login.dto';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
 import { ChangePasswordDto } from './dtos/change-password.dto';

@@ -1,31 +1,26 @@
-// External dependencies
-import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
-import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
+// External
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
-// Internal dependencies
-import { User } from '../entities/user.entity';
+// Internal
+import type { User } from '@/prisma/prisma.client';
+import { PrismaService } from '@/prisma/prisma.service';
 import { UserDeletedEvent } from '../events/user-deleted.event';
 import { DeleteUserCommand } from './delete-user.command';
 
 @CommandHandler(DeleteUserCommand)
 export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: EntityRepository<User>,
-
-    private readonly entityManager: EntityManager,
-
+    private readonly prismaService: PrismaService,
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: DeleteUserCommand): Promise<void> {
-    const { id } = command;
-
-    const user = await this.userRepository.findOneOrFail({ id });
-
-    await this.entityManager.removeAndFlush(user);
+  async execute(command: DeleteUserCommand): Promise<User> {
+    const user = await this.prismaService.user.delete({
+      where: { id: command.id },
+    });
 
     this.eventBus.publish(new UserDeletedEvent(user));
+
+    return user;
   }
 }

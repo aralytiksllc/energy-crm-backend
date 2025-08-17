@@ -1,7 +1,7 @@
-// External dependencies
+// External
+import type { User } from '@prisma/client';
 
-// Internal dependencies
-import { User } from '@/modules/users/entities/user.entity';
+// Internal
 
 export class LoggedInEvent {
   constructor(public readonly user: User) {}

@@ -1,8 +1,8 @@
-import { BaseEntity } from '@/common/cqrs/base.entity';
-import { Query, QueryParams } from '@/common/query';
+// External
+import { FindManyDto } from './find-many.dto';
 
-export class FindManyQuery<TEntity extends BaseEntity> extends Query<any, any> {
-  constructor(params: QueryParams<any>) {
-    super(params as any);
-  }
+// Internal
+
+export class FindManyQuery<TWhereInput> {
+  constructor(public readonly dto: FindManyDto<TWhereInput>) {}
 }

@@ -1,7 +1,7 @@
-// External dependencies
+// External
 
-// Internal dependencies
+// Internal
 import { FindManyQuery } from '@/common/cqrs/queries/find-many.query';
-import { User } from '../entities/user.entity';
+import type { Prisma } from '@/prisma/prisma.client';
 
-export class FindManyUserQuery extends FindManyQuery<User> {}
+export class FindManyUsersQuery extends FindManyQuery<Prisma.UserWhereInput> {}

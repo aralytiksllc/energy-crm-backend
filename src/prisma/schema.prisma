@@ -1,0 +1,250 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * ============================
+ * MODELS
+ * ============================
+ */
+
+model User {
+  // Primary & scalar fields
+  id        Int     @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String  @unique
+  password  String
+  isActive  Boolean @default(true)
+
+  // Foreign keys (scalar)
+  roleId       Int
+  departmentId Int?
+
+  // Relations
+  role           Role            @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  department     Department?     @relation(fields: [departmentId], references: [id])
+  passwordResets PasswordReset[]
+
+  // Indexes & mapping
+  @@index([roleId])
+  @@index([departmentId])
+  @@map("users")
+}
+
+model Role {
+  // Primary & scalar fields
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  // Relations
+  users       User[]
+  permissions Permission[]
+
+  // Mapping
+  @@map("roles")
+}
+
+model Permission {
+  // Primary & scalar fields
+  id         Int    @id @default(autoincrement())
+  action     String
+  subject    String
+  conditions Json?
+
+  // Relations
+  roles Role[]
+
+  // Mapping
+  @@map("permissions")
+}
+
+model Department {
+  // Primary & scalar fields
+  id       Int     @id @default(autoincrement())
+  name     String  @unique
+  code     String? @unique
+  isActive Boolean @default(true)
+
+  // Relations
+  users User[]
+
+  // Mapping
+  @@map("departments")
+}
+
+model PasswordReset {
+  // Primary & scalar fields
+  id        Int       @id @default(autoincrement())
+  token     String
+  expiresAt DateTime? @db.Timestamptz(6)
+
+  // Foreign keys (scalar)
+  userId Int
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes & mapping
+  @@unique([token])
+  @@index([userId])
+  @@map("password_resets")
+}
+
+model Customer {
+  // Primary & scalar fields
+  id                             Int       @id @default(autoincrement())
+  companyName                    String    @db.VarChar(255)
+  registeredAddress              String?   @db.Text
+  legalNoticeEmail               String?   @db.VarChar(255)
+  phone                          String?   @db.VarChar(50)
+  defaultOperationalEmail        String?   @db.VarChar(255)
+  defaultEscalationEmail         String?   @db.VarChar(255)
+  registrationNumber             String?   @db.VarChar(50)
+  businessType                   String?   @db.VarChar(100)
+  registrationDate               DateTime? @db.Date
+  registeredCapital              Float?
+  companyStatus                  String?   @db.VarChar(50)
+  mainActivity                   String?   @db.VarChar(255)
+  legalId                        String?   @db.VarChar(255)
+  legalStatus                    String?   @db.VarChar(255)
+  companyCode                    String?   @db.VarChar(50)
+  companyType                    String?   @db.VarChar(50)
+  companyDescription             String?   @db.VarChar(255)
+  cityRegion                     String?   @db.VarChar(255)
+  authorizedRepresentative       String?   @db.VarChar(255)
+  companyRole                    String?   @db.VarChar(50)
+  sectorPrimary                  String?   @db.VarChar(255)
+  sectorSecondary                String?   @db.VarChar(255)
+  clientStatus                   String?   @db.VarChar(50)
+  preferredCommunicationLanguage String?   @db.VarChar(50)
+
+  // Relations
+  branches Branch[]
+  Contract Contract[]
+
+  // Mapping
+  @@map("customers")
+}
+
+model Branch {
+  // Primary & scalar fields
+  id                 Int     @id @default(autoincrement())
+  branchName         String  @db.VarChar(512)
+  peakLoadKw         Float?
+  weatherDataLinkage String? @db.VarChar(50)
+
+  // Foreign keys (scalar)
+  customerId Int?
+
+  // Relations
+  customer       Customer?       @relation(fields: [customerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  meteringPoints MeteringPoint[]
+
+  // Indexes & mapping
+  @@index([customerId])
+  @@map("branches")
+}
+
+model MeteringPoint {
+  // Primary & scalar fields
+  id                      Int       @id @default(autoincrement())
+  deliveryAddress         String?   @db.Text
+  locationAddress         String?   @db.VarChar(255)
+  cityOrLocality          String?   @db.VarChar(150)
+  country                 String?   @db.VarChar(100)
+  tariffGroup             String?   @db.VarChar(100)
+  technicalContactName    String?   @db.VarChar(255)
+  technicalContactTitle   String?   @db.VarChar(120)
+  technicalContactPhone   String?   @db.VarChar(50)
+  technicalContactEmail   String?   @db.VarChar(255)
+  contractedCapacityValue Float?
+  contractedCapacityUnit  String?   @db.VarChar(10)
+  voltageLevel            String?   @db.VarChar(20)
+  meterType               String?   @db.VarChar(120)
+  connectionSpecs         String?   @db.Text
+  agreedMaxDemandKw       Float?
+  notes                   String?   @db.Text
+  meteringPointStatus     String?   @db.VarChar(50)
+  utilityProvider         String?   @db.VarChar(255)
+  gpsCoordinates          String?   @db.Text
+  registeredAddress       String?   @db.VarChar(255)
+  operationalStatus       String?   @db.Text
+  installationDate        DateTime? @db.Date
+  contractEndDate         DateTime? @db.Date
+
+  // Foreign keys (scalar)
+  branchId Int?
+
+  // Relations
+  branch       Branch?       @relation(fields: [branchId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  consumptions Consumption[]
+
+  // Indexes & mapping
+  @@index([branchId])
+  @@map("metering_points")
+}
+
+model Contract {
+  // Primary & scalar fields
+  id                              Int       @id @default(autoincrement())
+  contractNumber                  String    @db.VarChar(512)
+  effectiveDate                   DateTime? @db.Date
+  supplyStartDate                 DateTime? @db.Date
+  initialTermYears                Int?
+  maturityDate                    DateTime? @db.Date
+  renewalTermYears                Int?
+  contractQuantity                String?   @db.VarChar(100)
+  pricePerMwh                     Float?
+  includesNetworkTariffs          Boolean?
+  includesVat                     Boolean?
+  paymentTermsDays                Int?
+  securityDepositAmount           Float?
+  terminationNoticeDays           Int?
+  earlyTerminationFee             String?   @db.VarChar(100)
+  disputeResolutionMethod         String?   @db.Text
+  forecastDeadlineDaysBeforeMonth Int?
+
+  // Foreign keys (scalar)
+  customerId Int?
+
+  // Relations
+  customer     Customer?     @relation(fields: [customerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  consumptions Consumption[]
+
+  // Indexes & mapping
+  @@index([customerId])
+  @@map("contracts")
+}
+
+model Consumption {
+  // Primary & scalar fields
+  id                        Int      @id @default(autoincrement())
+  timestamp                 DateTime @db.Timestamp(0)
+  timeframe                 String   @db.VarChar(50)
+  electricityConsumptionKwh Float?
+
+  // Foreign keys (scalar)
+  meteringPointId Int
+  contractId      Int?
+
+  // Relations
+  meteringPoint MeteringPoint @relation(fields: [meteringPointId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  contract      Contract?     @relation(fields: [contractId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  // Indexes & mapping
+  @@unique([meteringPointId, timestamp, timeframe])
+  @@index([contractId])
+  @@map("consumption")
+}

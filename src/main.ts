@@ -1,7 +1,7 @@
 // External
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { parse } from 'qs';
 
 // Internal
@@ -34,7 +34,19 @@ async function bootstrap() {
 
   // Use qs parser for query strings
   const expressApp = app.getHttpAdapter().getInstance();
+
   expressApp.set('query parser', (str: string) => parse(str));
+
+  const config = new DocumentBuilder()
+    .setTitle('MDA Energy CRM API')
+    .setDescription('API documentation for MDA Energy CRM')
+    .setVersion('1.0')
+    // .addBearerAuth
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('swagger', app, document);
 
   // Start listening
   await app.listen(process.env.PORT ? Number(process.env.PORT) : 3000);

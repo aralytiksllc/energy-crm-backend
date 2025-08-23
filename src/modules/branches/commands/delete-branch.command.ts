@@ -1,6 +1,10 @@
 // External
 
 // Internal
-import { DeleteCommand } from '@/common/cqrs/commands/delete.command';
 
-export class DeleteBranchCommand extends DeleteCommand {}
+export class DeleteBranchCommand {
+  constructor(
+    public readonly customerId: number,
+    public readonly id: number,
+  ) {}
+}

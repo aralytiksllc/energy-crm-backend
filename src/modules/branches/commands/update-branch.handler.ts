@@ -6,6 +6,7 @@ import type { Branch } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
 import { BranchUpdatedEvent } from '../events/branch-updated.event';
 import { UpdateBranchCommand } from './update-branch.command';
+import { NotFoundException } from '@nestjs/common';
 
 @CommandHandler(UpdateBranchCommand)
 export class UpdateBranchHandler
@@ -17,13 +18,31 @@ export class UpdateBranchHandler
   ) {}
 
   async execute(command: UpdateBranchCommand): Promise<Branch> {
-    const branch = await this.prismaService.branch.update({
-      where: { id: command.id },
-      data: { ...command.dto },
-    });
+    const { customerId, id, dto } = command;
 
-    this.eventBus.publish(new BranchUpdatedEvent(branch));
+    try {
+      const { count } = await this.prismaService.branch.updateMany({
+        where: { id, customerId },
+        data: { ...dto },
+      });
 
-    return branch;
+      if (count === 0) {
+        throw new NotFoundException('Branch not found for this customer');
+      }
+
+      const branch = await this.prismaService.branch.findUnique({
+        where: { id, customerId },
+      });
+
+      if (!branch) {
+        throw new NotFoundException('Branch not found after update');
+      }
+
+      this.eventBus.publish(new BranchUpdatedEvent(branch));
+
+      return branch;
+    } catch (error) {
+      throw error;
+    }
   }
 }

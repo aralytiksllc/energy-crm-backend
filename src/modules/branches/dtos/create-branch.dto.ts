@@ -14,8 +14,4 @@ export class CreateBranchDto {
   @IsOptional()
   @IsString()
   weatherDataLinkage?: string;
-
-  @IsOptional()
-  @IsInt()
-  customerId?: number;
 }

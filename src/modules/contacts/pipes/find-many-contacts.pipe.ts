@@ -12,7 +12,7 @@ export class FindManyContactsPipe extends FindManyPipe<
 > {
   constructor() {
     super(
-      ['contactName', 'peakLoadKw', 'weatherDataLinkage', 'customerId'],
+      ['id', 'name', 'type', 'role', 'phone', 'email', 'status', 'customerId'],
       [],
       [{ id: 'desc' }],
     );

@@ -10,6 +10,7 @@ import { UserModule } from './modules/users/user.module';
 import { RoleModule } from './modules/roles/role.module';
 import { CustomerModule } from './modules/customers/customer.module';
 import { BranchModule } from './modules/branches/branch.module';
+import { ContactModule } from './modules/contacts/contact.module';
 import { MeteringPointModule } from './modules/metering-points/metering-point.module';
 import { ConsumptionModule } from './modules/consumptions/consumption.module';
 import { ContractModule } from './modules/contracts/contract.module';
@@ -27,6 +28,7 @@ import { ContractModule } from './modules/contracts/contract.module';
     RoleModule,
     CustomerModule,
     BranchModule,
+    ContactModule,
     MeteringPointModule,
     ConsumptionModule,
     ContractModule,

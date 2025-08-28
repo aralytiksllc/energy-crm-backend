@@ -8,11 +8,15 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { FindManyMeteringPointsQuery } from './find-many-metering-points.query';
 
 @QueryHandler(FindManyMeteringPointsQuery)
-export class FindManyMeteringPointsHandler implements IQueryHandler<FindManyMeteringPointsQuery> {
+export class FindManyMeteringPointsHandler
+  implements IQueryHandler<FindManyMeteringPointsQuery>
+{
   constructor(private readonly prismaService: PrismaService) {}
 
-  async execute(query: FindManyMeteringPointsQuery): Promise<Paged<MeteringPoint>> {
-    const findOptions = query.dto.findOptions;
+  async execute(
+    query: FindManyMeteringPointsQuery,
+  ): Promise<Paged<MeteringPoint>> {
+    const findOptions = { ...query.dto.findOptions, include: { branch: true } };
 
     const [rows, count] = await this.prismaService.$transaction([
       this.prismaService.meteringPoint.findMany(findOptions),

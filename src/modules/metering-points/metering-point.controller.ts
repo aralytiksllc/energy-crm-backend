@@ -20,7 +20,7 @@ import { UpdateMeteringPointDto } from './dtos/update-metering-point.dto';
 import { FindManyMeteringPointsPipe } from './pipes/find-many-metering-points.pipe';
 import { MeteringPointService } from './metering-point.service';
 
-@Controller('metering-pointes')
+@Controller('metering-points')
 export class MeteringPointController {
   constructor(private readonly meteringPointService: MeteringPointService) {}
 

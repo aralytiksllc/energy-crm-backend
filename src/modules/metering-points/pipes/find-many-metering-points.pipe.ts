@@ -39,7 +39,7 @@ export class FindManyMeteringPointsPipe extends FindManyPipe<
         'contractEndDate',
         'branchId',
       ],
-      [],
+      ['branch.customerId'],
       [{ id: 'desc' }],
     );
   }

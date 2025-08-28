@@ -3,4 +3,4 @@
 // Internal
 import { DeleteCommand } from '@/common/cqrs/commands/delete.command';
 
-export class DeleteBranchCommand extends DeleteCommand {}
+export class DeleteContactCommand extends DeleteCommand {}

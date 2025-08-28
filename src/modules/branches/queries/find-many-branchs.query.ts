@@ -1,12 +1,7 @@
 // External
 
 // Internal
-import { FindManyDto } from '@/common/cqrs/queries/find-many.dto';
+import { FindManyQuery } from '@/common/cqrs/queries/find-many.query';
 import type { Prisma } from '@/prisma/prisma.client';
 
-export class FindManyBranchsQuery {
-  constructor(
-    public readonly customerId: number,
-    public readonly dto: FindManyDto<Prisma.BranchWhereInput>,
-  ) {}
-}
+export class FindManyBranchsQuery extends FindManyQuery<Prisma.BranchWhereInput> {}

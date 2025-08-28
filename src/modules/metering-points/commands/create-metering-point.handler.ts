@@ -19,7 +19,7 @@ export class CreateMeteringPointHandler
   ) {}
 
   async execute(command: CreateMeteringPointCommand): Promise<MeteringPoint> {
-    const { branchId, dto } = command;
+    const { branchId, ...dto } = command.dto;
 
     try {
       const meteringPoint = await this.prismaService.meteringPoint.create({

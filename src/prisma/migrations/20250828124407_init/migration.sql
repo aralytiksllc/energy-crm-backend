@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "public"."ContactStatus" AS ENUM ('ACTIVE', 'INACTIVE');
+
 -- CreateTable
 CREATE TABLE "public"."users" (
     "id" SERIAL NOT NULL,
@@ -160,6 +163,20 @@ CREATE TABLE "public"."consumption" (
 );
 
 -- CreateTable
+CREATE TABLE "public"."Contact" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "type" TEXT,
+    "role" TEXT,
+    "phone" TEXT,
+    "email" TEXT NOT NULL,
+    "status" "public"."ContactStatus" NOT NULL DEFAULT 'ACTIVE',
+    "customerId" INTEGER NOT NULL,
+
+    CONSTRAINT "Contact_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "public"."_PermissionToRole" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL,
@@ -207,6 +224,9 @@ CREATE INDEX "consumption_contractId_idx" ON "public"."consumption"("contractId"
 CREATE UNIQUE INDEX "consumption_meteringPointId_timestamp_timeframe_key" ON "public"."consumption"("meteringPointId", "timestamp", "timeframe");
 
 -- CreateIndex
+CREATE INDEX "Contact_customerId_idx" ON "public"."Contact"("customerId");
+
+-- CreateIndex
 CREATE INDEX "_PermissionToRole_B_index" ON "public"."_PermissionToRole"("B");
 
 -- AddForeignKey
@@ -232,6 +252,9 @@ ALTER TABLE "public"."consumption" ADD CONSTRAINT "consumption_meteringPointId_f
 
 -- AddForeignKey
 ALTER TABLE "public"."consumption" ADD CONSTRAINT "consumption_contractId_fkey" FOREIGN KEY ("contractId") REFERENCES "public"."contracts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."Contact" ADD CONSTRAINT "Contact_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "public"."customers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."_PermissionToRole" ADD CONSTRAINT "_PermissionToRole_A_fkey" FOREIGN KEY ("A") REFERENCES "public"."permissions"("id") ON DELETE CASCADE ON UPDATE CASCADE;

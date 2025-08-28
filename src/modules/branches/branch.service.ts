@@ -21,35 +21,28 @@ export class BranchService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(
-    customerId: number,
-    dto: FindManyBranchsDto,
-  ): Promise<Paged<Branch>> {
-    const query = new FindManyBranchsQuery(customerId, dto);
+  async findMany(dto: FindManyBranchsDto): Promise<Paged<Branch>> {
+    const query = new FindManyBranchsQuery(dto);
     return this.queryBus.execute(query);
   }
 
-  async findOne(customerId: number, id: number): Promise<Branch> {
-    const query = new FindOneBranchQuery(customerId, id);
+  async findOne(id: number): Promise<Branch> {
+    const query = new FindOneBranchQuery(id);
     return this.queryBus.execute(query);
   }
 
-  async create(customerId: number, dto: CreateBranchDto): Promise<Branch> {
-    const command = new CreateBranchCommand(customerId, dto);
+  async create(dto: CreateBranchDto): Promise<Branch> {
+    const command = new CreateBranchCommand(dto);
     return this.commandBus.execute(command);
   }
 
-  async update(
-    customerId: number,
-    id: number,
-    dto: UpdateBranchDto,
-  ): Promise<Branch> {
-    const command = new UpdateBranchCommand(customerId, id, dto);
+  async update(id: number, dto: UpdateBranchDto): Promise<Branch> {
+    const command = new UpdateBranchCommand(id, dto);
     return this.commandBus.execute(command);
   }
 
-  async delete(customerId: number, id: number): Promise<Branch> {
-    const command = new DeleteBranchCommand(customerId, id);
+  async delete(id: number): Promise<Branch> {
+    const command = new DeleteBranchCommand(id);
     return this.commandBus.execute(command);
   }
 }

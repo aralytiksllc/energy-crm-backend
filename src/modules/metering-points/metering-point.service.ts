@@ -22,34 +22,32 @@ export class MeteringPointService {
   ) {}
 
   async findMany(
-    branchId: number,
     dto: FindManyMeteringPointsDto,
   ): Promise<Paged<MeteringPoint>> {
-    const query = new FindManyMeteringPointsQuery(branchId, dto);
+    const query = new FindManyMeteringPointsQuery(dto);
     return this.queryBus.execute(query);
   }
 
-  async findOne(branchId: number, id: number): Promise<MeteringPoint> {
-    const query = new FindOneMeteringPointQuery(branchId, id);
+  async findOne(id: number): Promise<MeteringPoint> {
+    const query = new FindOneMeteringPointQuery(id);
     return this.queryBus.execute(query);
   }
 
-  async create(branchId: number, dto: CreateMeteringPointDto): Promise<MeteringPoint> {
-    const command = new CreateMeteringPointCommand(branchId, dto);
+  async create(dto: CreateMeteringPointDto): Promise<MeteringPoint> {
+    const command = new CreateMeteringPointCommand(dto);
     return this.commandBus.execute(command);
   }
 
   async update(
-    branchId: number,
     id: number,
     dto: UpdateMeteringPointDto,
   ): Promise<MeteringPoint> {
-    const command = new UpdateMeteringPointCommand(branchId, id, dto);
+    const command = new UpdateMeteringPointCommand(id, dto);
     return this.commandBus.execute(command);
   }
 
-  async delete(branchId: number, id: number): Promise<MeteringPoint> {
-    const command = new DeleteMeteringPointCommand(branchId, id);
+  async delete(id: number): Promise<MeteringPoint> {
+    const command = new DeleteMeteringPointCommand(id);
     return this.commandBus.execute(command);
   }
 }

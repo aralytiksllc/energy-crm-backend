@@ -18,7 +18,10 @@ export class UpdateMeteringPointHandler
   ) {}
 
   async execute(command: UpdateMeteringPointCommand): Promise<MeteringPoint> {
-    const { branchId, id, dto } = command;
+    const {
+      id,
+      dto: { branchId, ...dto },
+    } = command;
 
     try {
       const { count } = await this.prismaService.meteringPoint.updateMany({

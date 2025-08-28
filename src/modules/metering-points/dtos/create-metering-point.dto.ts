@@ -1,5 +1,5 @@
 // External
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { IsOptional, IsString, IsNumber, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
 // Internal
@@ -96,4 +96,7 @@ export class CreateMeteringPointDto {
   @IsOptional()
   @Type(() => Date)
   contractEndDate?: Date;
+
+  @IsInt()
+  branchId: number;
 }

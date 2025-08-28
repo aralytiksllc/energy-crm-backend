@@ -132,7 +132,10 @@ model Customer {
 
   // Relations
   branches Branch[]
-  Contract Contract[]
+
+  contacts Contact[]
+
+  contracts Contract[]
 
   // Mapping
   @@map("customers")
@@ -250,16 +253,22 @@ model Consumption {
 }
 
 model Contact {
-  id       String   @id @default(uuid())
-  name     String
-  type     String?
-  role     String?
-  phone    String?
-  email    String   @unique
-  status   ContactStatus @default(ACTIVE)
+  id     Int           @id @default(autoincrement())
+  name   String
+  type   String?
+  role   String?
+  phone  String?
+  email  String
+  status ContactStatus @default(ACTIVE)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Foreign keys (scalar)
+  customerId Int
+
+  // Relations
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  // Indexes & mapping
+  @@index([customerId])
 }
 
 enum ContactStatus {

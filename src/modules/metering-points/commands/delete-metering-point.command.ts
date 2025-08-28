@@ -1,10 +1,6 @@
 // External
 
 // Internal
+import { DeleteCommand } from '@/common/cqrs/commands/delete.command';
 
-export class DeleteMeteringPointCommand {
-  constructor(
-    public readonly branchId: number,
-    public readonly id: number,
-  ) {}
-}
+export class DeleteMeteringPointCommand extends DeleteCommand {}

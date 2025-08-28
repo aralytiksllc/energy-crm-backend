@@ -18,7 +18,10 @@ export class UpdateBranchHandler
   ) {}
 
   async execute(command: UpdateBranchCommand): Promise<Branch> {
-    const { customerId, id, dto } = command;
+    const {
+      id,
+      dto: { customerId, ...dto },
+    } = command;
 
     try {
       const { count } = await this.prismaService.branch.updateMany({

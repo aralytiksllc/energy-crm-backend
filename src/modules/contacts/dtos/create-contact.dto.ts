@@ -3,9 +3,9 @@ import { IsString, IsOptional, IsNumber, IsInt } from 'class-validator';
 
 // Internal
 
-export class CreateBranchDto {
+export class CreateContactDto {
   @IsString()
-  branchName: string;
+  contactName: string;
 
   @IsOptional()
   @IsNumber()

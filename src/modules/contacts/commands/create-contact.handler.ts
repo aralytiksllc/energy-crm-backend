@@ -3,26 +3,26 @@ import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 // Internal
-import type { Branch } from '@/prisma/prisma.client';
+import type { Contact } from '@/prisma/prisma.client';
 import { Prisma } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
-import { BranchCreatedEvent } from '../events/branch-created.event';
-import { CreateBranchCommand } from './create-branch.command';
+import { ContactCreatedEvent } from '../events/contact-created.event';
+import { CreateContactCommand } from './create-contact.command';
 
-@CommandHandler(CreateBranchCommand)
-export class CreateBranchHandler
-  implements ICommandHandler<CreateBranchCommand>
+@CommandHandler(CreateContactCommand)
+export class CreateContactHandler
+  implements ICommandHandler<CreateContactCommand>
 {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: CreateBranchCommand): Promise<Branch> {
+  async execute(command: CreateContactCommand): Promise<Contact> {
     const { customerId, ...dto } = command.dto;
 
     try {
-      const branch = await this.prismaService.branch.create({
+      const contact = await this.prismaService.contact.create({
         data: {
           ...dto,
 
@@ -31,9 +31,9 @@ export class CreateBranchHandler
         },
       });
 
-      this.eventBus.publish(new BranchCreatedEvent(branch));
+      this.eventBus.publish(new ContactCreatedEvent(contact));
 
-      return branch;
+      return contact;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2003') {

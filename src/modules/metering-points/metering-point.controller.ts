@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -19,34 +20,48 @@ import { UpdateMeteringPointDto } from './dtos/update-metering-point.dto';
 import { FindManyMeteringPointsPipe } from './pipes/find-many-metering-points.pipe';
 import { MeteringPointService } from './metering-point.service';
 
-@Controller('metering-points')
+@Controller('branches/:branchId/metering-pointes')
 export class MeteringPointController {
   constructor(private readonly meteringPointService: MeteringPointService) {}
 
   @Get()
   findMany(
+    @Param('branchId', ParseIntPipe) branchId: number,
     @Query(FindManyMeteringPointsPipe) dto: FindManyMeteringPointsDto,
   ): Promise<Paged<MeteringPoint>> {
-    return this.meteringPointService.findMany(dto);
+    return this.meteringPointService.findMany(branchId, dto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number): Promise<MeteringPoint> {
-    return this.meteringPointService.findOne(+id);
+  findOne(
+    @Param('branchId', ParseIntPipe) branchId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<MeteringPoint> {
+    return this.meteringPointService.findOne(branchId, id);
   }
 
   @Post()
-  create(@Body() dto: CreateMeteringPointDto): Promise<MeteringPoint> {
-    return this.meteringPointService.create(dto);
+  create(
+    @Param('branchId', ParseIntPipe) branchId: number,
+    @Body() dto: CreateMeteringPointDto,
+  ): Promise<MeteringPoint> {
+    return this.meteringPointService.create(branchId, dto);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() dto: UpdateMeteringPointDto): Promise<MeteringPoint> {
-    return this.meteringPointService.update(+id, dto);
+  update(
+    @Param('branchId', ParseIntPipe) branchId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateMeteringPointDto,
+  ): Promise<MeteringPoint> {
+    return this.meteringPointService.update(branchId, id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<MeteringPoint> {
-    return this.meteringPointService.delete(+id);
+  remove(
+    @Param('branchId', ParseIntPipe) branchId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<MeteringPoint> {
+    return this.meteringPointService.delete(branchId, id);
   }
 }

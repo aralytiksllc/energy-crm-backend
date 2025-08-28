@@ -13,6 +13,7 @@ export class FindManyMeteringPointsPipe extends FindManyPipe<
   constructor() {
     super(
       [
+        'id',
         'deliveryAddress',
         'locationAddress',
         'cityOrLocality',

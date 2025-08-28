@@ -1,7 +1,12 @@
 // External
 
 // Internal
-import { FindManyQuery } from '@/common/cqrs/queries/find-many.query';
+import { FindManyDto } from '@/common/cqrs/queries/find-many.dto';
 import type { Prisma } from '@/prisma/prisma.client';
 
-export class FindManyMeteringPointsQuery extends FindManyQuery<Prisma.MeteringPointWhereInput> {}
+export class FindManyMeteringPointsQuery {
+  constructor(
+    public readonly branchId: number,
+    public readonly dto: FindManyDto<Prisma.MeteringPointWhereInput>,
+  ) {}
+}

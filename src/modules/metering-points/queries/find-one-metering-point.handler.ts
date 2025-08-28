@@ -8,13 +8,11 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { FindOneMeteringPointQuery } from './find-one-metering-point.query';
 
 @QueryHandler(FindOneMeteringPointQuery)
-export class FindOneMeteringPointHandler
-  implements IQueryHandler<FindOneMeteringPointQuery>
-{
-  constructor(private readonly prismaService: PrismaService) {}
+export class FindOneMeteringPointHandler implements IQueryHandler<FindOneMeteringPointQuery> {
+  constructor(private readonly prisma: PrismaService) {}
 
   async execute(query: FindOneMeteringPointQuery): Promise<MeteringPoint> {
-    const meteringPoint = await this.prismaService.meteringPoint.findUnique({
+    const meteringPoint = await this.prisma.meteringPoint.findUnique({
       where: { id: query.id },
     });
 

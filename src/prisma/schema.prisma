@@ -248,3 +248,21 @@ model Consumption {
   @@index([contractId])
   @@map("consumption")
 }
+
+model Contact {
+  id       String   @id @default(uuid())
+  name     String
+  type     String?
+  role     String?
+  phone    String?
+  email    String   @unique
+  status   ContactStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ContactStatus {
+  ACTIVE
+  INACTIVE
+}

@@ -12,7 +12,5 @@ export class MeteringPointSeed implements OnModuleInit {
     await this.seed();
   }
 
-  private async seed() {
-
-  }
+  private async seed() {}
 }

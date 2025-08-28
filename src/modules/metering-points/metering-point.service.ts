@@ -21,28 +21,35 @@ export class MeteringPointService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(dto: FindManyMeteringPointsDto): Promise<Paged<MeteringPoint>> {
-    const query = new FindManyMeteringPointsQuery(dto);
+  async findMany(
+    branchId: number,
+    dto: FindManyMeteringPointsDto,
+  ): Promise<Paged<MeteringPoint>> {
+    const query = new FindManyMeteringPointsQuery(branchId, dto);
     return this.queryBus.execute(query);
   }
 
-  async findOne(id: number): Promise<MeteringPoint> {
-    const query = new FindOneMeteringPointQuery(id);
+  async findOne(branchId: number, id: number): Promise<MeteringPoint> {
+    const query = new FindOneMeteringPointQuery(branchId, id);
     return this.queryBus.execute(query);
   }
 
-  async create(dto: CreateMeteringPointDto): Promise<MeteringPoint> {
-    const command = new CreateMeteringPointCommand(dto);
+  async create(branchId: number, dto: CreateMeteringPointDto): Promise<MeteringPoint> {
+    const command = new CreateMeteringPointCommand(branchId, dto);
     return this.commandBus.execute(command);
   }
 
-  async update(id: number, dto: UpdateMeteringPointDto): Promise<MeteringPoint> {
-    const command = new UpdateMeteringPointCommand(id, dto);
+  async update(
+    branchId: number,
+    id: number,
+    dto: UpdateMeteringPointDto,
+  ): Promise<MeteringPoint> {
+    const command = new UpdateMeteringPointCommand(branchId, id, dto);
     return this.commandBus.execute(command);
   }
 
-  async delete(id: number): Promise<MeteringPoint> {
-    const command = new DeleteMeteringPointCommand(id);
+  async delete(branchId: number, id: number): Promise<MeteringPoint> {
+    const command = new DeleteMeteringPointCommand(branchId, id);
     return this.commandBus.execute(command);
   }
 }

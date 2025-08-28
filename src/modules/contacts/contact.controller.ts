@@ -20,7 +20,7 @@ import { UpdateContactDto } from './dtos/update-contact.dto';
 import { FindManyContactsPipe } from './pipes/find-many-contacts.pipe';
 import { ContactService } from './contact.service';
 
-@Controller('contactes')
+@Controller('contacts')
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 

@@ -12,7 +12,7 @@ export class FindManyContractsHandler implements IQueryHandler<FindManyContracts
   constructor(private readonly prismaService: PrismaService) {}
 
   async execute(query: FindManyContractsQuery): Promise<Paged<Contract>> {
-    const findOptions = query.dto.findOptions;
+    const findOptions = { ...query.dto.findOptions, include: { customer: true } };
 
     const [rows, count] = await this.prismaService.$transaction([
       this.prismaService.contract.findMany(findOptions),

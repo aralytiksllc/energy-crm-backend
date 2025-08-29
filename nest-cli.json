@@ -4,12 +4,12 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "watchAssets": true,
     "assets": [
       {
-        "include": "modules/contracts/templates/**/*",
-        "outDir": "dist/src/modules/contracts/templates"
+        "include": "modules/**/templates/**/*",
+        "outDir": "dist"
       }
-    ]
+    ],
+    "watchAssets": true
   }
 }

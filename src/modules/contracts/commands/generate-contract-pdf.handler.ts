@@ -7,7 +7,7 @@ import type { Prisma } from '@prisma/client';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import Handlebars from 'handlebars';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 type ContractForDoc = Prisma.ContractGetPayload<{
   include: { customer: true };
@@ -34,10 +34,13 @@ export class GenerateContractPdfHandler
 
     // Compile HTML (Handlebars)
     const ctx = this.toTemplateContext(db);
-    const tplPath = path.resolve(
+    const tplPath = path.join(
       __dirname,
-      '../../templates/contract.part1.al.hbs',
+      '..',
+      'templates',
+      'contract.part1.al.hbs',
     );
+
     const tplSrc = await fs.readFile(tplPath, 'utf8');
     const html = Handlebars.compile(tplSrc, { noEscape: false })(ctx);
 

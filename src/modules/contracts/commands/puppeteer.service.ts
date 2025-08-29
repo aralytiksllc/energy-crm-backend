@@ -15,7 +15,6 @@ export class PuppeteerService implements OnModuleDestroy {
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
-
     return this.browser;
   }
 

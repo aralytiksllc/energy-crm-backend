@@ -60,12 +60,14 @@ export class ContractController {
   @Get(':id/generate-pdf')
   async generatePdf(
     @Param('id', ParseIntPipe) id: number,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
-    const pdf = await this.contractService.generatePdf(id);
+    const { buffer, filename } = await this.contractService.generatePdf(id);
 
-    return new StreamableFile(pdf.buffer, {
-      type: 'application/pdf',
-      disposition: `attachment; filename="${pdf.filename}"`,
-    });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
+
+    return new StreamableFile(buffer);
   }
 }

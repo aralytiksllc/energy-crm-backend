@@ -5,10 +5,13 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
+  Res,
 } from '@nestjs/common';
+import type { Response } from 'express';
 
 // Internal
 import { Paged } from '@/common/paged/paged.impl';
@@ -41,12 +44,32 @@ export class ContractController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() dto: UpdateContractDto): Promise<Contract> {
+  update(
+    @Param('id') id: number,
+    @Body() dto: UpdateContractDto,
+  ): Promise<Contract> {
     return this.contractService.update(+id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: number): Promise<Contract> {
     return this.contractService.delete(+id);
+  }
+
+  @Get(':id/generate-pdf')
+  async generatePdf(
+    @Param('id', ParseIntPipe) id: number,
+    @Res() res: Response,
+  ) {
+    const pdf = await this.contractService.generatePdf(id);
+
+    res.setHeader('Content-Type', 'application/pdf');
+
+    res.setHeader(
+      'Content-Disposition',
+      `inline; filename="contract-${id}-part1.pdf"`,
+    );
+
+    res.send(pdf);
   }
 }

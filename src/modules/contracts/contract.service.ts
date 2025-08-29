@@ -13,6 +13,7 @@ import { FindManyContractsQuery } from './queries/find-many-contracts.query';
 import { FindOneContractQuery } from './queries/find-one-contract.query';
 import { UpdateContractCommand } from './commands/update-contract.command';
 import { UpdateContractDto } from './dtos/update-contract.dto';
+import { GenerateContractPdfCommand } from './commands/generate-contract-pdf.command';
 
 @Injectable()
 export class ContractService {
@@ -43,6 +44,11 @@ export class ContractService {
 
   async delete(id: number): Promise<Contract> {
     const command = new DeleteContractCommand(id);
+    return this.commandBus.execute(command);
+  }
+
+  async generatePdf(id: number): Promise<Contract> {
+    const command = new GenerateContractPdfCommand(id);
     return this.commandBus.execute(command);
   }
 }

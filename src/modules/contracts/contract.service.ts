@@ -47,7 +47,7 @@ export class ContractService {
     return this.commandBus.execute(command);
   }
 
-  async generatePdf(id: number): Promise<Contract> {
+  async generatePdf(id: number): Promise<{ buffer: Buffer; filename: string }> {
     const command = new GenerateContractPdfCommand(id);
     return this.commandBus.execute(command);
   }

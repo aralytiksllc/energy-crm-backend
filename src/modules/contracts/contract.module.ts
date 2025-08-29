@@ -15,6 +15,8 @@ import { ContractController } from './contract.controller';
 import { ContractService } from './contract.service';
 import { ContractSeed } from './contract.seed';
 
+import { PuppeteerService } from './commands/puppeteer.service';
+
 @Module({
   imports: [CqrsModule, PrismaModule],
   controllers: [ContractController],
@@ -28,6 +30,7 @@ import { ContractSeed } from './contract.seed';
     GenerateContractPdfHandler,
     ContractService,
     ContractSeed,
+    PuppeteerService,
   ],
   exports: [ContractService],
 })

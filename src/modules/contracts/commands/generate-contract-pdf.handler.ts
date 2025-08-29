@@ -1,11 +1,12 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { NotFoundException } from '@nestjs/common';
 import { GenerateContractPdfCommand } from './generate-contract-pdf.command';
 import { PrismaService } from '@/prisma/prisma.service';
+import { PuppeteerService } from './puppeteer.service'; // <-- përshtate path-in
 import type { Prisma } from '@prisma/client';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import Handlebars from 'handlebars';
-import puppeteer from 'puppeteer';
 import dayjs from 'dayjs';
 
 type ContractForDoc = Prisma.ContractGetPayload<{
@@ -16,18 +17,23 @@ type ContractForDoc = Prisma.ContractGetPayload<{
 export class GenerateContractPdfHandler
   implements ICommandHandler<GenerateContractPdfCommand>
 {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly pptr: PuppeteerService,
+  ) {}
 
-  async execute(cmd: GenerateContractPdfCommand): Promise<Buffer> {
+  async execute(
+    cmd: GenerateContractPdfCommand,
+  ): Promise<{ buffer: Buffer; filename: string }> {
     const db = (await this.prisma.contract.findUnique({
       where: { id: cmd.id },
       include: { customer: true },
     })) as ContractForDoc | null;
 
-    if (!db) throw new Error('Contract not found');
+    if (!db) throw new NotFoundException('Contract not found');
 
+    // Compile HTML (Handlebars)
     const ctx = this.toTemplateContext(db);
-
     const tplPath = path.resolve(
       __dirname,
       '../../templates/contract.part1.al.hbs',
@@ -35,13 +41,11 @@ export class GenerateContractPdfHandler
     const tplSrc = await fs.readFile(tplPath, 'utf8');
     const html = Handlebars.compile(tplSrc, { noEscape: false })(ctx);
 
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    // Reuse shared browser, close only the page
+    const browser = await this.pptr.getBrowser();
+    const page = await browser.newPage();
 
     try {
-      const page = await browser.newPage();
       await page.setContent(html, { waitUntil: 'networkidle0' });
 
       const pdfUint8 = await page.pdf({
@@ -50,10 +54,13 @@ export class GenerateContractPdfHandler
         margin: { top: '20mm', bottom: '20mm', left: '20mm', right: '20mm' },
       });
 
-      const pdfBuffer = Buffer.from(pdfUint8);
-      return pdfBuffer;
+      const base = db.contractNumber || `contract-${db.id}`;
+      const safe = `${base}`.replace(/[^\w\-]+/g, '_');
+      const filename = `${safe}.pdf`;
+
+      return { buffer: Buffer.from(pdfUint8), filename };
     } finally {
-      await browser.close();
+      await page.close();
     }
   }
 

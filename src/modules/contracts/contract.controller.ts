@@ -10,6 +10,7 @@ import {
   Put,
   Query,
   Res,
+  StreamableFile,
 } from '@nestjs/common';
 import type { Response } from 'express';
 
@@ -59,17 +60,12 @@ export class ContractController {
   @Get(':id/generate-pdf')
   async generatePdf(
     @Param('id', ParseIntPipe) id: number,
-    @Res() res: Response,
-  ) {
+  ): Promise<StreamableFile> {
     const pdf = await this.contractService.generatePdf(id);
 
-    res.setHeader('Content-Type', 'application/pdf');
-
-    res.setHeader(
-      'Content-Disposition',
-      `inline; filename="contract-${id}-part1.pdf"`,
-    );
-
-    res.send(pdf);
+    return new StreamableFile(pdf.buffer, {
+      type: 'application/pdf',
+      disposition: `attachment; filename="${pdf.filename}"`,
+    });
   }
 }

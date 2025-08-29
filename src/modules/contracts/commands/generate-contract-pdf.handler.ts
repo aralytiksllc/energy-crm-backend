@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { NotFoundException } from '@nestjs/common';
 import { GenerateContractPdfCommand } from './generate-contract-pdf.command';
 import { PrismaService } from '@/prisma/prisma.service';
-import { PuppeteerService } from './puppeteer.service'; // <-- përshtate path-in
+import { PuppeteerService } from './puppeteer.service'; // sigurohu që path-i është i saktë
 import type { Prisma } from '@prisma/client';
 import * as path from 'path';
 import * as fs from 'fs/promises';
@@ -10,7 +10,20 @@ import Handlebars from 'handlebars';
 import * as dayjs from 'dayjs';
 
 type ContractForDoc = Prisma.ContractGetPayload<{
-  include: { customer: true };
+  include: {
+    customer: {
+      select: {
+        id: true;
+        companyName: true;
+        registeredAddress: true;
+        registrationNumber: true;
+        legalNoticeEmail: true;
+        defaultOperationalEmail: true;
+        phone: true;
+        contacts: { select: { email: true; phone: true; isPrimary: true } };
+      };
+    };
+  };
 }>;
 
 @CommandHandler(GenerateContractPdfCommand)
@@ -27,7 +40,20 @@ export class GenerateContractPdfHandler
   ): Promise<{ buffer: Buffer; filename: string }> {
     const db = (await this.prisma.contract.findUnique({
       where: { id: cmd.id },
-      include: { customer: true },
+      include: {
+        customer: {
+          select: {
+            id: true,
+            companyName: true,
+            registeredAddress: true,
+            registrationNumber: true,
+            legalNoticeEmail: true,
+            defaultOperationalEmail: true,
+            phone: true,
+            contacts: { select: { email: true, phone: true } },
+          },
+        },
+      },
     })) as ContractForDoc | null;
 
     if (!db) throw new NotFoundException('Contract not found');
@@ -49,23 +75,19 @@ export class GenerateContractPdfHandler
     const page = await browser.newPage();
 
     try {
-      try {
-        await page.setContent(html, { waitUntil: 'networkidle0' });
+      await page.setContent(html, { waitUntil: 'networkidle0' });
 
-        const pdfUint8 = await page.pdf({
-          format: 'A4',
-          printBackground: true,
-          margin: { top: '20mm', bottom: '20mm', left: '20mm', right: '20mm' },
-        });
+      const pdfUint8 = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: { top: '20mm', bottom: '20mm', left: '20mm', right: '20mm' },
+      });
 
-        const base = db.contractNumber || `contract-${db.id}`;
-        const safe = `${base}`.replace(/[^\w\-]+/g, '_');
-        const filename = `${safe}.pdf`;
+      const base = db.contractNumber || `contract-${db.id}`;
+      const safe = `${base}`.replace(/[^\w\-]+/g, '_');
+      const filename = `${safe}.pdf`;
 
-        return { buffer: Buffer.from(pdfUint8), filename };
-      } catch (error) {
-        throw error;
-      }
+      return { buffer: Buffer.from(pdfUint8), filename };
     } finally {
       await page.close();
     }
@@ -82,6 +104,23 @@ export class GenerateContractPdfHandler
       });
     };
 
+    const cust = db.customer;
+    const primary = cust?.contacts?.find(c => c.isPrimary) ?? null;
+    const any = cust?.contacts?.find(c => !!c.email || !!c.phone) ?? null;
+
+    const email =
+      cust?.defaultOperationalEmail ??
+      cust?.legalNoticeEmail ??
+      primary?.email ??
+      any?.email ??
+      null;
+
+    const phone =
+      cust?.phone ??
+      primary?.phone ??
+      any?.phone ??
+      null;
+
     return {
       supplier: {
         name: 'Management & Development Associates LLC',
@@ -92,12 +131,12 @@ export class GenerateContractPdfHandler
         regNo: '810491952',
       },
       customer: {
-        id: db.customer?.id,
-        name: (db.customer as any)?.name,
-        address: (db.customer as any)?.address,
-        regNo: (db.customer as any)?.registryNumber,
-        email: (db.customer as any)?.email,
-        phone: (db.customer as any)?.phone,
+        id: cust?.id ?? null,
+        name: cust?.companyName ?? null,
+        address: cust?.registeredAddress ?? null,
+        regNo: cust?.registrationNumber ?? null,
+        email,
+        phone,
       },
       contract: {
         number: db.contractNumber,

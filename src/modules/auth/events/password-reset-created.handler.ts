@@ -15,7 +15,7 @@ export class PasswordResetCreatedHandler
     try {
       const { user, passwordReset } = event;
 
-      const link = `http://localhost:5173/update-password?userId=${user.id}&token=${passwordReset.token}`;
+      const link = `https://energy-crm-frontend-875671653104.herokuapp.com/update-password?userId=${user.id}&token=${passwordReset.token}`;
 
       await this.emailService.sendWithRetryAsync({
         to: [user.email],

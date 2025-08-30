@@ -6,6 +6,7 @@ import type { User } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
 import { UserUpdatedEvent } from '../events/user-updated.event';
 import { UpdateUserCommand } from './update-user.command';
+import { Hash } from '@/common/hash/hash.impl';
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
@@ -20,6 +21,10 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
       data: command.dto,
       include: { role: { include: { permissions: true } }, department: true },
     });
+
+    if (typeof command.dto.password === 'string') {
+      command.dto.password = await Hash.make(command.dto.password);
+    }
 
     this.eventBus.publish(new UserUpdatedEvent(user));
 

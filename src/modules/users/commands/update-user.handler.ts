@@ -16,15 +16,15 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   ) {}
 
   async execute(command: UpdateUserCommand): Promise<User> {
-    const user = await this.prismaService.user.update({
-      where: { id: command.id },
-      data: command.dto,
-      include: { role: { include: { permissions: true } }, department: true },
-    });
-
     if (typeof command.dto.password === 'string') {
       command.dto.password = await Hash.make(command.dto.password);
     }
+
+    const user = await this.prismaService.user.update({
+      where: { id: command.id },
+      data: { ...command.dto },
+      include: { role: { include: { permissions: true } }, department: true },
+    });
 
     this.eventBus.publish(new UserUpdatedEvent(user));
 

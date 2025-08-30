@@ -1,11 +1,13 @@
 // External
-import { IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
 
 // Internal
 
 export class ChangePasswordDto {
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
+  @Type(() => Number)
   userId: number;
 
   @IsNotEmpty()

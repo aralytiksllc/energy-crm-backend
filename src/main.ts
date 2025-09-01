@@ -7,6 +7,7 @@ import { parse } from 'qs';
 // Internal
 // import { AuthJwtGuard } from '@/common/auth';
 import { AppModule } from './app.module';
+import { AuthJwtGuard } from './common/auth/auth.guard';
 
 async function bootstrap() {
   // Create Nest app with Winston logger
@@ -30,7 +31,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   // Global guards
-  // app.useGlobalGuards(new AuthJwtGuard(reflector));
+  app.useGlobalGuards(new AuthJwtGuard(reflector));
 
   // Use qs parser for query strings
   const expressApp = app.getHttpAdapter().getInstance();

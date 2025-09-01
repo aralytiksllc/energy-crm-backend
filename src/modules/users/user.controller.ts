@@ -8,7 +8,6 @@ import {
   Post,
   Put,
   Query,
-  Req,
 } from '@nestjs/common';
 
 // Internal
@@ -19,6 +18,7 @@ import { FindManyUsersDto } from './dtos/find-many-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { FindManyUsersPipe } from './pipes/find-many-users.pipe';
 import { UserService } from './user.service';
+import { CurrentUser } from '@/common/auth/current-user.decorator';
 
 @Controller('users')
 export class UserController {
@@ -52,8 +52,8 @@ export class UserController {
   }
 
   @Get('me')
-  async getProfile(@Req() req) {
-    const userId = +req.user.sub;
+  async getProfile(@CurrentUser() user) {
+    const userId = Number(user.id);
     return this.userService.findOne(userId);
   }
 }

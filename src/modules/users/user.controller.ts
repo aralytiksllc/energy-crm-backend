@@ -18,7 +18,6 @@ import { FindManyUsersDto } from './dtos/find-many-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { FindManyUsersPipe } from './pipes/find-many-users.pipe';
 import { UserService } from './user.service';
-import { CurrentUser } from '@/common/auth/current-user.decorator';
 
 @Controller('users')
 export class UserController {
@@ -49,11 +48,5 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: number): Promise<User> {
     return this.userService.delete(+id);
-  }
-
-  @Get('me')
-  async getProfile(@CurrentUser() user) {
-    const userId = Number(user.id);
-    return this.userService.findOne(userId);
   }
 }

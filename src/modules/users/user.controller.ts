@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
 } from '@nestjs/common';
 
 // Internal
@@ -48,5 +49,11 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: number): Promise<User> {
     return this.userService.delete(+id);
+  }
+
+  @Get('me')
+  async getProfile(@Req() req) {
+    const userId = +req.user.sub;
+    return this.userService.findOne(userId);
   }
 }

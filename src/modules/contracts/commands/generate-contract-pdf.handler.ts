@@ -119,7 +119,6 @@ export class GenerateContractPdfHandler
               },
             },
             contacts: { select: { email: true, phone: true } },
-            contracts: { select: {  } },
           },
         },
       },

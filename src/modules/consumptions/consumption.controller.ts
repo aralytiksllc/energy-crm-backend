@@ -53,12 +53,7 @@ export class ConsumptionController {
     @Req() req: Request,
   ) {
     const errors = req['csvErrors'] ?? [];
-
-    console.log('errors', JSON.stringify(errors));
-
     const rows = (req['csvData'] ?? []) as CreateConsumptionDto[];
-
-    console.log('rows', JSON.stringify(rows));
 
     if (errors.length > 0) {
       return {

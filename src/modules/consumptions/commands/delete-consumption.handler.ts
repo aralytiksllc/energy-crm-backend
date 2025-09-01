@@ -2,7 +2,7 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 // Internal
-import type { Consumption } from '@/prisma/prisma.client';
+import type { ConsumptionFile } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
 import { ConsumptionDeletedEvent } from '../events/consumption-deleted.event';
 import { DeleteConsumptionCommand } from './delete-consumption.command';
@@ -14,8 +14,8 @@ export class DeleteConsumptionHandler implements ICommandHandler<DeleteConsumpti
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: DeleteConsumptionCommand): Promise<Consumption> {
-    const consumption = await this.prismaService.consumption.delete({
+  async execute(command: DeleteConsumptionCommand): Promise<ConsumptionFile> {
+    const consumption = await this.prismaService.consumptionFile.delete({
       where: { id: command.id },
     });
 

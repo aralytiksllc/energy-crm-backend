@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common';
 import { Paged } from '@/common/paged/paged.impl';
 import type { Consumption } from '@/prisma/prisma.client';
 import { CreateConsumptionCommand } from './commands/create-consumption.command';
+import { CreateConsumptionFileDto } from './dtos/create-consumption-file.dto';
 import { CreateConsumptionDto } from './dtos/create-consumption.dto';
 import { DeleteConsumptionCommand } from './commands/delete-consumption.command';
 import { FindManyConsumptionsDto } from './dtos/find-many-consumptions.dto';
@@ -31,8 +32,12 @@ export class ConsumptionService {
     return this.queryBus.execute(query);
   }
 
-  async create(dto: CreateConsumptionDto): Promise<Consumption> {
-    const command = new CreateConsumptionCommand(dto);
+  async create(
+    file: Express.Multer.File,
+    dto: CreateConsumptionFileDto,
+    rows: CreateConsumptionDto[],
+  ): Promise<Consumption> {
+    const command = new CreateConsumptionCommand(file, dto, rows);
     return this.commandBus.execute(command);
   }
 

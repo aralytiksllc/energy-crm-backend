@@ -26,6 +26,7 @@ export class EmailService {
 
   async sendAsync(request: EmailRequest): Promise<void> {
     const to = request.to.filter(Boolean);
+
     if (to.length === 0) return;
 
     const mailOptions: SendMailOptions = {

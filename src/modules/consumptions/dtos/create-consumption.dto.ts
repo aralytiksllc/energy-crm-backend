@@ -1,25 +1,21 @@
-// External
-import { IsInt, IsOptional, IsNumber, IsString } from 'class-validator';
-import { Type } from 'class-transformer';
-
-// Internal
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateConsumptionDto {
-  @IsOptional()
-  @Type(() => Date)
-  timestamp: string;
+  @IsNotEmpty()
+  @IsDate()
+  timestamp!: Date;
 
+  @IsOptional()
   @IsString()
-  timeframe: string;
+  timeframe: string = '15m';
 
   @IsOptional()
   @IsNumber()
   electricityConsumptionKwh?: number;
-
-  @IsInt()
-  meteringPointId: number;
-
-  @IsOptional()
-  @IsInt()
-  contractId?: number;
 }

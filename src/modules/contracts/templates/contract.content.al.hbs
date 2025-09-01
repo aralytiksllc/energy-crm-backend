@@ -1,0 +1,1269 @@
+<!-- file: templates/contract.al.hbs -->
+<html lang='sq'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Kontrata e Furnizimit me Energji Elektrike</title>
+
+    <style>
+      /* Page setup */
+      @page {
+        size: A4;
+        margin: 20mm;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 10pt; /* 10% smaller, rounded */
+        color: #111;
+        line-height: 1.35;
+      }
+
+      /* Headings */
+      h1,
+      h2,
+      h3 {
+        margin-bottom: 8px;
+        font-weight: 700;
+        color: #111;
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+      h1 {
+        font-size: 14pt;
+      }
+      h2 {
+        font-size: 12pt;
+      }
+      h3 {
+        font-size: 10pt;
+      }
+
+      /* add spacing above headings so sections don't stick */
+      h1:not(:first-child),
+      h2:not(:first-child),
+      h3:not(:first-child) {
+        margin-top: 10pt;
+        padding-top: 6pt;
+      }
+
+      /* Text blocks */
+      .paragraph {
+        text-align: justify;
+        margin: 6px 0;
+        font-size: 10pt;
+      }
+      .muted {
+        color: #666;
+      }
+
+      /* Page sections */
+      .page {
+        break-after: page;
+        padding-top: 0;
+      }
+      .page.last {
+        break-after: auto;
+      }
+      .page-break {
+        break-after: page;
+        page-break-after: always;
+      }
+
+      /* Key–value grid */
+      .kv {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 4px 12px;
+        margin: 10px 0;
+        font-size: 10pt;
+      }
+
+      /* Tables */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        margin: 6px 0 10px;
+        font-size: 9pt;
+      }
+      thead {
+        display: table-header-group;
+      }
+      tfoot {
+        display: table-footer-group;
+      }
+      tr {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      th,
+      td {
+        border: 1px solid #222;
+        padding: 4px 6px;
+        vertical-align: top;
+        word-break: break-word;
+      }
+      thead th {
+        background: #f2f2f2;
+        font-weight: 700;
+        text-align: left;
+      }
+
+      /* Signature blocks */
+      .signature-blocks {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 14px;
+      }
+      .signature-box {
+        width: 48%;
+        font-size: 10pt;
+        line-height: 1.35;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      /* Utilities */
+      .text-center {
+        text-align: center;
+      }
+      .text-right {
+        text-align: right;
+      }
+      .mb-0 {
+        margin-bottom: 0 !important;
+      }
+      .mt-0 {
+        margin-top: 0 !important;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <section class='page'>
+      <img src='{{supplier.logoUrl}}' alt='Logo' />
+      <h1 class='title-main'>KONTRATA E FURNIZIMIT ME ENERGJI ELEKTRIKE</h1>
+      <p class='paragraph muted'><strong>Data e Hyrjes në Fuqi:</strong>
+        {{contract.effectiveDate}}</p>
+
+      <p class='paragraph'><strong>NDËRMJET:</strong></p>
+      <p class='paragraph'>
+        <strong>{{supplier.name}}</strong>
+        (në tekstin e mëtejmë i referuar si "Furnizuesi" ose "MDA"), një kompani
+        e organizuar dhe ekzistuese sipas ligjeve të Republikës së Kosovës, me
+        vendin e saj kryesor të biznesit në
+        <strong>{{supplier.address}}</strong>, e regjistruar në Agjencinë e
+        Regjistrimit të Bizneseve të Kosovës me Numrin Unik të Identifikimit
+        <strong>{{supplier.regNo}}</strong>, dhe që mban Licencën e Tregtimit të
+        Energjisë Nr.
+        <strong>{{supplier.licenseNo}}</strong>
+        të lëshuar nga Zyra e Rregullatorit të Energjisë (ZRRE).
+      </p>
+
+      <p class='paragraph'><strong>DHE:</strong></p>
+      <p class='paragraph'>
+        <strong>{{customer.name}}</strong>
+        (në tekstin e mëtejmë i referuar si "Klienti"), një kompani e organizuar
+        dhe ekzistuese sipas ligjeve të Kosovës, me vendin e saj kryesor të
+        biznesit në
+        <strong>{{customer.address}}</strong>, e regjistruar me Numrin Unik të
+        Identifikimit
+        <strong>{{customer.regNo}}</strong>.
+      </p>
+
+      <p class='paragraph'>
+        Furnizuesi dhe Klienti më poshtë referohen individualisht si "<strong
+        >Pala</strong>" dhe së bashku si "<strong>Palët</strong>".
+      </p>
+
+      <p class='paragraph'><strong>MEQË:</strong></p>
+      <ol class='recitals'>
+        <li><strong>Furnizuesi</strong>
+          është i licencuar për të tregtuar dhe furnizuar energji elektrike në
+          Republikën e Kosovës.</li>
+        <li><strong>Klienti</strong>
+          dëshiron të blejë energji elektrike nga Furnizuesi për nevojat e tij
+          të konsumit në Pikat e Dorëzimit të specifikuara këtu.</li>
+        <li><strong>Palët</strong>
+          bien dakord të veprojnë sipas termave dhe kushteve të kësaj Kontrate
+          dhe në përputhje me ligjet dhe rregulloret në fuqi.</li>
+      </ol>
+
+      <p class='paragraph'><strong>TANI, PRANDAJ, PALËT BIEN DAKORD SI MË
+          POSHTË:</strong></p>
+
+      <!-- Article 1 -->
+      <h2><strong>NENI 1: PËRKUFIZIME</strong></h2>
+      <p class='paragraph'>
+        Në këtë Kontratë, përveç nëse konteksti kërkon ndryshe, termat e
+        mëposhtëm do të kenë kuptimet e dhëna më poshtë:
+      </p>
+      <ul class='definition-list'>
+        <li><strong>"Filial"</strong>
+          do të thotë, në lidhje me secilën Palë, çdo kompani ose entitet
+          juridik që kontrollon, kontrollohet nga ose është nën kontroll të
+          përbashkët me atë Palë.</li>
+        <li><strong>"Energji Balancuese"</strong>
+          do të thotë energjia elektrike e përdorur për të pajtuar ndryshimet
+          midis rrjedhave të planifikuara dhe atyre aktuale të energjisë
+          elektrike në sistemin e transmetimit ose shpërndarjes.</li>
+        <li><strong>"Pala Përgjegjëse e Balancimit"</strong>
+          do të thotë një pjesëmarrës në treg përgjegjës për çekuilibrat e tij
+          ose për çekuilibrat e grupit të tij.</li>
+        <li><strong>"Ditë pune"</strong>
+          do të thotë çdo ditë (përveç të shtunës dhe të dielës) në të cilën
+          bankat janë të hapura për aktivitete të përgjithshme në Kosovë.</li>
+        <li><strong>"Informacion Konfidencial"</strong>
+          do të thotë çdo informacion i zbuluar nga njëra Palë te tjetra, qoftë
+          me gojë, me shkrim ose në çdo formë tjetër, që është përcaktuar si
+          konfidencial ose që në mënyrë të arsyeshme duhet të kuptohet si
+          konfidencial duke pasur parasysh natyrën e informacionit dhe rrethanat
+          e zbulimit.</li>
+        <li><strong>"Çmimi i Kontratës"</strong>
+          do të thotë çmimi për energjinë elektrike të furnizuar sipas kësaj
+          Kontrate, siç përcaktohet në përputhje me Nenin 6.</li>
+        <li><strong>"Sasia e Kontratës"</strong>
+          do të thotë sasia e energjisë elektrike që do të furnizohet nga
+          Furnizuesi dhe do të blihet nga Klienti, siç specifikohet në Nenin 5
+          dhe/ose Shtojcën 2.</li>
+        <li><strong>"Pika(t) e Dorëzimit"</strong>
+          do të thotë pika(t) në të cilën energjia elektrike dorëzohet nga
+          Furnizuesi te Klienti, siç specifikohet në Shtojcën 1.</li>
+        <li><strong>"Operatori i Sistemit të Shpërndarjes (OSSH)"</strong>
+          do të thotë subjekti përgjegjës për operimin, mirëmbajtjen dhe
+          zhvillimin e sistemit të shpërndarjes së energjisë elektrike në zonën
+          përkatëse.</li>
+        <li><strong>"ZRRE"</strong>
+          do të thotë Zyra e Rregullatorit të Energjisë e Republikës së Kosovës.</li>
+        <li><strong>"Ngjarje e Forcës Madhore"</strong>
+          ka kuptimin e dhënë në Nenin 12.</li>
+        <li><strong>"Mosbalancim"</strong>
+          do të thotë një devijim midis sasisë së planifikuar të energjisë
+          elektrike dhe sasisë aktuale të matur të energjisë elektrike të
+          konsumuar nga Klienti ose të furnizuar nga Furnizuesi brenda një
+          periudhe të caktuar pagese.</li>
+        <li><strong>"Rregullat e Tregut"</strong>
+          do të thotë rregullat, rregulloret, kodet dhe procedurat që
+          rregullojnë tregun e energjisë elektrike në Kosovë, të lëshuara ose të
+          miratuara nga ZRRE-ja ose autoritetet e tjera përkatëse.</li>
+        <li><strong>"Pajisje Matëse"</strong>
+          do të thotë matësit dhe pajisjet shoqëruese të përdorura për të matur
+          sasinë e energjisë elektrike të furnizuar dhe të konsumuar në
+          Pikën(at) e Dorëzimit.</li>
+        <li><strong>"Muaji"</strong> do të thotë një muaj kalendarik.</li>
+        <li><strong>"Nominim"</strong>
+          do të thotë dorëzimi i një orari për furnizimin ose konsumin e
+          energjisë elektrike te Operatori përkatës i Sistemit.</li>
+        <li><strong>"Agjent i Planifikimit"</strong>
+          do të thotë subjekti përgjegjës për dorëzimin e Nominimeve te OST-ja
+          ose operatori përkatës i tregut.</li>
+        <li><strong>"Operator i Sistemit"</strong>
+          do të thotë ose OSSH-ja ose OST-ja, sipas kontekstit.</li>
+        <li><strong>"Operatori i Sistemit të Transmetimit (OST)"</strong>
+          do të thotë subjekti përgjegjës për operimin, mirëmbajtjen dhe
+          zhvillimin e sistemit të transmetimit të energjisë elektrike në
+          Kosovë.</li>
+      </ul>
+
+      <!-- Article 2 -->
+      <h2><strong>NENI 2: OBJEKTI I KONTRATËS</strong></h2>
+      <p class='paragraph'>
+        <strong>2.1.</strong>
+        Furnizuesi pranon të shesë dhe të dorëzojë, dhe Klienti pranon të blejë
+        dhe të marrë në dorëzim Sasinë e Kontratës të energjisë elektrike në
+        Pikën(at) e Dorëzimit, në përputhje me termat dhe kushtet e kësaj
+        Kontrate dhe Rregullave të Tregut në fuqi.
+      </p>
+      <p class='paragraph'>
+        <strong>2.2.</strong>
+        Palët marrin përsipër të zbatojnë të gjitha ligjet, rregulloret,
+        Rregullat e Tregut dhe vendimet e ZRRE-së dhe autoriteteve të tjera
+        kompetente në Kosovë në kryerjen e detyrimeve të tyre sipas kësaj
+        Kontrate.
+      </p>
+
+      <!-- ARTICLE 3 -->
+      <h2><strong>NENI 3: FILLIMI, KOHËZGJATJA, RIPËRTËRITJA DHE KUSHTET
+          PARAPRAKE</strong></h2>
+      <p class='paragraph'><strong>3.1. Data e Fillimit:</strong>
+        Kjo Kontratë do të hyjë në fuqi në Datën e Hyrjes në Fuqi dhe furnizimi
+        me energji elektrike do të fillojë më __________ ("Data e Fillimit të
+        Furnizimit").</p>
+      <p class='paragraph'><strong>3.2. Afati Fillestar:</strong>
+        Kjo Kontratë do të mbetet në fuqi për një afat fillestar prej një (1)
+        viti nga Data e Fillimit të Furnizimit ("Afati Fillestar").</p>
+      <p class='paragraph'><strong>3.3. Rinovimi:</strong>
+        Kjo Kontratë do të rinovohet automatikisht për periudha të njëpasnjëshme
+        prej një (1) viti secila, përveç nëse njëra Palë i jep Palës tjetër
+        njoftim me shkrim për qëllimin e saj për të mos e rinovuar të paktën
+        gjashtëdhjetë (60) ditë para skadimit të kontratës në fuqi.</p>
+      <p class='paragraph'><strong>3.4. Kushtet paraprake:</strong>
+        Detyrimet e Furnizuesit për të filluar furnizimin me energji elektrike
+        sipas kësaj Kontrate kushtëzohen nga:
+        <br />a) pagesa e Depozitës e Sigurisë nga Klienti në përputhje me Nenin
+        7;
+        <br />b) të gjitha informacionet dhe dokumentacioni i nevojshëm nga
+        Klienti, siç kërkohet në mënyrë të arsyeshme nga Furnizuesi për
+        furnizim.
+      </p>
+
+      <!-- ARTICLE 4 -->
+      <h2><strong>NENI 4: PIKA(T) E FURNIZIMIT DHE SPECIFIKIMET E MATJES</strong></h2>
+      <p class='paragraph'><strong>4.1.</strong>
+        Energjia elektrike do të dorëzohet nga Furnizuesi dhe do të pranohet nga
+        Klienti në Pikën(at) e Dorëzimit të specifikuara në Shtojcën 1 (Lista e
+        Pikës(ave) së Matjes dhe Specifikimet Teknike), e cila përbën një pjesë
+        integrale të kësaj Kontrate.</p>
+      <p class='paragraph'><strong>4.2.</strong>
+        Matja e energjisë elektrike të furnizuar sipas kësaj Kontrate do të
+        kryhet nga Operatori i Sistemit Shpërndarës (KEDS) duke përdorur Pajisje
+        Matëse në përputhje me standardet dhe Rregullat e Tregut në fuqi.</p>
+      <p class='paragraph'><strong>4.3.</strong>
+        KEDS do të jetë përgjegjës për leximin e Pajisjeve Matëse dhe ofrimin e
+        të dhënave të matjes për Furnizuesin dhe/ose Klientin sipas rregulloreve
+        dhe procedurave në fuqi. Në mungesë të leximeve aktuale, konsumi mund të
+        vlerësohet sipas rregullave në fuqi.</p>
+      <p class='paragraph'><strong>4.4.</strong>
+        Klienti do të japë, ose do të sigurojë dhënien e, aksesit të sigurt dhe
+        të papenguar në Pajisjet Matëse për personelin e autorizuar të
+        Operatorit të Sistemit dhe Furnizuesit për qëllime leximi, inspektimi,
+        testimi, mirëmbajtjeje ose riparimi, në përputhje me rregulloret në
+        fuqi.</p>
+
+      <!-- ARTICLE 5 -->
+      <h2><strong>NENI 5: SASIA DHE STANDARDET E DORËZIMIT TË ENERGJISË
+          ELEKTRIKE</strong></h2>
+      <p class='paragraph'><strong>5.1. Sasia e Kontratës:</strong>
+        Sasia e energjisë elektrike që do të furnizohet nga Furnizuesi do të
+        jetë ajo e matur dhe e raportuar nga Operatori i Sistemit të
+        Shpërndarjes (OSSH), në pikën e matjes në objektin e furnizimit të
+        Konsumatorit.</p>
+      <p class='paragraph'><strong>5.2. Përgjegjësia e Furnizuesit:</strong>
+        Furnizuesi do të jetë përgjegjës për organizimin e furnizimit të Sasisë
+        së Kontratës në Pikën(at) e Dorëzimit. Furnizuesi nuk do të jetë
+        përgjegjës për asnjë dështim në furnizim, ndërprerje ose ndryshim në
+        furnizim në masën e shkaktuar nga ngjarje ose rrethana në rrjetin e
+        OST-së (KOSTT) ose OSSH-së (KEDS), ose nga një Ngjarje e Forcës Madhore,
+        ose nga shkelja e kushteve të kësaj Kontrate nga Klienti.</p>
+
+      <!-- ARTICLE 6 -->
+      <h2><strong>NENI 6: ÇMIMET, FATURIMI DHE MODALITETET E PAGESËS</strong></h2>
+      <p class='paragraph'><strong>6.1. Struktura e Çmimeve:</strong>
+        Çmimi për energjinë elektrike të furnizuar sipas kësaj Kontrate ("Çmimi
+        i Kontratës") do të jetë
+        <strong>199 EUR për MWh</strong>, i cili përfshin tarifat e rrjetit nga
+        KOSTT dhe KEDS, dhe TVSH-në. Kostoja e imbalanceve që tarifohet nga
+        KOSTT nuk është përfshirë në Çmim dhe rregullohet sipas nenit 8 pika 2.</p>
+      <p class='paragraph'><strong>6.2. Rregullimet e Çmimit:</strong>
+        Komponenti i energjisë i Çmimit të Kontratës mund të ndryshohet nga
+        Furnizuesi me një njoftim me shkrim tridhjetë (30) ditë më parë për
+        Klientin në rast të ndryshimeve të rëndësishme në kushtet e tregut me
+        shumicë ose tarifat rregullatore.</p>
+      <p class='paragraph'><strong>6.3. Faturimi:</strong>
+        Furnizuesi duhet të lëshojë një faturë për Klientin në baza mujore për
+        energjinë elektrike të furnizuar gjatë Muajit paraprak. Fatura duhet të
+        detajojë konsumin e matur, përbërësit përkatës të Çmimit të Kontratës
+        dhe shumën totale të duhur. Faturat duhet të dërgohen në adresën e
+        email-it të Klientit të specifikuar në Nenin 17 dhe do të konsiderohet e
+        pranuar nga Klienti në momentin e dërgimit të saj në atë adresë, përveç
+        nëse sistemi i dërgimit kthen një njoftim automatik që dëshmon se
+        e-maili nuk është dorëzuar me sukses.</p>
+      <p class='paragraph'><strong>6.4. Kushtet e Pagesës:</strong>
+        Klienti duhet të paguajë shumën e plotë të faturuar brenda pesë (5)
+        ditëve kalendarike nga data e faturës ("Data e Pagesës").</p>
+      <p class='paragraph'><strong>6.5. Pagesë e Vonë:</strong>
+        Nëse Klienti nuk arrin të paguajë ndonjë shumë të faturuar deri në Datën
+        e Pagesës, Furnizuesi do të ketë të drejtë të ngarkojë interes mbi
+        shumën e vonuar me normën e përcaktuar sipas Ligjit për Kamatë-vonesat
+        në transaksionet tregtare në fuqi, nga Data e Pagesës deri në datën e
+        pranimit të pagesës.</p>
+      <p class='paragraph'><strong>6.6. Metoda e Pagesës:</strong>
+        Të gjitha pagesat duhet të bëhen në
+        <strong>Euro (EUR)</strong>
+        në llogarinë bankare të Furnizuesit të specifikuar.</p>
+      <p class='paragraph'><strong>6.7. Faturat e Kontestuara:</strong>
+        Nëse Klienti konteston ndonjë pjesë të një fature me mirëbesim, Klienti
+        duhet të njoftojë Furnizuesin me shkrim për shumën e kontestuar dhe
+        arsyet e mosmarrëveshjes para Datës së Pagesës. Klienti duhet të paguajë
+        pjesën e padiskutueshme të faturës deri në Datën e Pagesës. Palët duhet
+        të përpiqen ta zgjidhin mosmarrëveshjen në mënyrë miqësore. Nëse
+        mosmarrëveshja nuk zgjidhet brenda pesëmbëdhjetë (15) ditësh, ajo do të
+        zgjidhet në përputhje me Nenin 16.</p>
+
+      <!-- ARTICLE 7 -->
+      <h2><strong>NENI 7: KËRKESAT E SIGURISË</strong></h2>
+      <p class='paragraph'><strong>7.1.</strong>
+        Si kusht për furnizimin me energji elektrike, Klienti duhet të sigurojë
+        dhe të mbajë në favor të Furnizuesit një depozitë sigurie ("Depozita e
+        Sigurisë") për të siguruar detyrimet e pagesës së Klientit sipas kësaj
+        Kontrate.</p>
+      <p class='paragraph'><strong>7.2. Forma e Sigurisë:</strong>
+        Depozita e Sigurisë duhet të jetë në formën e një depozite në para të
+        gatshme të paguar në një llogari bankare të caktuar nga Furnizuesi.</p>
+      <p class='paragraph'><strong>7.3. Shuma e Sigurisë:</strong>
+        Shuma e Depozitës së Sigurisë duhet të jetë ekuivalente me vlerën e
+        parashikuar të konsumit të energjisë elektrike për dy (2) muaj. Kjo
+        shumë mund të ndryshohet nga Furnizuesi mbi baza të arsyeshme, siç është
+        një ndryshim i rëndësishëm në konsumin ose besueshmërinë e Klientit, ose
+        sipas udhëzimeve të ZRRE-së.</p>
+      <p class='paragraph'><strong>7.4. Kthimi i Sigurisë:</strong>
+        Depozita e Sigurisë (ose çdo bilanc i mbetur i saj) do t'i kthehet
+        Klientit, pa interes, brenda tridhjetë (30) ditëve pas përfundimit ose
+        skadimit të kësaj Kontrate dhe zgjidhjes së plotë dhe përfundimtare të
+        të gjitha detyrimeve të papaguara të Klientit ndaj Furnizuesit.</p>
+
+      <!-- ARTICLE 8 -->
+      <h2><strong>NENI 8: NOMINIMET, PLANIFIKIMI DHE BALANCIMI</strong></h2>
+      <p class='paragraph'><strong>8.1. Parashikimet e Konsumit:</strong>
+        Klienti duhet t'i japë Furnizuesit profilin e konsumit të energjisë
+        elektrike për dy vitet e kaluara, dhe parashikimin për periudhat
+        përkatëse, në formatin dhe brenda afateve të kërkuara nga Furnizuesi.
+        Detajet të jepen në Shtojcën 2 (Profili i Konsumit të Klientit / Të
+        Dhënat e Parashikimit).</p>
+      <p class='paragraph'><strong>8.2. Përgjegjësia e Balancimit:</strong>
+        Klienti është përgjegjës për të gjitha kostot që lidhen me Jobalancat.
+        Furnizuesi do të llogarisë dhe faturojë kosto të tilla te Klienti bazuar
+        në mekanizmat përkatës të zgjidhjes së jobalancave të OST/Operatorit të
+        Tregut, plus çdo tarifë të arsyeshme administrative.</p>
+      <p class='paragraph'><strong>8.3. Shkëmbimi i të Dhënave:</strong>
+        Palët do të bashkëpunojnë dhe do të shkëmbejnë të dhënat e nevojshme në
+        kohën e duhur për të lehtësuar parashikimin e saktë, Nominimin,
+        planifikimin dhe proceset e pajtimit, në përputhje me Rregullat e Tregut
+        dhe praktikat më të mira të industrisë.</p>
+
+      <!-- ARTICLE 9 -->
+      <h2><strong>NENI 9: TË DREJTAT DHE DETYRIMET E FURNIZUESIT</strong></h2>
+      <p class='paragraph'><strong>9.1. Furnizuesi duhet të:</strong></p>
+      <ul class='definition-list'>
+        <li>a) Furnizojë me energji elektrike Klientin në përputhje me kushtet e
+          kësaj Kontrate, licencën e tij tregtare të ZRRE-së, ligjet në fuqi dhe
+          Rregullat e Tregut.</li>
+        <li>b) Bëjë përpjekje të arsyeshme për të siguruar furnizim të
+          vazhdueshëm dhe të besueshëm, në varësi të dispozitave të kësaj
+          Kontrate.</li>
+        <li>c) Zbatojë të gjitha detyrimet për informacion, transparencë dhe të
+          drejta të klientit, siç përcaktohen nga rregulloret e ZRRE-së.</li>
+        <li>d) Lëshojë fatura të sakta në kohën e duhur.</li>
+        <li>e) Trajtojë ankesat e Klientëve në përputhje me procedurat e tij të
+          miratuara dhe rregullat e ZRRE-së.</li>
+      </ul>
+
+      <p class='paragraph'><strong>9.2. Furnizuesi ka të drejtë të:</strong></p>
+      <ul class='definition-list'>
+        <li>a) Marrë pagesën në kohë për të gjithë energjinë elektrike të
+          furnizuar dhe tarifat e tjera të duhura sipas kësaj Kontrate.</li>
+        <li>b) Pezullojë furnizimin në rast të mospërmbushjes së detyrimeve nga
+          Klienti, në përputhje me Nenin 14 dhe rregullat në fuqi të ZRRE-së për
+          shkyçjen.</li>
+        <li>c) Kërkojë dhe mbajë një Depozitë Sigurie sipas Nenit 7.</li>
+      </ul>
+
+      <!-- ARTICLE 10 -->
+      <h2><strong>NENI 10: TË DREJTAT DHE DETYRIMET E KLIENTIT</strong></h2>
+      <p class='paragraph'><strong>10.1. Klienti duhet të:</strong></p>
+      <ul class='definition-list'>
+        <li>a) Pranojë dhe të paguajë për energjinë elektrike të furnizuar nga
+          Furnizuesi në përputhje me kushtet e kësaj Kontrate.</li>
+        <li>b) I japë Furnizuesit informacion të saktë të nevojshëm për
+          parashikimin, planifikimin dhe faturimin në kohën e duhur, sipas
+          kërkesës së arsyeshme.</li>
+        <li>c) Nuk do të rishesë, devijojë ose përdorë energjinë elektrike të
+          furnizuar jashtë kushteve të kësaj Kontrate pa pëlqimin paraprak me
+          shkrim të Furnizuesit dhe të operatorit të tregut (KEDS).</li>
+        <li>d) Të zbatojë të gjitha ligjet, rregulloret, Rregullat e Tregut dhe
+          kërkesat teknike në fuqi në lidhje me instalimet dhe konsumin e
+          energjisë elektrike.</li>
+        <li>e) Të mbajë instalimet e tij elektrike poshtë Pikës(ave) të
+          Dorëzimit në një gjendje të rregullt, të sigurt dhe në përputhje me
+          standardet në fuqi.</li>
+        <li>f) Të njoftojë menjëherë Furnizuesin për çdo ndryshim në të dhënat e
+          tij të kontaktit, statusin ligjor ose çdo rrethanë që mund të ndikojë
+          materialisht në aftësinë e tij për të kryer detyrimet e tij sipas
+          kësaj Kontrate.</li>
+      </ul>
+      <p class='paragraph'><strong>10.2. Klienti ka të drejtë të:</strong></p>
+      <ul class='definition-list'>
+        <li>a) Marrë energji elektrike në përputhje me kushtet e kësaj Kontrate.</li>
+        <li>b) Të marrë shërbime në përputhje me të gjitha të drejtat e
+          përcaktuara nga legjislacioni në fuqi dhe rregulloret e ZRRE-së.</li>
+        <li><strong>c)</strong>
+          Të informohet në mënyrë transparente rreth çmimeve, termave dhe
+          kushteve të zbatueshme.</li>
+        <li><strong>d)</strong>
+          Të ketë akses në mekanizmat e zgjidhjes së mosmarrëveshjeve sipas
+          Nenit 16 dhe rregullave të ZRRE-së.</li>
+        <li><strong>e)</strong>
+          Të ndryshojë furnizuesin në përputhje me rregulloret e ZRRE-së, në
+          varësi të përmbushjes së detyrimeve të tij sipas kësaj Kontrate.</li>
+      </ul>
+
+      <!-- ARTICLE 11 -->
+      <h2><strong>NENI 11: PËRGJEGJËSIA DHE KUFIZIMET</strong></h2>
+      <p class='paragraph'><strong>11.1. Kufizimi i Përgjegjësisë:</strong>
+        Asnjëra Palë nuk do të jetë përgjegjëse ndaj Palës tjetër për ndonjë dëm
+        indirekt, të rastësishëm, pasues, të veçantë, ose ndëshkues (duke
+        përfshirë, por pa u kufizuar në humbjen e fitimit, humbjen e të
+        ardhurave, humbjen e prodhimit, humbjen e emrit të mirë ose ndërprerjen
+        e biznesit) që rrjedh nga ose në lidhje me këtë Kontratë, qoftë bazuar
+        në kontratë, delikt (duke përfshirë neglizhencën), përgjegjësi strikte
+        ose ndonjë teori tjetër ligjore, përveç rasteve të sjelljes së
+        qëllimshme të pahijshme, neglizhencës së rëndë ose shkeljes së
+        detyrimeve të konfidencialitetit.</p>
+      <p class='paragraph'><strong>11.2. Dëmshpërblimi:</strong>
+        Pavarësisht pretendimeve dhe arsyeve, vlera maksimale e dëmshpërblimit
+        kufizohet nga obligimet kontraktuale që rrjedhin nga kjo Kontratë.</p>
+
+      <!-- ARTICLE 12 -->
+      <h2><strong>NENI 12: FORCA MADHORE</strong></h2>
+      <p class='paragraph'><strong>12.1. Përkufizim:</strong>
+        Një @Ngjarje Force Madhore" do të thotë çdo akt ose ngjarje, e
+        parashikuar apo e paparashikuar, që është përtej kontrollit të arsyeshëm
+        të Palës së prekur, e pengon ose e vonon atë Palë nga kryerja e
+        detyrimeve të saj sipas kësaj Kontrate dhe nuk mund të ishte shmangur
+        ose kapërcyer me anë të ushtrimit të kujdesit të arsyeshëm. Ngjarje të
+        tilla mund të përfshijnë, por nuk kufizohen vetëm në: akte të Zotit (si
+        tërmete, përmbytje, rrufe, epidemi), luftë, terrorizëm, trazira civile,
+        sabotim, shpërthime, zjarre, greva të përgjithshme, veprime ose urdhra
+        të autoriteteve qeveritare ose rregullatore (përfshirë ZRRE-në, KOSTT,
+        KEDS dhe të tjerë) që ndikojnë drejtpërdrejt në performancë, ose dështim
+        të sistemit të transmetimit ose shpërndarjes. Furnizuesi nuk do të jetë
+        përgjegjës për mos furnizimin e energjisë në rastet e dështimeve të
+        Operatori i Sistemit të Transmisionit dhe Tregut (KOSTT) dhe Operatorit
+        të Sistemit të Shpërndarjes (KEDS).</p>
+      <p class='paragraph'><strong>12.2. Njoftimi:</strong>
+        Pala e prekur nga një Ngjarje e Forcës Madhore duhet të njoftojë Palën
+        tjetër me shkrim sa më shpejt të jetë e mundur, por jo më vonë se një
+        (1) Ditë kalendarike pasi të jetë vënë në dijeni të ngjarjes, duke
+        specifikuar natyrën e ngjarjes, kohëzgjatjen e saj të pritur dhe
+        detyrimet e prekura.</p>
+      <p class='paragraph'><strong>12.3. Përfundimi:</strong>
+        Nëse një Ngjarje e Forcës Madhore vazhdon për një periudhë që tejkalon
+        gjashtëdhjetë (60) ditë rresht, secila Palë do të ketë të drejtë ta
+        ndërpresë këtë Kontratë duke i dhënë Palës tjetër një njoftim me shkrim
+        pesëmbëdhjetë (15) ditë përpara, pa përgjegjësi të mëtejshme, përveç
+        detyrimeve të grumbulluara para përfundimit.</p>
+
+      <!-- ARTICLE 13 -->
+      <h2><strong>NENI 13: KONFIDENCIALITETI DHE MBROJTJA E TË DHËNAVE</strong></h2>
+      <p class='paragraph'><strong>13.1.</strong>
+        Secila Palë do të trajtojë si konfidenciale të gjitha Informacionet
+        Konfidenciale të marra nga Pala tjetër në lidhje me këtë Kontratë dhe
+        nuk do t'ia zbulojë ato asnjë pale të tretë pa pëlqimin paraprak me
+        shkrim të Palës zbuluese, përveç rasteve kur:
+        <br />a) bëhet fjalë për Filialet e saj, punonjësit, zyrtarët,
+        drejtorët, agjentët, konsulentët ose këshilltarët profesionalë që duhet
+        të dinë informacion të tillë për qëllimet e kësaj Kontrate dhe që janë
+        të detyruar nga detyrime ekuivalente të konfidencialitetit;
+        <br />b) kërkohet nga ligji, rregullorja, urdhri i gjykatës ose nga një
+        autoritet rregullator kompetent (përfshirë ZRRE-në, OST-në, OSSH-në);
+        <br />c) informacioni është tashmë publik përveçse nëpërmjet një
+        shkeljeje të këtij Neni;
+        <br />d) përdorimit të emrit të Klientit nga Furnizuesi për çështje të
+        PR/komunikimit.
+      </p>
+      <p class='paragraph'><strong>13.2.</strong>
+        Detyrimet e konfidencialitetit sipas këtij Neni do të vazhdojnë pas
+        përfundimit ose skadimit të kësaj Kontrate për një periudhë prej tre (3)
+        vjetësh.</p>
+      <p class='paragraph'><strong>13.3.</strong>
+        Të dyja Palët do të zbatojnë të gjitha ligjet dhe rregulloret në fuqi
+        për mbrojtjen e të dhënave në Kosovë në lidhje me përpunimin e çdo të
+        dhëne personale të shkëmbyer ose të përpunuar në lidhje me këtë
+        Kontratë.</p>
+
+      <!-- ARTICLE 14 -->
+      <h2><strong>NENI 14: NDËRPRERJA DHE PASOJAT</strong></h2>
+      <p class='paragraph'><strong>14.1. Ndërprerja nga Furnizuesi:</strong>
+        Furnizuesi mund ta ndërpresë këtë Kontratë menjëherë me njoftim me
+        shkrim për Klientin në rastet kur:
+        <br /><strong>a)</strong>
+        Klienti nuk arrin të bëjë pagesat e detyrueshme sipas Nenit 6 brenda
+        pesë (5) Ditë Pune pas njoftimit me shkrim për mospërmbushje nga
+        Furnizuesi;
+        <br /><strong>b)</strong>
+        Klienti nuk arrin të ofrojë ose të rimbushë Depozitën e Sigurisë në
+        përputhje me Nenin 7;
+        <br /><strong>c)</strong>
+        Klienti është në shkelje materiale të ndonjë detyrimi tjetër sipas kësaj
+        Kontrate, dhe një shkelje e tillë nuk korrigjohet brenda dhjetë (10)
+        Ditë Pune nga njoftimi me shkrim nga Furnizuesi;
+        <br /><strong>d)</strong>
+        Siç kërkohet ose lejohet nga ligji, Rregullat e Tregut ose udhëzimet nga
+        një autoritet kompetent.
+      </p>
+      <p class='paragraph'><strong>14.2. Ndërprerja nga Klienti:</strong>
+        Klienti mund ta ndërpresë këtë Kontratë në përputhje me rregullat e
+        ZRRE-së për ndërrimin e furnizuesit, me kusht që të gjitha detyrimet e
+        papaguara ndaj Furnizuesit të jenë zgjidhur. [Konsideroni nëse kërkohet
+        ndonjë periudhë specifike njoftimi nga Klienti përveç rregullave të
+        ZRRE-së, nëse lejohet].</p>
+      <p class='paragraph'><strong>14.4. Pasojat e Ndërprerjes:</strong>
+        Pas ndërprerjes ose skadimit të kësaj Kontrate:
+        <br /><strong>a)</strong>
+        Furnizuesi do të ndërpresë furnizimin me energji elektrike të Klientit;
+        <br /><strong>b)</strong>
+        Të dyja Palët do të shlyejnë menjëherë të gjitha pagesat e papaguara dhe
+        detyrimet e tjera të grumbulluara deri në datën e ndërprerjes.
+        Furnizuesi do të lëshojë një faturë përfundimtare;
+        <br /><strong>c)</strong>
+        Dispozitat e kësaj Kontrate që nga natyra e tyre synojnë të mbijetojnë
+        pas ndërprerjes (duke përfshirë, por pa u kufizuar në Nenet 11, 13, 16,
+        18) do të mbeten në fuqi të plotë.
+      </p>
+      <p class='paragraph'><strong>14.5. Tarifa e Ndërprerjes së Parakohshme:</strong>
+        Nëse Klienti e ndërpret këtë Kontratë para skadimit të Afatit Fillestar,
+        përveç për një arsye të lejuar sipas kësaj Kontrate ose ligjit në fuqi,
+        Klienti do t'i paguajë Furnizuesit një Tarifa të Ndërprerjes së
+        Parakohshme me shumën ekuivalente për dy muaj paraprak.</p>
+
+      <!-- ARTICLE 15 -->
+      <h2><strong>NENI 15: TRANSFERIMI, RINOVIMI DHE NDRYSHIMI I KONTROLLIT</strong></h2>
+      <p class='paragraph'><strong>15.1. Transferimi:</strong>
+        Asnjëra Palë nuk mund të transferojë të drejtat ose detyrimet e saj
+        sipas kësaj Kontrate, tërësisht ose pjesërisht.</p>
+      <p class='paragraph'><strong>15.2.</strong>
+        Pavarësisht Nenit 15.1, Furnizuesi mund t'ia transferojë këtë Kontratë
+        një Filiali ose në lidhje me një bashkim, shitje të pothuajse të gjitha
+        aseteve të tij ose ristrukturim të korporatës, me kusht që furnizuesi i
+        ri të ketë një licencë të vlefshme të ZRRE-së për furnizim/tregti
+        energjie elektrike dhe të jetë i aftë të kryejë detyrimet e Furnizuesit
+        sipas kësaj Kontrate. Furnizuesi gjithashtu mund të transferojë të
+        drejtat e tij për të marrë pagesa sipas kësaj Kontrate.</p>
+
+      <!-- ARTICLE 16 -->
+      <h2><strong>NENI 16: MEKANIZMI I ZGJIDHJES SË MOSMARRËVESHJEVE</strong></h2>
+      <p class='paragraph'><strong>16.1. Negocimi Miqësor:</strong>
+        Në rast të ndonjë mosmarrëveshjeje, polemike ose pretendimi që rrjedh
+        nga ose lidhet me këtë Kontratë, shkeljen, ndërprerjen ose vlefshmërinë
+        e saj (një "Mosmarrëveshje"), Palët së pari duhet të përpiqen ta
+        zgjidhin Mosmarrëveshjen në mënyrë miqësore përmes negociatave me
+        mirëbesim midis përfaqësuesve të tyre të autorizuar brenda pesëmbëdhjetë
+        (15) ditëve nga njoftimi me shkrim (email) i Mosmarrëveshjes.</p>
+      <p class='paragraph'><strong>16.2. Referimi te ZRRE-ja:</strong>
+        Nëse Mosmarrëveshja bie brenda juridiksionit rregullator të ZRRE-së dhe
+        nuk zgjidhet përmes negociatave miqësore brenda periudhës së specifikuar
+        në Nenin 16.1, secila Palë mund ta referojë Mosmarrëveshjen te ZRRE-ja
+        për zgjidhje në përputhje me rregullat dhe procedurat e zbatueshme të
+        ZRRE-së për zgjidhjen e mosmarrëveshjeve.</p>
+      <p class='paragraph'><strong>16.3. Juridiksioni i Gjykatës:</strong>
+        Për çdo Mosmarrëveshje që nuk zgjidhet përmes negociatave ose nga
+        ZRRE-ja, ose që nuk bie brenda juridiksionit të ZRRE-së, Palët i
+        nënshtrohen në mënyrë të pakthyeshme juridiksionit ekskluziv të Gjykatës
+        Komerciale në Prishtinë, Republika e Kosovës, për zgjidhje.</p>
+
+      <!-- ARTICLE 17 -->
+      <h2><strong>NENI 17: NJOFTIMET DHE KOMUNIKIMI</strong></h2>
+      <p class='paragraph'><strong>17.1.</strong>
+        Të gjitha njoftimet, kërkesat dhe komunikimet e tjera sipas kësaj
+        Kontrate do të jenë me shkrim dhe do të konsiderohen të dhëna siç duhet:
+        <br /><strong>a)</strong>
+        Me transmetim me email, me kusht që marrja të konfirmohet elektronikisht
+        ose me një kopje jo-elektronike pasuese, të adresuar Palëve në adresat e
+        tyre përkatëse ose adresat e email-it të specifikuara më poshtë; ose
+        <br /><strong>b)</strong>
+        Kur dorëzohen personalisht ose dërgohen me postë të regjistruar ose
+        shërbim korrieri, ose siç njoftohet ndryshe me shkrim nga njëra Palë te
+        tjetra.
+      </p>
+      <p class='paragraph'><strong>17.2.</strong>
+        Secila Palë duhet të njoftojë menjëherë me shkrim Palën tjetër për çdo
+        ndryshim në të dhënat e saj të kontaktit të dhëna në kontratë.</p>
+
+      <!-- ARTICLE 18 -->
+      <h2><strong>NENI 18: LIGJI DHE GJUHA QË RREGULLOHET</strong></h2>
+      <p class='paragraph'><strong>18.1. Ligji Rregullues:</strong>
+        Kjo Kontratë dhe çdo detyrim jokontraktual që rrjedh nga ose në lidhje
+        me të do të rregullohet dhe interpretohet në përputhje me ligjet e
+        Republikës së Kosovës.</p>
+      <p class='paragraph'><strong>18.2. Gjuha:</strong>
+        Kjo Kontratë ekzekutohet në gjuhën shqipe.</p>
+
+      <!-- ARTICLE 19 -->
+      <h2><strong>NENI 19: DISPOZITA TË PËRGJITHSHME</strong></h2>
+      <p class='paragraph'><strong>19.1. Ndryshimet:</strong>
+        Asnjë ndryshim, modifikim ose heqje dorë nga ndonjë dispozitë e kësaj
+        Kontrate nuk do të jetë në fuqi nëse nuk bëhet me shkrim dhe nuk
+        nënshkruhet nga përfaqësues të autorizuar siç duhet të të dyja Palëve.</p>
+      <p class='paragraph'><strong>19.2. Pajtueshmëria me Rregullat e ZRRE-së:</strong>
+        Palët pranojnë se kjo Kontratë i nënshtrohet rregullave dhe rregulloreve
+        të ZRRE-së, dhe ato bien dakord të përmbushin të gjitha obligimet dhe
+        detyrimet nga rregullat dhe rregulloret e tilla në fuqi.</p>
+
+      <p class='paragraph'><strong>NË DËSHMI TË KËSAJ,</strong>
+        Palët këtu kanë bërë që kjo Kontratë të nënshkruhet nga përfaqësuesit e
+        tyre të autorizuar siç duhet që në Datën e Hyrjes në Fuqi.</p>
+
+      <!-- SIGNATURE BLOCKS -->
+      <div class='signature-blocks'>
+        <div class='signature-box'>
+          <p><strong>Për dhe në emër të Furnizuesit:</strong>
+            {{supplier.name}}</p>
+          <p><strong>Emri:</strong> {{supplier.representativeName}}</p>
+          <p><strong>Titulli:</strong> {{supplier.representativeTitle}}</p>
+          <p><strong>Autorizimi:</strong> Sipas ARBK</p>
+          <p><strong>Data:</strong> {{contract.effectiveDate}}</p>
+          <p><strong>Adresa:</strong> {{supplier.address}}</p>
+          <p><strong>Email:</strong> {{supplier.email}}</p>
+          <p><strong>Telefoni:</strong> {{supplier.phone}}</p>
+          <p><strong>Numri i biznesit:</strong> {{supplier.regNo}}</p>
+          <p><strong>Licenca:</strong> {{supplier.licenseNo}}</p>
+          <p><strong>Nënshkrimi:</strong></p>
+          <p><strong>Vula:</strong></p>
+        </div>
+
+        <div class='signature-box'>
+          <p><strong>Për dhe në emër të Klientit:</strong>
+            {{customer.companyName}}</p>
+          <p><strong>Emri:</strong> {{customer.authorizedRepresentative}}</p>
+          <p><strong>Titulli:</strong> {{customer.companyRole}}</p>
+          <p><strong>Autorizimi:</strong> {{customer.legalStatus}}</p>
+          <p><strong>Data:</strong> {{contract.effectiveDate}}</p>
+          <p><strong>Adresa:</strong>
+            {{customer.registeredAddress}},
+            {{customer.cityRegion}}</p>
+          <p><strong>Email:</strong> {{customer.defaultOperationalEmail}}</p>
+          <p><strong>Telefoni:</strong> {{customer.phone}}</p>
+          <p><strong>Numri i biznesit:</strong>
+            {{customer.registrationNumber}}</p>
+          <p><strong>Nënshkrimi:</strong></p>
+          <p><strong>Vula:</strong></p>
+        </div>
+      </div>
+
+      <!-- APPENDICES LIST -->
+      <h2><strong>LISTA E SHTOJCAVE</strong></h2>
+      <p class='paragraph'>
+        Shtojcat e mëposhtme bashkëngjiten dhe përbëjnë pjesë integrale të kësaj
+        Kontrate:
+      </p>
+      <ul class='definition-list'>
+        <li>
+          <strong>Shtojca 1:</strong>
+          Lista e Pikave të Matjes dhe Specifikimeve Teknike
+          <br />Detaje: ID-të e Pikës së Matjes; Adresa(t) e Pikës(ave) së
+          Dorëzimit; Grupi(et) Tarifor; Niveli(et) i Tensionit; Kapaciteti i
+          Kontraktuar (nëse aplikohet).
+        </li>
+        <li>
+          <strong>Shtojca 2:</strong>
+          Profili i Konsumit të Klientit / Kërkesat e të Dhënave të Parashikimit
+          (nëse aplikohet)
+        </li>
+        <li>
+          <strong>Shtojca 3:</strong>
+          Të dhënat e kontaktit për njoftimet dhe komunikimet operative
+          <br />Shënim: Përdoret nëse ndryshojnë nga Neni 17 ose kërkohen më të
+          detajuara.
+        </li>
+        <li>
+          <strong>Shtojca 4:</strong>
+          Formatet e Dokumenteve të Sigurisë
+          <br />Shembull: Model për Garanci Bankare ose Letër Krediti (nëse
+          është e aplikueshme).
+        </li>
+        <li>
+          <strong>Shtojca 5:</strong>
+          Orari i Çmimeve dhe Metodologjia e Llogaritjes
+          <br />Shënim: Përdoret kur kërkohen tabela/formula të detajuara.
+        </li>
+        <li>
+          <strong>Shtojca 6:</strong>
+          Përmbledhje e të Drejtave dhe Detyrimeve të Klientit (sipas kërkesave
+          të ZRRE-së)
+        </li>
+      </ul>
+
+      <div class='page-break'></div>
+
+      <!-- APPENDIX 1 -->
+      <h2><strong>SHTOJCA 1: LISTA E PIKAVE(VE) TË MATJES DHE SPECIFIKIMEVE
+          TEKNIKE</strong></h2>
+
+      <p class='paragraph'>
+        Ky Shtojcë përbën një pjesë integrale të Kontratës së Furnizimit me
+        Energji Elektrike të datës
+        <strong>{{contract.effectiveDate}}</strong>
+        midis
+        <strong>{{supplier.name}}</strong>
+        ("Furnizuesi") dhe
+        <strong>{{customer.companyName}}</strong>
+        ("Klienti").
+      </p>
+
+      <h3><strong>1. Informacion mbi pikën e matjes:</strong></h3>
+      <table class='metering-table'>
+        <thead>
+          <tr>
+            <th>Nr.</th>
+            <th>ID e Pikës së Matjes (OSSH/OST)</th>
+            <th>Adresa e plotë e pikës së dorëzimit</th>
+            <th>Qyteti/Vendi</th>
+            <th>Grupi Tarifor</th>
+            <th>Niveli i tensionit</th>
+            <th>Kapaciteti i Kontraktuar</th>
+            <th>Shënime/Kushte Specifike</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each customer.branches}}
+            {{#each meteringPoints}}
+              <tr>
+                <td>{{@index}}</td>
+                <td>{{this.id}}</td>
+                <td>{{this.deliveryAddress}}</td>
+                <td>{{this.cityOrLocality}}</td>
+                <td>{{this.tariffGroup}}</td>
+                <td>{{this.voltageLevel}}</td>
+                <td>{{this.contractedCapacityValue}}
+                  {{this.contractedCapacityUnit}}</td>
+                <td>{{this.notes}}</td>
+              </tr>
+            {{/each}}
+          {{/each}}
+        </tbody>
+      </table>
+
+      <h3><strong>2. Personi Teknik i Kontaktit për Pikat e Matjes (Ana e
+          Klientit):</strong></h3>
+      <table class='metering-contacts-table'>
+        <thead>
+          <tr>
+            <th>Nr.</th>
+            <th>ID e Pikës së Matjes</th>
+            <th>Emri</th>
+            <th>Titulli</th>
+            <th>Telefoni</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each customer.branches}}
+            {{#each meteringPoints}}
+              <tr>
+                <td>{{@index}}</td>
+                <td>{{this.id}}</td>
+                <td>{{this.technicalContactName}}</td>
+                <td>{{this.technicalContactTitle}}</td>
+                <td>{{this.technicalContactPhone}}</td>
+                <td>{{this.technicalContactEmail}}</td>
+              </tr>
+            {{/each}}
+          {{/each}}
+        </tbody>
+      </table>
+
+      <h3><strong>3. Specifikime Teknike Shtesë (nëse ka):</strong></h3>
+      <table class='metering-extra-table'>
+        <thead>
+          <tr>
+            <th>Nr.</th>
+            <th>ID e Pikës së Matjes</th>
+            <th>Lloji i Matësit</th>
+            <th>Specifikat e Lidhjes</th>
+            <th>Kërkesa Maksimale e Dakorduar (kW)</th>
+            <th>Statusi Operacional</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each customer.branches}}
+            {{#each meteringPoints}}
+              <tr>
+                <td>{{@index}}</td>
+                <td>{{this.id}}</td>
+                <td>{{this.meterType}}</td>
+                <td>{{this.connectionSpecs}}</td>
+                <td>{{this.agreedMaxDemandKw}}</td>
+                <td>{{this.operationalStatus}}</td>
+              </tr>
+            {{/each}}
+          {{/each}}
+        </tbody>
+      </table>
+
+      <p class='paragraph'><strong>Dakord dhe i konfirmuar:</strong></p>
+
+      <div class='signature-blocks'>
+        <div class='signature-box'>
+          <p><strong>Për Furnizuesin ({{supplier.name}}):</strong></p>
+          <p>Emri: ____________________</p>
+          <p>Titulli: ____________________</p>
+          <p>Data: ____________________</p>
+        </div>
+        <div class='signature-box'>
+          <p><strong>Për Klientin ({{customer.companyName}}):</strong></p>
+          <p>Emri: ____________________</p>
+          <p>Titulli: ____________________</p>
+          <p>Data: ____________________</p>
+        </div>
+      </div>
+
+      <div class='page-break'></div>
+
+      <!-- APPENDIX 2 -->
+      <h2><strong>SHTOJCA 2: PROFILI I KONSUMI TË KLIENTIT / KËRKESAT PËR TË
+          DHËNA PARASHIKIMI</strong></h2>
+
+      <p class='paragraph'>
+        Ky Shtojcë përbën një pjesë integrale të Kontratës së Furnizimit me
+        Energji Elektrike të datës
+        <strong>{{contract.effectiveDate}}</strong>
+        midis
+        <strong>{{supplier.name}}</strong>
+        ("Furnizuesi") dhe
+        <strong>{{customer.companyName}}</strong>
+        ("Klienti").
+      </p>
+
+      <h3><strong>1. Detyrimi i Parashikimit:</strong></h3>
+      <ul class='definition-list'>
+        <li>Klienti duhet t'i japë Furnizuesit vlerësimin e tij më të mirë të
+          parashikimeve të konsumit të energjisë elektrike për Pikat e Dorëzimit
+          të listuara në Shtojcën 1.</li>
+        <li>Parashikimet duhet të ofrohen për periudhat e mëposhtme: per ore per
+          cdo Dite per tere Muajin.</li>
+        <li>Afati i fundit për dorëzimin: Parashikimet për muaji pasardhës duhet
+          t'i dorëzohen Furnizuesit jo më vonë se ora 10:00 e mëngjesit 5 Ditë
+          Pune para fillimit të muajit për parashikimet mujore.</li>
+      </ul>
+
+      <h3><strong>2. Formati i të dhënave të parashikimit:</strong></h3>
+      <ul class='definition-list'>
+        <li>Të dhënat e parashikimit duhet të dorëzohen në formatin e
+          spreadsheet Excel me email.</li>
+        <li>Modeli për dorëzimin e parashikimit është bashkëngjitur këtu si
+          Shtojca 2.A / do të sigurohet nga Furnizuesi dhe dergohet me email tek
+          klienti.</li>
+        <li>Pikat e të dhënave të kërkuara për interval parashikimi: Konsumi i
+          pritur i kWh cdo 15 minuta per 2 vitet e ardhshme.</li>
+      </ul>
+
+      <h3><strong>3. Të dhëna historike të konsumit:</strong></h3>
+      <ul class='definition-list'>
+        <li>Me kërkesë të Furnizuesit, dhe në masën e disponueshme dhe të
+          lejueshme, Klienti duhet të ofrojë të dhëna historike të konsumit për
+          Pikat e Dorëzimit për të ndihmuar në parashikimin fillestar dhe
+          zhvillimin e profilit.</li>
+      </ul>
+
+      <h3><strong>4. Përditësime të Parashikimeve:</strong></h3>
+      <ul class='definition-list'>
+        <li>Klienti mund të paraqesë parashikime të rishikuara deri në 2 ditë
+          para periudhës së dorëzimit, në varësi të pranimit nga Furnizuesi dhe
+          Rregullave të Tregut në fuqi.</li>
+      </ul>
+
+      <h3><strong>5. Kontakti për dorëzimin e parashikimit:</strong></h3>
+      <ul class='definition-list'>
+        <li>Parashikimet duhet të dorëzohen në adresën e mëposhtme të email-it
+          ose te personi i kontaktit te Furnizuesi:</li>
+      </ul>
+      <p class='paragraph'>
+        <strong>Email:</strong>
+        {{supplier.email}}<br />
+        <strong>Vëmendje:</strong>
+        Plani i parashikimit per
+        {{customer.companyName}}
+      </p>
+
+      <p class='paragraph'><strong>Dakord dhe i konfirmuar:</strong></p>
+
+      <div class='signature-blocks'>
+        <div class='signature-box'>
+          <p><strong>Për Furnizuesin ({{supplier.name}}):</strong></p>
+          <p>Emri: ____________________</p>
+          <p>Titulli: ____________________</p>
+          <p>Data: ____________________</p>
+        </div>
+        <div class='signature-box'>
+          <p><strong>Për Klientin ({{customer.companyName}}):</strong></p>
+          <p>Emri: ____________________</p>
+          <p>Titulli: Drejtor</p>
+          <p>Data: ____________________</p>
+        </div>
+      </div>
+
+      <div class='page-break'></div>
+
+      <!-- APPENDIX 3 -->
+      <h2><strong>SHTOJCA 3: TË DHËNAT E KONTAKTIT PËR NJOFTIMET DHE KOMUNIKIMET
+          OPERACIONALE</strong></h2>
+
+      <p class='paragraph'>
+        Ky Shtojcë përbën pjesë integrale të Kontratës së Furnizimit me Energji
+        Elektrike të datës
+        <strong>{{contract.effectiveDate}}</strong>
+        midis
+        <strong>{{supplier.name}}</strong>
+        ("Furnizuesi") dhe
+        <strong>{{customer.companyName}}</strong>
+        ("Klienti").
+      </p>
+
+      <p class='paragraph'>
+        Ky Shtojcë plotëson Nenin 17 (Njoftimet dhe Komunikimi) të Kontratës.
+      </p>
+
+      <h3><strong>1. Njoftime Zyrtare</strong></h3>
+      <p class='paragraph'><strong>Furnizuesi ({{supplier.name}})</strong></p>
+      <p class='paragraph'><strong>Adresa:</strong> {{supplier.address}}</p>
+      <p class='paragraph'><strong>Email:</strong> {{supplier.email}}</p>
+      <p class='paragraph'><strong>Vëmendje:</strong> ____________________</p>
+
+      <p class='paragraph'><strong>Klienti ({{customer.companyName}})</strong></p>
+      <p class='paragraph'><strong>Adresa:</strong>
+        {{customer.registeredAddress}},
+        {{customer.cityRegion}}</p>
+      <p class='paragraph'><strong>Email:</strong>
+        {{customer.legalNoticeEmail}}</p>
+      <p class='paragraph'><strong>Vëmendje:</strong> ____________________</p>
+
+      <h3><strong>2. Komunikime Operacionale</strong></h3>
+      <p class='paragraph'>
+        Për shembull: parashikim, planifikim, ndërprerje, pyetje për faturim që
+        nuk janë mosmarrëveshje formale.
+      </p>
+
+      <p class='paragraph'><strong>Furnizuesi ({{supplier.name}})</strong></p>
+      <p class='paragraph'><strong>Departamenti:</strong>
+        ____________________</p>
+      <p class='paragraph'><strong>Personi i Kontaktit:</strong>
+        ____________________</p>
+      <p class='paragraph'><strong>Telefoni:</strong> {{supplier.phone}}</p>
+      <p class='paragraph'><strong>Email:</strong> {{supplier.email}}</p>
+      <p class='paragraph'><strong>Orari i Punës:</strong>
+        ____________________</p>
+
+      <p class='paragraph'><strong>Klienti ({{customer.companyName}})</strong></p>
+      <p class='paragraph'><strong>Departamenti:</strong>
+        ____________________</p>
+      <p class='paragraph'><strong>Personi i Kontaktit:</strong>
+        ____________________</p>
+      <p class='paragraph'><strong>Telefoni:</strong> {{customer.phone}}</p>
+      <p class='paragraph'><strong>Email:</strong>
+        {{customer.defaultOperationalEmail}}</p>
+      <p class='paragraph'><strong>Orari i Punës:</strong>
+        ____________________</p>
+
+      <div class='page-break'></div>
+
+      <!-- APPENDIX 4 -->
+      <h2><strong>SHTOJCA 4: KONTAKTET E PËRSHKALLËZIMIT</strong></h2>
+
+      <p class='paragraph'>
+        Ky Shtojcë përbën një pjesë integrale të Kontratës së Furnizimit me
+        Energji Elektrike të datës
+        <strong>{{contract.effectiveDate}}</strong>
+        midis
+        <strong>{{supplier.name}}</strong>
+        ("Furnizuesi") dhe
+        <strong>{{customer.companyName}}</strong>
+        ("Klienti").
+      </p>
+
+      <h3><strong>3. Kontaktet e Përshkallëzimit (për çështje operative të
+          pazgjidhura para mosmarrëveshjes formale):</strong></h3>
+
+      <p class='paragraph'><strong>Furnizuesi ({{supplier.name}})</strong></p>
+      <p class='paragraph'><strong>Kontakti për Përshkallëzim:</strong></p>
+      <p class='paragraph'><strong>Emri:</strong> ____________________</p>
+      <p class='paragraph'><strong>Titulli:</strong> ____________________</p>
+      <p class='paragraph'><strong>Telefoni:</strong> {{supplier.phone}}</p>
+      <p class='paragraph'><strong>Email:</strong> {{supplier.email}}</p>
+
+      <p class='paragraph'><strong>Klienti ({{customer.companyName}})</strong></p>
+      <p class='paragraph'><strong>Kontakti për Përshkallëzim:</strong></p>
+      <p class='paragraph'><strong>Emri:</strong> ____________________</p>
+      <p class='paragraph'><strong>Titulli:</strong> ____________________</p>
+      <p class='paragraph'><strong>Telefoni:</strong> {{customer.phone}}</p>
+      <p class='paragraph'><strong>Email:</strong>
+        {{customer.defaultEscalationEmail}}</p>
+
+      <p class='paragraph'>
+        Palët bien dakord të njoftojnë menjëherë njëra-tjetrën me shkrim për çdo
+        ndryshim në të dhënat e kontaktit të dhëna në këtë Shtojcë.
+      </p>
+
+      <p class='paragraph'><strong>Dakord dhe i konfirmuar:</strong></p>
+
+      <div class='signature-blocks'>
+        <div class='signature-box'>
+          <p><strong>Për Furnizuesin ({{supplier.name}}):</strong></p>
+          <p>Emri: ____________________</p>
+          <p>Titulli: ____________________</p>
+          <p>Data: ____________________</p>
+        </div>
+        <div class='signature-box'>
+          <p><strong>Për Klientin ({{customer.companyName}}):</strong></p>
+          <p>Emri: ____________________</p>
+          <p>Titulli: ____________________</p>
+          <p>Data: ____________________</p>
+        </div>
+      </div>
+
+      <div class='page-break'></div>
+
+      <!-- APPENDIX 5 -->
+      <h2><strong>SHTOJCA 5: PËRMBLEDHJE E TË DREJTAVE DHE DETYRIMEVE TË
+          KLIENTËVE (SIPAS KËRKESAVE TË ZRRE-së)</strong></h2>
+
+      <p class='paragraph'>
+        Ky Shtojcë përbën një pjesë integrale të Kontratës së Furnizimit me
+        Energji Elektrike të datës
+        <strong>{{contract.effectiveDate}}</strong>
+        midis
+        <strong>{{supplier.name}}</strong>
+        ("Furnizuesi") dhe
+        <strong>{{customer.companyName}}</strong>
+        ("Klienti").
+      </p>
+
+      <h3><strong>A. TË DREJTAT E KLIENTIT</strong></h3>
+      <p class='paragraph'>Si klient komercial i energjisë elektrike në Kosovë,
+        ju keni të drejta, duke përfshirë, por pa u kufizuar në:</p>
+
+      <p class='paragraph'><strong>1. E drejta për trajtim jo-diskriminues:</strong>
+        Të merrni shërbime të furnizimit me energji elektrike pa diskriminim në
+        lidhje me çmimet, termat dhe kushtet, me kusht që të jeni në një
+        kategori të ngjashme me klientët e tjerë.</p>
+
+      <p class='paragraph'><strong>2. E drejta për marrëdhënie kontraktuale
+          transparente:</strong>
+        Të keni një kontratë të qartë dhe të kuptueshme që detajon të gjitha
+        termat dhe kushtet, duke përfshirë çmimet, kohëzgjatjen, rinovimin dhe
+        përfundimin.</p>
+
+      <p class='paragraph'><strong>3. E drejta për informacion:</strong></p>
+
+      <p class='paragraph'>- Të informoheni rreth çmimeve, tarifave dhe çdo
+        ndryshimi të tyre me njoftim paraprak, sipas Kontratës dhe rregullave të
+        ZRRE-së.</p>
+
+      <p class='paragraph'>- Të merrni fatura të sakta dhe në kohë që detajojnë
+        konsumin dhe tarifat tuaja.</p>
+
+      <p class='paragraph'>- Të merrni informacion në lidhje me të dhënat tuaja
+        historike të konsumit (në varësi të disponueshmërisë dhe rregullave
+        përkatëse).</p>
+
+      <p class='paragraph'>- Të informoheni rreth burimeve të energjisë që
+        përbëjnë përzierjen e përgjithshme të karburantit të Furnizuesit dhe
+        ndikimin e tyre mjedisor, siç ofrohet nga Furnizuesi.</p>
+
+      <p class='paragraph'><strong>4. E drejta për të zgjedhur dhe ndryshuar
+          furnizuesin:</strong>
+        Të zgjidhni lirisht furnizuesin tuaj të energjisë elektrike dhe të
+        ndërroni furnizuesit në përputhje me rregullat e ZRRE-së, zakonisht pa
+        pagesë (në varësi të përmbushjes së detyrimeve sipas kontratës
+        ekzistuese).</p>
+
+      <p class='paragraph'><strong>5. E drejta për kompensim:</strong>
+        Për të kërkuar kompensim për dëmet ose humbjet e shkaktuara për shkak të
+        dështimit të Furnizuesit për të përmbushur nivelet e cilësisë së
+        shërbimit të kontraktuar ose për faturim të pasaktë, në përputhje me
+        kontratën dhe rregullat e ZRRE-së.</p>
+
+      <p class='paragraph'><strong>6. E drejta për trajtimin e ankesave dhe
+          zgjidhjen e mosmarrëveshjeve:</strong></p>
+      <p class='paragraph'>- Të paraqisni ankesa te Furnizuesi në lidhje me
+        shërbimet e ofruara. Furnizuesi duhet të ketë një procedurë të qartë dhe
+        efektive për trajtimin e tyre.</p>
+      <p class='paragraph'>- Nëse një ankesë nuk zgjidhet në mënyrë të
+        kënaqshme, keni të drejtë ta referoni mosmarrëveshjen në ZRRE për
+        ndërmjetësim ose në gjykatat kompetente, sipas Kontratës.</p>
+
+      <p class='paragraph'><strong>7. E drejta për mbrojtjen e të dhënave:</strong>
+        Që të dhënat tuaja personale dhe të konsumit të trajtohen sipas ligjeve
+        për mbrojtjen e të dhënave në fuqi.</p>
+
+      <h3><strong>B. DETYRIMET E KLIENTIT</strong></h3>
+      <p class='paragraph'>Si klient komercial i energjisë elektrike në Kosovë,
+        ju keni detyrime, duke përfshirë, por pa u kufizuar në:</p>
+
+      <h3><strong>B. DETYRIMET E KLIENTIT</strong></h3>
+
+      <p class='paragraph'><strong>1. Detyrimi për të Paguar:</strong>
+        Të paguajë për energjinë elektrike të konsumuar dhe të gjitha tarifat e
+        tjera të zbatueshme sipas kushteve të Kontratës dhe faturave të lëshuara
+        nga Furnizuesi.</p>
+
+      <p class='paragraph'><strong>2. Detyrimi për t'iu përmbajtur Kushteve
+          Kontraktuese:</strong>
+        Të respektojë të gjitha termat dhe kushtet e përcaktuara në këtë
+        Kontratë Furnizimi me Energji Elektrike.</p>
+
+      <p class='paragraph'><strong>3. Detyrimi për të dhënë informacion të
+          saktë:</strong>
+        T'i ofrojë Furnizuesit informacion të saktë të nevojshëm për krijimin
+        dhe mirëmbajtjen e shërbimit të furnizimit, duke përfshirë qëllime
+        parashikimi dhe faturimi, dhe të njoftojë menjëherë Furnizuesin për çdo
+        ndryshim në këtë informacion.</p>
+
+      <p class='paragraph'><strong>4. Detyrimi në lidhje me instalimet
+          elektrike:</strong></p>
+      <p class='paragraph'>- Për të siguruar që instalimet tuaja elektrike
+        poshtë Pikës(ave) së Dorëzimit janë projektuar, instaluar, mirëmbajtur
+        dhe operuar në një mënyrë të sigurt dhe në përputhje me të gjitha
+        standardet teknike dhe kërkesat ligjore në fuqi.</p>
+      <p class='paragraph'>- Për të parandaluar çdo ndërhyrje ose dëmtim të
+        Pajisjeve Matëse ose rrjetit të shpërndarjes/transmetimit.</p>
+
+      <p class='paragraph'><strong>5. Detyrimi për të dhënë akses:</strong>
+        Të siguroni akses të sigurt dhe të papenguar në ambientet tuaja për
+        personelin e autorizuar të Furnizuesit dhe/ose Operatorit të Sistemit
+        (KEDS/KOSTT) për qëllime leximi, inspektimi, testimi, mirëmbajtja,
+        riparimi ose zëvendësimi të Pajisjeve Matëse, ose për veprime të tjera
+        të nevojshme që lidhen me furnizimin me energji elektrike, në përputhje
+        me rregulloret në fuqi.</p>
+
+      <p class='paragraph'><strong>6. Detyrimi për të Mos Rishitur/Devijuar
+          Energjinë Elektrike:</strong>
+        Të mos rishisni, devijoni ose përdorni energjinë elektrike të furnizuar
+        sipas kësaj Kontrate në asnjë vend tjetër përveç Pikës(ave) të Dorëzimit
+        të specifikuara ose për ndonjë qëllim tjetër përveç konsumit tuaj
+        vetjak, pa pëlqimin paraprak me shkrim të Furnizuesit.</p>
+
+      <p class='paragraph'><strong>7. Detyrimi për t'iu përmbajtur Rregullave të
+          Tregut:</strong>
+        Të përmbushen Rregullat dhe rregulloret e zbatueshme të Tregut që lidhen
+        me konsumatorët e energjisë elektrike.</p>
+
+      <h3><strong>C. SHËNIME TË RËNDËSISHME</strong></h3>
+      <p class='paragraph'>- Ky përmbledhje nuk është shteruese dhe nuk
+        zëvendëson dispozitat e detajuara të Kontratës së Furnizimit me Energji
+        Elektrike ose ligjet dhe rregulloret në fuqi të ZRRE-së.</p>
+      <p class='paragraph'>- Për detaje të plota mbi të drejtat dhe detyrimet
+        tuaja, ju lutemi referojuni trupit kryesor të kësaj Kontrate, Shtojcave
+        të saj, si dhe legjislacionit përkatës dhe rregullave të ZRRE-së.</p>
+      <p class='paragraph'>- Furnizuesi ({{supplier.name}}) është i licencuar
+        dhe i rregulluar nga Zyra e Rregullatorit të Energjisë (ZRRE) e Kosovës.
+        Të dhënat e kontaktit për ZRRE-në mund të gjenden në faqen e tyre
+        zyrtare të internetit.</p>
+      <p class='paragraph'>- Ju inkurajoheni të njiheni me "Rregulloren mbi
+        Kushtet e Përgjithshme të Furnizimit me Energji" të ZRRE-së dhe
+        udhëzimet e tjera përkatëse për mbrojtjen e konsumatorit.</p>
+
+      <p class='paragraph'><strong>Njoftim nga Klienti:</strong>
+        Klienti pranon se e ka marrë dhe e ka kuptuar këtë përmbledhje të të
+        drejtave dhe detyrimeve të tij.</p>
+
+      <div class='signature-blocks'>
+        <div class='signature-box'>
+          <p><strong>Për Klientin ({{customer.companyName}}):</strong></p>
+          <p>Emri: ____________________</p>
+          <p>Titulli: ____________________</p>
+          <p>Data: ____________________</p>
+        </div>
+      </div>
+
+    </section>
+
+  </body>
+</html>

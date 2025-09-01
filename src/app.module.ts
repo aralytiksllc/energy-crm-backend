@@ -1,6 +1,6 @@
 // External
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 // Internal
 import { EmailModule } from './common/email/email.module';
@@ -14,12 +14,22 @@ import { ContactModule } from './modules/contacts/contact.module';
 import { MeteringPointModule } from './modules/metering-points/metering-point.module';
 import { ConsumptionModule } from './modules/consumptions/consumption.module';
 import { ContractModule } from './modules/contracts/contract.module';
+import { DocumentModule } from './modules/documents/document.module';
+import { AzureStorageModule } from './common/azure-storage';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+    }),
+    AzureStorageModule.withConfigAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        connectionString: config.get<string>('AZURE_STORAGE_CONNECTION_STRING')!,
+        accountName: config.get<string>('AZURE_STORAGE_ACCOUNT_NAME')!,
+        containerName: config.get<string>('AZURE_STORAGE_CONTAINER_NAME')!,
+      }),
     }),
     PrismaModule,
     EmailModule,
@@ -32,6 +42,7 @@ import { ContractModule } from './modules/contracts/contract.module';
     MeteringPointModule,
     ConsumptionModule,
     ContractModule,
+    DocumentModule,
   ],
 })
 export class AppModule {}

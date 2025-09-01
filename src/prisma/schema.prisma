@@ -131,11 +131,10 @@ model Customer {
   preferredCommunicationLanguage String?   @db.VarChar(50)
 
   // Relations
-  branches Branch[]
-
-  contacts Contact[]
-
+  branches  Branch[]
+  contacts  Contact[]
   contracts Contract[]
+  documents Document[]
 
   // Mapping
   @@map("customers")
@@ -231,24 +230,37 @@ model Contract {
   @@map("contracts")
 }
 
+model ConsumptionFile {
+  id           Int     @id @default(autoincrement())
+  name         String  @db.VarChar(255)
+  originalName String  @db.VarChar(255)
+  mimeType     String  @db.VarChar(100)
+  size         Int
+  path         String  @db.VarChar(500)
+  description  String? @db.Text
+
+  consumptions Consumption[]
+
+  @@map("consumption_files")
+}
+
 model Consumption {
-  // Primary & scalar fields
   id                        Int      @id @default(autoincrement())
   timestamp                 DateTime @db.Timestamp(0)
   timeframe                 String   @db.VarChar(50)
-  electricityConsumptionKwh Float?
+  electricityConsumptionKwh Decimal? @db.Decimal(12, 6)
 
-  // Foreign keys (scalar)
-  meteringPointId Int
-  contractId      Int?
+  meteringPointId   Int
+  contractId        Int?
+  consumptionFileId Int?
 
-  // Relations
-  meteringPoint MeteringPoint @relation(fields: [meteringPointId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  contract      Contract?     @relation(fields: [contractId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  meteringPoint   MeteringPoint    @relation(fields: [meteringPointId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  contract        Contract?        @relation(fields: [contractId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  consumptionFile ConsumptionFile? @relation(fields: [consumptionFileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  // Indexes & mapping
   @@unique([meteringPointId, timestamp, timeframe])
   @@index([contractId])
+  @@index([consumptionFileId])
   @@map("consumption")
 }
 
@@ -274,4 +286,27 @@ model Contact {
 enum ContactStatus {
   ACTIVE
   INACTIVE
+}
+
+model Document {
+  // Primary & scalar fields
+  id           Int     @id @default(autoincrement())
+  name         String  @db.VarChar(255)
+  originalName String  @db.VarChar(255)
+  mimeType     String  @db.VarChar(100)
+  size         Int
+  path         String  @db.VarChar(500)
+  description  String? @db.Text
+  documentType String? @db.VarChar(64)
+
+  // Foreign keys (scalar)
+  customerId Int
+
+  // Relations
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // Indexes & mapping
+  @@index([customerId])
+  @@index([documentType])
+  @@map("documents")
 }

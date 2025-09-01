@@ -31,7 +31,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   // Global guards
-  // app.useGlobalGuards(new AuthJwtGuard(reflector));
+  app.useGlobalGuards(new AuthJwtGuard(reflector));
 
   // Use qs parser for query strings
   const expressApp = app.getHttpAdapter().getInstance();

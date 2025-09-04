@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 // Internal
-import { PrismaModule } from './prisma/prisma.module';
-import { prismaExtension } from './prisma/prisma.extension';
+import { PrismaModule } from './common/prisma/prisma.module';
+import { prismaExtension } from './common/prisma/prisma.extension';
 import { EmailModule } from './common/email/email.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/users/user.module';
@@ -25,7 +25,8 @@ import { AzureStorageModule } from './common/azure-storage';
       envFilePath: '.env',
     }),
     PrismaModule.forRootAsync({
-      name: 'PrismaService',
+      name: 'Prisma',
+      isGlobal: true,
       useFactory: () => prismaExtension,
     }),
     AzureStorageModule.withConfigAsync({

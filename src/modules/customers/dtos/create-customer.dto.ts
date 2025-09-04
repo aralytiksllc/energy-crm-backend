@@ -1,3 +1,4 @@
+// External
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
@@ -6,6 +7,8 @@ import {
   IsNumber,
   IsDateString,
 } from 'class-validator';
+
+// Internal
 
 export class CreateCustomerDto {
   @ApiProperty()

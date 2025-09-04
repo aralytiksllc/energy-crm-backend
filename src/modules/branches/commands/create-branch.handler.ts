@@ -3,9 +3,9 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 
 // Internal
-import { PrismaService } from '@/prisma/prisma.service';
-import { type PrismaExtension } from '@/prisma/prisma.extension';
-import { type Prisma, type Branch } from '@/prisma/prisma.client';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type Prisma, type Branch } from '@/common/prisma/prisma.client';
 import { BranchCreatedEvent } from '../events/branch-created.event';
 import { CreateBranchCommand } from './create-branch.command';
 
@@ -14,8 +14,8 @@ export class CreateBranchHandler
   implements ICommandHandler<CreateBranchCommand, Branch>
 {
   constructor(
-    @Inject('PrismaService')
-    private readonly prismaService: PrismaService<PrismaExtension>,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -36,7 +36,7 @@ export class CreateBranchHandler
       };
     }
 
-    const branch = await this.prismaService.client.branch.create({ data });
+    const branch = await this.prisma.client.branch.create({ data });
 
     this.eventBus.publish(new BranchCreatedEvent(branch));
 

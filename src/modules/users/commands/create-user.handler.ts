@@ -1,10 +1,8 @@
 // External
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { Inject } from '@nestjs/common';
 
 // Internal
-import { PrismaService } from '@/prisma/prisma.service';
-import { type PrismaExtension } from '@/prisma/prisma.extension';
+import { Prisma } from '@/common/prisma';
 import { type User } from '@/prisma/prisma.client';
 import { UserCreatedEvent } from '../events/user-created.event';
 import { CreateUserCommand } from './create-user.command';
@@ -13,8 +11,7 @@ import { Hash } from '@/common/hash/hash.impl';
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
-    @Inject('PrismaService')
-    private readonly prismaService: PrismaService<PrismaExtension>,
+    private readonly prisma: Prisma,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -23,7 +20,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       command.dto.password = await Hash.make(command.dto.password);
     }
 
-    const user = await this.prismaService.client.user.create({
+    const user = await this.prisma.client.user.create({
       data: { ...command.dto },
     });
 

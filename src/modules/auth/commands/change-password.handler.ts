@@ -1,27 +1,30 @@
 // External
 import { ForbiddenException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import type { User } from '@prisma/client';
+import { Inject } from '@nestjs/common';
 
 // Internal
 import { Hash } from '@/common/hash/hash.impl';
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type User } from '@/common/prisma/prisma.client';
 import { PasswordChangedEvent } from '../events/password-changed.event';
 import { ChangePasswordCommand } from './change-password.command';
 
 @CommandHandler(ChangePasswordCommand)
 export class ChangePasswordHandler
-  implements ICommandHandler<ChangePasswordCommand>
+  implements ICommandHandler<ChangePasswordCommand, User>
 {
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   public async execute(command: ChangePasswordCommand): Promise<User> {
     const { userId, password, token } = command.dto;
 
-    const user = await this.prismaService.$transaction(async (tx) => {
+    const user = await this.prisma.client.$transaction(async (tx) => {
       const { count } = await tx.passwordReset.deleteMany({
         where: { token, userId, expiresAt: { gt: new Date() } },
       });

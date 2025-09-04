@@ -1,19 +1,23 @@
 // External
-import { UnauthorizedException } from '@nestjs/common';
+import { Inject, UnauthorizedException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 
 // Internal
 import { Hash } from '@/common/hash/hash.impl';
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
 import { LoggedInEvent } from '../events/logged-in.event';
 import { AuthResponse } from '../auth.interfaces';
 import { LoginCommand } from './login.command';
 
 @CommandHandler(LoginCommand)
-export class LoginHandler implements ICommandHandler<LoginCommand> {
+export class LoginHandler
+  implements ICommandHandler<LoginCommand, AuthResponse>
+{
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly jwtService: JwtService,
     private readonly eventBus: EventBus,
   ) {}
@@ -21,7 +25,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
   public async execute(command: LoginCommand): Promise<AuthResponse> {
     const { email, password } = command.dto;
 
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.prisma.client.user.findUnique({
       where: { email },
     });
 

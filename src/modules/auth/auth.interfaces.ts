@@ -1,5 +1,5 @@
 // External
-import type { User } from '@prisma/client';
+import { type User } from '@/common/prisma/prisma.client';
 
 // Internal
 

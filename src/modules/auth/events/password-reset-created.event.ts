@@ -1,7 +1,7 @@
 // External
-import type { User, PasswordReset } from '@prisma/client';
 
 // Internal
+import { type User, type PasswordReset } from '@/common/prisma/prisma.client';
 
 export class PasswordResetCreatedEvent {
   constructor(

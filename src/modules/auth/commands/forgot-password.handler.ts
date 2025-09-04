@@ -1,36 +1,39 @@
 // External
-import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
 import { Token } from '@/common/token/token.impl';
 import { DateTime } from '@/common/datetime/datetime.impl';
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type Prisma } from '@/common/prisma/prisma.client';
 import { PasswordResetCreatedEvent } from '../events/password-reset-created.event';
 import { ForgotPasswordCommand } from './forgot-password.command';
 
 @CommandHandler(ForgotPasswordCommand)
 export class ForgotPasswordHandler
-  implements ICommandHandler<ForgotPasswordCommand>
+  implements ICommandHandler<ForgotPasswordCommand, void>
 {
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   public async execute(command: ForgotPasswordCommand): Promise<void> {
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.prisma.client.user.findUniqueOrThrow({
       where: { email: command.dto.email },
     });
 
-    if (!user) throw new NotFoundException('User not found.');
+    const data: Prisma.PasswordResetCreateInput = {
+      token: Token.generate(),
+      expiresAt: DateTime.expiresInHours(15),
+      user: { connect: { id: user.id } },
+    };
 
-    const passwordReset = await this.prismaService.passwordReset.create({
-      data: {
-        userId: user.id,
-        token: Token.generate(),
-        expiresAt: DateTime.expiresInHours(15),
-      },
+    const passwordReset = await this.prisma.client.passwordReset.create({
+      data,
     });
 
     this.eventBus.publish(new PasswordResetCreatedEvent(user, passwordReset));

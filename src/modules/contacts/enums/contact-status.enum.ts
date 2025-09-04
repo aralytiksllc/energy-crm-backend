@@ -1,4 +1,6 @@
+// External
 
+// Internal
 
 export enum ContactStatus {
   ACTIVE = 'ACTIVE',

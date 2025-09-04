@@ -13,7 +13,7 @@ import {
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import { type Contact } from '@/prisma/prisma.client';
+import { type Contact } from '@/common/prisma/prisma.client';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { FindManyContactsDto } from './dtos/find-many-contacts.dto';
 import { UpdateContactDto } from './dtos/update-contact.dto';

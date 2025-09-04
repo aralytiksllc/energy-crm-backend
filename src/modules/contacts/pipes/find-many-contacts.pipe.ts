@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 // Internal
 import { FindManyPipe } from '@/common/cqrs/queries/find-many.pipe';
-import type { Prisma } from '@/prisma/prisma.service';
+import { type Prisma } from '@/common/prisma/prisma.client';
 
 @Injectable()
 export class FindManyContactsPipe extends FindManyPipe<
@@ -12,7 +12,19 @@ export class FindManyContactsPipe extends FindManyPipe<
 > {
   constructor() {
     super(
-      ['id', 'name', 'type', 'role', 'phone', 'email', 'status', 'customerId'],
+      [
+        'id',
+        'name',
+        'type',
+        'department',
+        'role',
+        'phone',
+        'email',
+        'status',
+        'preferredLanguage',
+        'branchName',
+        'customerId',
+      ],
       [],
       [{ id: 'desc' }],
     );

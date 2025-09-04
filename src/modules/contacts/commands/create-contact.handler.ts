@@ -3,9 +3,9 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 
 // Internal
-import { PrismaService } from '@/prisma/prisma.service';
-import { type PrismaExtension } from '@/prisma/prisma.extension';
-import { type Prisma, type Contact } from '@/prisma/prisma.client';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type Prisma, type Contact } from '@/common/prisma/prisma.client';
 import { ContactCreatedEvent } from '../events/contact-created.event';
 import { CreateContactCommand } from './create-contact.command';
 
@@ -14,8 +14,8 @@ export class CreateContactHandler
   implements ICommandHandler<CreateContactCommand, Contact>
 {
   constructor(
-    @Inject('PrismaService')
-    private readonly prismaService: PrismaService<PrismaExtension>,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -30,7 +30,7 @@ export class CreateContactHandler
       },
     };
 
-    const contact = await this.prismaService.client.contact.create({ data });
+    const contact = await this.prisma.client.contact.create({ data });
 
     this.eventBus.publish(new ContactCreatedEvent(contact));
 

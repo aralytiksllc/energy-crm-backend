@@ -1,15 +1,10 @@
+// External
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsString,
-  IsOptional,
-  IsEmail,
-  IsNumber,
-} from 'class-validator';
+import { IsString, IsOptional, IsEmail, IsNumber } from 'class-validator';
+
+// Internal
 
 export class CreateContactDto {
-  @ApiProperty()
-  id: number;
-
   @ApiProperty()
   @IsString()
   name: string;

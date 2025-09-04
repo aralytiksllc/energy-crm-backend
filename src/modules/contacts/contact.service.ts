@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import { type Contact } from '@/prisma/prisma.client';
+import { type Contact } from '@/common/prisma/prisma.client';
 import { CreateContactCommand } from './commands/create-contact.command';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { DeleteContactCommand } from './commands/delete-contact.command';

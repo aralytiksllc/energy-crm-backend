@@ -3,9 +3,9 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 
 // Internal
-import { PrismaService } from '@/prisma/prisma.service';
-import { type PrismaExtension } from '@/prisma/prisma.extension';
-import { type Contact } from '@/prisma/prisma.client';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type Contact } from '@/common/prisma/prisma.client';
 import { ContactDeletedEvent } from '../events/contact-deleted.event';
 import { DeleteContactCommand } from './delete-contact.command';
 
@@ -14,13 +14,13 @@ export class DeleteContactHandler
   implements ICommandHandler<DeleteContactCommand, Contact>
 {
   constructor(
-    @Inject('PrismaService')
-    private readonly prismaService: PrismaService<PrismaExtension>,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: DeleteContactCommand): Promise<Contact> {
-    const contact = await this.prismaService.client.contact.delete({
+    const contact = await this.prisma.client.contact.delete({
       where: { id: command.id },
     });
 

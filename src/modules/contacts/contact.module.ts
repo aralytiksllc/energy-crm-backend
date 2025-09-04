@@ -8,13 +8,12 @@ import { DeleteContactHandler } from './commands/delete-contact.handler';
 import { FindManyContactsPipe } from './pipes/find-many-contacts.pipe';
 import { FindManyContactsHandler } from './queries/find-many-contacts.handler';
 import { FindOneContactHandler } from './queries/find-one-contact.handler';
-import { PrismaModule } from '@/prisma/prisma.module';
 import { UpdateContactHandler } from './commands/update-contact.handler';
 import { ContactController } from './contact.controller';
 import { ContactService } from './contact.service';
 
 @Module({
-  imports: [CqrsModule, PrismaModule],
+  imports: [CqrsModule],
   controllers: [ContactController],
   providers: [
     FindManyContactsPipe,

@@ -1,10 +1,10 @@
+// External
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsOptional, IsNumber } from 'class-validator';
 
-export class CreateBranchDto {
-  @ApiProperty()
-  id: number;
+// Internal
 
+export class CreateBranchDto {
   @ApiProperty()
   @IsString()
   name: string;

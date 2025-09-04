@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import { type Branch } from '@/prisma/prisma.client';
+import { type Branch } from '@/common/prisma/prisma.client';
 import { CreateBranchCommand } from './commands/create-branch.command';
 import { CreateBranchDto } from './dtos/create-branch.dto';
 import { DeleteBranchCommand } from './commands/delete-branch.command';

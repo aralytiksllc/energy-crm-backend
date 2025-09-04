@@ -13,6 +13,7 @@ export class FindManyCustomersPipe extends FindManyPipe<
   constructor() {
     super(
       [
+        'id',
         'name',
         'registeredAddress',
         'legalNoticeEmail',

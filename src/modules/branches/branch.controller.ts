@@ -13,7 +13,7 @@ import {
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import { type Branch } from '@/prisma/prisma.client';
+import { type Branch } from '@/common/prisma/prisma.client';
 import { CreateBranchDto } from './dtos/create-branch.dto';
 import { FindManyBranchsDto } from './dtos/find-many-branchs.dto';
 import { UpdateBranchDto } from './dtos/update-branch.dto';

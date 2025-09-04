@@ -8,13 +8,12 @@ import { DeleteBranchHandler } from './commands/delete-branch.handler';
 import { FindManyBranchsPipe } from './pipes/find-many-branchs.pipe';
 import { FindManyBranchsHandler } from './queries/find-many-branchs.handler';
 import { FindOneBranchHandler } from './queries/find-one-branch.handler';
-import { PrismaModule } from '@/prisma/prisma.module';
 import { UpdateBranchHandler } from './commands/update-branch.handler';
 import { BranchController } from './branch.controller';
 import { BranchService } from './branch.service';
 
 @Module({
-  imports: [CqrsModule, PrismaModule],
+  imports: [CqrsModule],
   controllers: [BranchController],
   providers: [
     FindManyBranchsPipe,

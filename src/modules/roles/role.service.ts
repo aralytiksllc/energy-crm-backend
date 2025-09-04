@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import type { Role } from '@/prisma/prisma.service';
+import { type Role } from '@/common/prisma/prisma.client';
 import { CreateRoleCommand } from './commands/create-role.command';
 import { CreateRoleDto } from './dtos/create-role.dto';
 import { DeleteRoleCommand } from './commands/delete-role.command';

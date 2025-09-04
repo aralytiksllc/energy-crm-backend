@@ -33,7 +33,7 @@ export class CustomerController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Customer> {
-    return this.customerService.findOne(+id);
+    return this.customerService.findOne(id);
   }
 
   @Post()
@@ -46,11 +46,11 @@ export class CustomerController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateCustomerDto,
   ): Promise<Customer> {
-    return this.customerService.update(+id, dto);
+    return this.customerService.update(id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number): Promise<Customer> {
-    return this.customerService.delete(+id);
+    return this.customerService.delete(id);
   }
 }

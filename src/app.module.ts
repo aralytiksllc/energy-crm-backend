@@ -25,7 +25,7 @@ import { AzureStorageModule } from './common/azure-storage';
       envFilePath: '.env',
     }),
     PrismaModule.forRootAsync({
-      name: 'Prisma',
+      name: 'prisma',
       isGlobal: true,
       useFactory: () => prismaExtension,
     }),

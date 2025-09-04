@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 // Internal
 import { FindManyPipe } from '@/common/cqrs/queries/find-many.pipe';
-import type { Prisma } from '@/prisma/prisma.service';
+import { type Prisma } from '@/common/prisma/prisma.client';
 
 @Injectable()
 export class FindManyRolesPipe extends FindManyPipe<
@@ -11,6 +11,6 @@ export class FindManyRolesPipe extends FindManyPipe<
   Prisma.RoleOrderByWithRelationInput
 > {
   constructor() {
-    super(['id', 'name'], [], [{ id: 'desc' }]);
+    super(['id', 'name', 'description'], [], [{ id: 'desc' }]);
   }
 }

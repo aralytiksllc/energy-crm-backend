@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -12,7 +13,7 @@ import {
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import type { Role } from '@/prisma/prisma.service';
+import { type Role } from '@/common/prisma/prisma.client';
 import { CreateRoleDto } from './dtos/create-role.dto';
 import { FindManyRolesDto } from './dtos/find-many-roles.dto';
 import { UpdateRoleDto } from './dtos/update-role.dto';
@@ -31,8 +32,8 @@ export class RoleController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number): Promise<Role> {
-    return this.roleService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Role> {
+    return this.roleService.findOne(id);
   }
 
   @Post()
@@ -41,12 +42,15 @@ export class RoleController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() dto: UpdateRoleDto): Promise<Role> {
-    return this.roleService.update(+id, dto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateRoleDto,
+  ): Promise<Role> {
+    return this.roleService.update(id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number): Promise<Role> {
-    return this.roleService.delete(+id);
+  remove(@Param('id', ParseIntPipe) id: number): Promise<Role> {
+    return this.roleService.delete(id);
   }
 }

@@ -1,26 +1,26 @@
 // External
-import { NotFoundException } from '@nestjs/common';
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { Role } from '@/prisma/prisma.service';
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type Role } from '@/common/prisma/prisma.client';
 import { FindOneRoleQuery } from './find-one-role.query';
 
 @QueryHandler(FindOneRoleQuery)
-export class FindOneRoleHandler implements IQueryHandler<FindOneRoleQuery> {
-  constructor(private readonly prisma: PrismaService) {}
+export class FindOneRoleHandler
+  implements IQueryHandler<FindOneRoleQuery, Role>
+{
+  constructor(
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
+  ) {}
 
   async execute(query: FindOneRoleQuery): Promise<Role> {
-    const role = await this.prisma.role.findUnique({
+    return await this.prisma.client.role.findUniqueOrThrow({
       where: { id: query.id },
       include: { permissions: true },
     });
-
-    if (!role) {
-      throw new NotFoundException('Role not found.');
-    }
-
-    return role;
   }
 }

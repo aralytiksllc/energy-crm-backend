@@ -39,7 +39,7 @@ export class ConsumptionController {
 
   @Get(':id')
   findOne(@Param('id') id: number): Promise<Consumption> {
-    return this.consumptionService.findOne(+id);
+    return this.consumptionService.findOne(id);
   }
 
   @Post()
@@ -75,11 +75,11 @@ export class ConsumptionController {
     @Param('id') id: number,
     @Body() dto: UpdateConsumptionDto,
   ): Promise<Consumption> {
-    return this.consumptionService.update(+id, dto);
+    return this.consumptionService.update(id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: number): Promise<Consumption> {
-    return this.consumptionService.delete(+id);
+    return this.consumptionService.delete(id);
   }
 }

@@ -2,6 +2,6 @@
 
 // Internal
 import { FindManyQuery } from '@/common/cqrs/queries/find-many.query';
-import type { Prisma } from '@/prisma/prisma.service';
+import { type Prisma } from '@/common/prisma/prisma.client';
 
 export class FindManyRolesQuery extends FindManyQuery<Prisma.RoleWhereInput> {}

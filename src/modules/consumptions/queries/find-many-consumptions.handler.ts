@@ -1,5 +1,5 @@
 // External
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 
 // Internal
 import { Paginate } from '@/common/paginate';

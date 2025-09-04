@@ -32,7 +32,7 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: number): Promise<User> {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
   @Post()
@@ -42,11 +42,11 @@ export class UserController {
 
   @Put(':id')
   update(@Param('id') id: number, @Body() dto: UpdateUserDto): Promise<User> {
-    return this.userService.update(+id, dto);
+    return this.userService.update(id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: number): Promise<User> {
-    return this.userService.delete(+id);
+    return this.userService.delete(id);
   }
 }

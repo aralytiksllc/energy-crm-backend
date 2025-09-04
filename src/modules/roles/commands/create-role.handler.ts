@@ -3,9 +3,9 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 
 // Internal
-import { PrismaService } from '@/prisma/prisma.service';
-import { type PrismaExtension } from '@/prisma/prisma.extension';
-import { type Role } from '@/prisma/prisma.client';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type Role } from '@/common/prisma/prisma.client';
 import { RoleCreatedEvent } from '../events/role-created.event';
 import { CreateRoleCommand } from './create-role.command';
 
@@ -14,13 +14,13 @@ export class CreateRoleHandler
   implements ICommandHandler<CreateRoleCommand, Role>
 {
   constructor(
-    @Inject('PrismaService')
-    private readonly prismaService: PrismaService<PrismaExtension>,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateRoleCommand): Promise<Role> {
-    const role = await this.prismaService.client.role.create({
+    const role = await this.prisma.client.role.create({
       data: { ...command.dto },
     });
 

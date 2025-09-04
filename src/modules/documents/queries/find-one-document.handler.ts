@@ -1,6 +1,6 @@
 // External
 import { NotFoundException } from '@nestjs/common';
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 
 // Internal
 import type { Document } from '@/prisma/prisma.service';

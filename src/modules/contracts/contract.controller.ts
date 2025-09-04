@@ -36,7 +36,7 @@ export class ContractController {
 
   @Get(':id')
   findOne(@Param('id') id: number): Promise<Contract> {
-    return this.contractService.findOne(+id);
+    return this.contractService.findOne(id);
   }
 
   @Post()
@@ -49,12 +49,12 @@ export class ContractController {
     @Param('id') id: number,
     @Body() dto: UpdateContractDto,
   ): Promise<Contract> {
-    return this.contractService.update(+id, dto);
+    return this.contractService.update(id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: number): Promise<Contract> {
-    return this.contractService.delete(+id);
+    return this.contractService.delete(id);
   }
 
   @Get(':id/generate-pdf')

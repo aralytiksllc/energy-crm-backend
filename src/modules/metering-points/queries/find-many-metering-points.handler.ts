@@ -4,18 +4,18 @@ import { Inject } from '@nestjs/common';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import { PrismaService } from '@/prisma/prisma.service';
-import { type PrismaExtension } from '@/prisma/prisma.extension';
-import { type Prisma, type MeteringPoint } from '@/prisma/prisma.client';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type Prisma, type MeteringPoint } from '@/common/prisma/prisma.client';
 import { FindManyMeteringPointsQuery } from './find-many-metering-points.query';
 
 @QueryHandler(FindManyMeteringPointsQuery)
 export class FindManyMeteringPointsHandler
-  implements IQueryHandler<FindManyMeteringPointsQuery>
+  implements IQueryHandler<FindManyMeteringPointsQuery, Paginate<MeteringPoint>>
 {
   constructor(
-    @Inject('PrismaService')
-    private readonly prismaService: PrismaService<PrismaExtension>,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
   ) {}
 
   async execute(
@@ -26,9 +26,9 @@ export class FindManyMeteringPointsHandler
       include: { branch: true },
     };
 
-    const [rows, count] = await this.prismaService.client.$transaction([
-      this.prismaService.client.meteringPoint.findMany(findOptions),
-      this.prismaService.client.meteringPoint.count({
+    const [rows, count] = await this.prisma.client.$transaction([
+      this.prisma.client.meteringPoint.findMany(findOptions),
+      this.prisma.client.meteringPoint.count({
         where: findOptions.where,
       }),
     ]);

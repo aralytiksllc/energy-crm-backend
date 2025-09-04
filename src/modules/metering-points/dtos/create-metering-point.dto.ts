@@ -1,11 +1,15 @@
+// External
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
   IsOptional,
   IsNumber,
-  IsEmail,
   IsDateString,
+  IsEmail,
+  IsObject,
 } from 'class-validator';
+
+// Internal
 
 export class CreateMeteringPointDto {
   @ApiProperty({ required: false })
@@ -98,8 +102,9 @@ export class CreateMeteringPointDto {
   @IsString()
   utilityProvider?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, type: Object })
   @IsOptional()
+  @IsObject()
   gpsCoordinates?: Record<string, any>;
 
   @ApiProperty({ required: false })

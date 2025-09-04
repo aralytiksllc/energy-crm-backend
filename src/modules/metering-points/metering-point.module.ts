@@ -8,14 +8,12 @@ import { DeleteMeteringPointHandler } from './commands/delete-metering-point.han
 import { FindManyMeteringPointsPipe } from './pipes/find-many-metering-points.pipe';
 import { FindManyMeteringPointsHandler } from './queries/find-many-metering-points.handler';
 import { FindOneMeteringPointHandler } from './queries/find-one-metering-point.handler';
-import { PrismaModule } from '@/prisma/prisma.module';
 import { UpdateMeteringPointHandler } from './commands/update-metering-point.handler';
 import { MeteringPointController } from './metering-point.controller';
 import { MeteringPointService } from './metering-point.service';
-import { MeteringPointSeed } from './metering-point.seed';
 
 @Module({
-  imports: [CqrsModule, PrismaModule],
+  imports: [CqrsModule],
   controllers: [MeteringPointController],
   providers: [
     FindManyMeteringPointsPipe,
@@ -25,7 +23,6 @@ import { MeteringPointSeed } from './metering-point.seed';
     UpdateMeteringPointHandler,
     DeleteMeteringPointHandler,
     MeteringPointService,
-    MeteringPointSeed,
   ],
   exports: [MeteringPointService],
 })

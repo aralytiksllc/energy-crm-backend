@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import type { MeteringPoint } from '@/prisma/prisma.service';
+import { type MeteringPoint } from '@/common/prisma/prisma.client';
 import { CreateMeteringPointCommand } from './commands/create-metering-point.command';
 import { CreateMeteringPointDto } from './dtos/create-metering-point.dto';
 import { DeleteMeteringPointCommand } from './commands/delete-metering-point.command';

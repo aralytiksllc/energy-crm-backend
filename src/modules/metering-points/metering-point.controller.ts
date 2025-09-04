@@ -13,7 +13,7 @@ import {
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import type { MeteringPoint } from '@/prisma/prisma.service';
+import { type MeteringPoint } from '@/common/prisma/prisma.client';
 import { CreateMeteringPointDto } from './dtos/create-metering-point.dto';
 import { FindManyMeteringPointsDto } from './dtos/find-many-metering-points.dto';
 import { UpdateMeteringPointDto } from './dtos/update-metering-point.dto';

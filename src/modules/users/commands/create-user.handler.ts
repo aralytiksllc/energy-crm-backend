@@ -1,17 +1,22 @@
 // External
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import { Prisma } from '@/common/prisma';
-import { type User } from '@/prisma/prisma.client';
+import { Hash } from '@/common/hash/hash.impl';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type User } from '@/common/prisma/prisma.client';
 import { UserCreatedEvent } from '../events/user-created.event';
 import { CreateUserCommand } from './create-user.command';
-import { Hash } from '@/common/hash/hash.impl';
 
 @CommandHandler(CreateUserCommand)
-export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
+export class CreateUserHandler
+  implements ICommandHandler<CreateUserCommand, User>
+{
   constructor(
-    private readonly prisma: Prisma,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 

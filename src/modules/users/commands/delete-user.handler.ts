@@ -3,22 +3,24 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 
 // Internal
-import { PrismaService } from '@/prisma/prisma.service';
-import { type PrismaExtension } from '@/prisma/prisma.extension';
-import { type User } from '@/prisma/prisma.client';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type User } from '@/common/prisma/prisma.client';
 import { UserDeletedEvent } from '../events/user-deleted.event';
 import { DeleteUserCommand } from './delete-user.command';
 
 @CommandHandler(DeleteUserCommand)
-export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
+export class DeleteUserHandler
+  implements ICommandHandler<DeleteUserCommand, User>
+{
   constructor(
-    @Inject('PrismaService')
-    private readonly prismaService: PrismaService<PrismaExtension>,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: DeleteUserCommand): Promise<User> {
-    const user = await this.prismaService.client.user.delete({
+    const user = await this.prisma.client.user.delete({
       where: { id: command.id },
     });
 

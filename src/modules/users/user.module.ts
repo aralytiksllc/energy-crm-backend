@@ -8,14 +8,12 @@ import { DeleteUserHandler } from './commands/delete-user.handler';
 import { FindManyUsersPipe } from './pipes/find-many-users.pipe';
 import { FindManyUsersHandler } from './queries/find-many-users.handler';
 import { FindOneUserHandler } from './queries/find-one-user.handler';
-import { PrismaModule } from '@/prisma/prisma.module';
 import { UpdateUserHandler } from './commands/update-user.handler';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { UserSeed } from './user.seed';
 
 @Module({
-  imports: [CqrsModule, PrismaModule],
+  imports: [CqrsModule],
   controllers: [UserController],
   providers: [
     FindManyUsersPipe,
@@ -25,7 +23,6 @@ import { UserSeed } from './user.seed';
     UpdateUserHandler,
     DeleteUserHandler,
     UserService,
-    UserSeed,
   ],
   exports: [UserService],
 })

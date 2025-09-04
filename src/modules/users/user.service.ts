@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import type { User } from '@/prisma/prisma.service';
+import { type User } from '@/common/prisma/prisma.client';
 import { CreateUserCommand } from './commands/create-user.command';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { DeleteUserCommand } from './commands/delete-user.command';

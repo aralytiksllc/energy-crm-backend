@@ -12,7 +12,7 @@ import {
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import type { User } from '@/prisma/prisma.service';
+import { type User } from '@/common/prisma/prisma.client';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { FindManyUsersDto } from './dtos/find-many-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';

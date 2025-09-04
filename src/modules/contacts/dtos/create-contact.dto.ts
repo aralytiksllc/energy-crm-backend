@@ -1,44 +1,60 @@
-// contact.dto.ts
+import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsEmail,
-  IsEnum,
-  IsInt,
-  IsOptional,
   IsString,
-  MaxLength,
+  IsOptional,
+  IsEmail,
+  IsNumber,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-import { ContactStatus } from '../enums/contact-status.enum';
 
 export class CreateContactDto {
-  @IsString()
-  @MaxLength(255)
-  name!: string;
+  @ApiProperty()
+  id: number;
 
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  @MaxLength(100)
-  type?: string | null;
+  type?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  @MaxLength(100)
-  role?: string | null;
+  department?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  @MaxLength(50)
-  phone?: string | null;
+  role?: string;
 
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsEmail()
-  @MaxLength(255)
-  email!: string;
+  email?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
-  @IsEnum(ContactStatus)
-  status?: ContactStatus;
+  @IsString()
+  status?: string;
 
-  @Type(() => Number)
-  @IsInt()
-  customerId!: number;
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  preferredLanguage?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  branchName?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  customerId: number;
 }

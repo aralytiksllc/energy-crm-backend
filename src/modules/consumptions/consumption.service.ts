@@ -3,8 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Consumption } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Consumption } from '@/prisma/prisma.service';
 import { CreateConsumptionCommand } from './commands/create-consumption.command';
 import { CreateConsumptionFileDto } from './dtos/create-consumption-file.dto';
 import { CreateConsumptionDto } from './dtos/create-consumption.dto';
@@ -22,7 +22,7 @@ export class ConsumptionService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(dto: FindManyConsumptionsDto): Promise<Paged<Consumption>> {
+  async findMany(dto: FindManyConsumptionsDto): Promise<Paginate<Consumption>> {
     const query = new FindManyConsumptionsQuery(dto);
     return this.queryBus.execute(query);
   }

@@ -2,8 +2,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Contact } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Contact } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FindManyContactsQuery } from './find-many-contacts.query';
 
@@ -11,7 +11,7 @@ import { FindManyContactsQuery } from './find-many-contacts.query';
 export class FindManyContactsHandler implements IQueryHandler<FindManyContactsQuery> {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async execute(query: FindManyContactsQuery): Promise<Paged<Contact>> {
+  async execute(query: FindManyContactsQuery): Promise<Paginate<Contact>> {
     const findOptions = query.dto.findOptions;
 
     const [rows, count] = await this.prismaService.$transaction([
@@ -19,6 +19,6 @@ export class FindManyContactsHandler implements IQueryHandler<FindManyContactsQu
       this.prismaService.contact.count({ where: findOptions.where }),
     ]);
 
-    return new Paged(rows, count, 1, 1);
+    return new Paginate(rows, count, 1, 1);
   }
 }

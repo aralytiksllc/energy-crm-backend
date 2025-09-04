@@ -12,7 +12,6 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { UpdateBranchHandler } from './commands/update-branch.handler';
 import { BranchController } from './branch.controller';
 import { BranchService } from './branch.service';
-import { BranchSeed } from './branch.seed';
 
 @Module({
   imports: [CqrsModule, PrismaModule],
@@ -25,7 +24,6 @@ import { BranchSeed } from './branch.seed';
     UpdateBranchHandler,
     DeleteBranchHandler,
     BranchService,
-    BranchSeed,
   ],
   exports: [BranchService],
 })

@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { User } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { User } from '@/prisma/prisma.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { FindManyUsersDto } from './dtos/find-many-users.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -26,7 +26,7 @@ export class UserController {
   @Get()
   findMany(
     @Query(FindManyUsersPipe) dto: FindManyUsersDto,
-  ): Promise<Paged<User>> {
+  ): Promise<Paginate<User>> {
     return this.userService.findMany(dto);
   }
 

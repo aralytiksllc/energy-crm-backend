@@ -3,8 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { MeteringPoint } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { MeteringPoint } from '@/prisma/prisma.service';
 import { CreateMeteringPointCommand } from './commands/create-metering-point.command';
 import { CreateMeteringPointDto } from './dtos/create-metering-point.dto';
 import { DeleteMeteringPointCommand } from './commands/delete-metering-point.command';
@@ -23,7 +23,7 @@ export class MeteringPointService {
 
   async findMany(
     dto: FindManyMeteringPointsDto,
-  ): Promise<Paged<MeteringPoint>> {
+  ): Promise<Paginate<MeteringPoint>> {
     const query = new FindManyMeteringPointsQuery(dto);
     return this.queryBus.execute(query);
   }

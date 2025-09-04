@@ -1,41 +1,38 @@
-import { IsInt, IsOptional, IsString, MaxLength } from 'class-validator';
-import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateDocumentDto {
-  @IsOptional()
+  @ApiProperty()
   @IsString()
-  @MaxLength(255)
   name: string;
 
+  @ApiProperty()
   @IsString()
-  @IsOptional()
-  @MaxLength(255)
   originalName: string;
 
+  @ApiProperty()
   @IsString()
-  @IsOptional()
-  @MaxLength(100)
   mimeType: string;
 
-  @IsOptional()
-  @IsInt()
+  @ApiProperty()
+  @IsNumber()
   size: number;
 
-  @IsOptional()
+  @ApiProperty()
   @IsString()
-  @MaxLength(500)
   path: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   description?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  @MaxLength(64)
   documentType?: string;
 
-  @Type(() => Number)
-  @IsInt()
-  customerId!: number;
+  @ApiProperty()
+  @IsNumber()
+  customerId: number;
 }

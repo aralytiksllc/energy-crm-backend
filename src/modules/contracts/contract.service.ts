@@ -3,8 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Contract } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Contract } from '@/prisma/prisma.service';
 import { CreateContractCommand } from './commands/create-contract.command';
 import { CreateContractDto } from './dtos/create-contract.dto';
 import { DeleteContractCommand } from './commands/delete-contract.command';
@@ -22,7 +22,7 @@ export class ContractService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(dto: FindManyContractsDto): Promise<Paged<Contract>> {
+  async findMany(dto: FindManyContractsDto): Promise<Paginate<Contract>> {
     const query = new FindManyContractsQuery(dto);
     return this.queryBus.execute(query);
   }

@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
 }
 
 datasource db {
@@ -13,300 +14,411 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/**
- * ============================
- * MODELS
- * ============================
- */
-
 model User {
-  // Primary & scalar fields
-  id        Int     @id @default(autoincrement())
-  firstName String
-  lastName  String
-  email     String  @unique
-  password  String
-  isActive  Boolean @default(true)
+  // Primary key
+  id Int @id @default(autoincrement()) @map("user_id")
 
-  // Foreign keys (scalar)
-  roleId       Int
-  departmentId Int?
+  // Attributes
+  firstName String  @map("user_first_name") @db.VarChar(255)
+  lastName  String  @map("user_last_name") @db.VarChar(255)
+  email     String  @unique @map("user_email") @db.VarChar(255)
+  password  String  @map("user_password") @db.VarChar(255)
+  isActive  Boolean @default(true) @map("user_is_active")
+
+  // Foreign keys
+  roleId       Int  @map("role_id")
+  departmentId Int? @map("department_id")
 
   // Relations
-  role           Role            @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  role           Role            @relation(fields: [roleId], references: [id])
   department     Department?     @relation(fields: [departmentId], references: [id])
   passwordResets PasswordReset[]
 
-  // Indexes & mapping
+  // Indexes & table mapping
   @@index([roleId])
   @@index([departmentId])
   @@map("users")
 }
 
 model Role {
-  // Primary & scalar fields
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  // Primary key
+  id Int @id @default(autoincrement()) @map("role_id")
+
+  // Attributes
+  name        String  @unique @map("role_name") @db.VarChar(100)
+  description String? @map("role_description") @db.VarChar(255)
 
   // Relations
   users       User[]
   permissions Permission[]
 
-  // Mapping
+  // Table mapping
   @@map("roles")
 }
 
 model Permission {
-  // Primary & scalar fields
-  id         Int    @id @default(autoincrement())
-  action     String
-  subject    String
-  conditions Json?
+  // Primary key
+  id Int @id @default(autoincrement()) @map("permission_id")
+
+  // Attributes
+  action      String  @map("permission_action") @db.VarChar(100)
+  subject     String  @map("permission_subject") @db.VarChar(100)
+  conditions  Json?   @map("permission_conditions")
+  description String? @map("permission_description") @db.VarChar(255)
 
   // Relations
   roles Role[]
 
-  // Mapping
+  // Table mapping
   @@map("permissions")
 }
 
 model Department {
-  // Primary & scalar fields
-  id       Int     @id @default(autoincrement())
-  name     String  @unique
-  code     String? @unique
-  isActive Boolean @default(true)
+  // Primary key
+  id Int @id @default(autoincrement()) @map("department_id")
+
+  // Attributes
+  name        String  @unique @map("department_name") @db.VarChar(100)
+  code        String? @unique @map("department_code") @db.VarChar(50)
+  isActive    Boolean @default(true) @map("department_is_active")
+  description String? @map("department_description") @db.VarChar(255)
 
   // Relations
   users User[]
 
-  // Mapping
+  // Table mapping
   @@map("departments")
 }
 
 model PasswordReset {
-  // Primary & scalar fields
-  id        Int       @id @default(autoincrement())
-  token     String
-  expiresAt DateTime? @db.Timestamptz(6)
+  // Primary key
+  id Int @id @default(autoincrement()) @map("password_reset_id")
 
-  // Foreign keys (scalar)
-  userId Int
+  // Attributes
+  token     String    @unique @map("password_reset_token")
+  expiresAt DateTime? @map("password_reset_expires_at") @db.Timestamptz(6)
+
+  // Foreign keys
+  userId Int @map("user_id")
 
   // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
 
-  // Indexes & mapping
-  @@unique([token])
+  // Indexes & table mapping
   @@index([userId])
   @@map("password_resets")
 }
 
 model Customer {
-  // Primary & scalar fields
-  id                             Int       @id @default(autoincrement())
-  companyName                    String    @db.VarChar(255)
-  registeredAddress              String?   @db.Text
-  legalNoticeEmail               String?   @db.VarChar(255)
-  phone                          String?   @db.VarChar(50)
-  defaultOperationalEmail        String?   @db.VarChar(255)
-  defaultEscalationEmail         String?   @db.VarChar(255)
-  registrationNumber             String?   @db.VarChar(50)
-  businessType                   String?   @db.VarChar(100)
-  registrationDate               DateTime? @db.Date
-  registeredCapital              Float?
-  companyStatus                  String?   @db.VarChar(50)
-  mainActivity                   String?   @db.VarChar(255)
-  legalId                        String?   @db.VarChar(255)
-  legalStatus                    String?   @db.VarChar(255)
-  companyCode                    String?   @db.VarChar(50)
-  companyType                    String?   @db.VarChar(50)
-  companyDescription             String?   @db.VarChar(255)
-  cityRegion                     String?   @db.VarChar(255)
-  authorizedRepresentative       String?   @db.VarChar(255)
-  companyRole                    String?   @db.VarChar(50)
-  sectorPrimary                  String?   @db.VarChar(255)
-  sectorSecondary                String?   @db.VarChar(255)
-  clientStatus                   String?   @db.VarChar(50)
-  preferredCommunicationLanguage String?   @db.VarChar(50)
+  // Primary key
+  id Int @id @default(autoincrement()) @map("customer_id")
+
+  // Attributes
+  name                           String    @unique @map("company_name") @db.VarChar(255)
+  registeredAddress              String?   @map("registered_address") @db.VarChar(255)
+  legalNoticeEmail               String?   @map("legal_notice_email") @db.VarChar(255)
+  phone                          String?   @map("phone") @db.VarChar(50)
+  defaultOperationalEmail        String?   @map("default_operational_email") @db.VarChar(255)
+  defaultEscalationEmail         String?   @map("default_escalation_email") @db.VarChar(255)
+  registrationNumber             String    @unique @map("registration_number") @db.VarChar(50)
+  businessType                   String?   @map("business_type") @db.VarChar(100)
+  registrationDate               DateTime? @map("registration_date") @db.Date
+  registeredCapital              Decimal?  @map("registered_capital") @db.Decimal(15, 2)
+  status                         String?   @map("company_status") @db.VarChar(50)
+  mainActivity                   String?   @map("main_activity") @db.VarChar(255)
+  legalId                        String?   @map("legal_id") @db.VarChar(255)
+  legalStatus                    String?   @map("legal_status") @db.VarChar(255)
+  code                           String?   @map("company_code") @db.VarChar(50)
+  type                           String?   @map("company_type") @db.VarChar(50)
+  description                    String?   @map("company_description") @db.VarChar(255)
+  cityRegion                     String?   @map("city_region") @db.VarChar(255)
+  authorizedRepresentative       String?   @map("authorized_representative") @db.VarChar(255)
+  role                           String?   @map("company_role") @db.VarChar(50)
+  sectorPrimary                  String?   @map("sector_primary") @db.VarChar(255)
+  sectorSecondary                String?   @map("sector_secondary") @db.VarChar(255)
+  preferredCommunicationLanguage String?   @map("preferred_communication_language") @db.VarChar(50)
 
   // Relations
-  branches  Branch[]
-  contacts  Contact[]
-  contracts Contract[]
-  documents Document[]
+  contacts Contact[]
+  branches Branch[]
+  Document Document[]
+  Contract Contract[]
 
-  // Mapping
+  // Table mapping
   @@map("customers")
 }
 
-model Branch {
-  // Primary & scalar fields
-  id                 Int     @id @default(autoincrement())
-  branchName         String  @db.VarChar(512)
-  peakLoadKw         Float?
-  weatherDataLinkage String? @db.VarChar(50)
+model Contact {
+  // Primary key
+  id Int @id @default(autoincrement()) @map("contact_id")
 
-  // Foreign keys (scalar)
-  customerId Int?
+  // Attributes
+  name              String  @map("contact_name") @db.VarChar(255)
+  type              String? @map("contact_type") @db.VarChar(50)
+  department        String? @map("company_department_of_contact") @db.VarChar(50)
+  role              String? @map("contact_role") @db.VarChar(50)
+  phone             String? @map("contact_phone") @db.VarChar(50)
+  email             String? @map("contact_email") @db.VarChar(255)
+  status            String? @map("contact_status") @db.VarChar(50)
+  preferredLanguage String? @map("preferred_communication_language") @db.VarChar(50)
+  branchName        String? @map("branch_name") @db.VarChar(255)
+
+  // Foreign keys
+  customerId Int @map("customer_id")
 
   // Relations
-  customer       Customer?       @relation(fields: [customerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  meteringPoints MeteringPoint[]
+  customer      Customer        @relation(fields: [customerId], references: [id])
+  Branch        Branch[]
+  MeteringPoint MeteringPoint[]
 
-  // Indexes & mapping
+  // Indexes & table mapping
+  @@index([customerId])
+  @@map("contacts")
+}
+
+model Branch {
+  // Primary key
+  id Int @id @default(autoincrement()) @map("branch_id")
+
+  // Attributes
+  name              String  @map("branch_name") @db.VarChar(512)
+  address           String? @map("branch_address") @db.VarChar(512)
+  cityRegion        String? @map("branch_city_region") @db.VarChar(512)
+  operationalStatus String? @map("operational_status") @db.VarChar(40)
+
+  // Foreign keys
+  customerId Int  @map("customer_id")
+  contactId  Int? @map("contact_id")
+
+  // Relations
+  customer      Customer        @relation(fields: [customerId], references: [id])
+  contact       Contact?        @relation(fields: [contactId], references: [id])
+  MeteringPoint MeteringPoint[]
+
+  // Indexes & table mapping
   @@index([customerId])
   @@map("branches")
 }
 
-model MeteringPoint {
-  // Primary & scalar fields
-  id                      Int       @id @default(autoincrement())
-  deliveryAddress         String?   @db.Text
-  locationAddress         String?   @db.VarChar(255)
-  cityOrLocality          String?   @db.VarChar(150)
-  country                 String?   @db.VarChar(100)
-  tariffGroup             String?   @db.VarChar(100)
-  technicalContactName    String?   @db.VarChar(255)
-  technicalContactTitle   String?   @db.VarChar(120)
-  technicalContactPhone   String?   @db.VarChar(50)
-  technicalContactEmail   String?   @db.VarChar(255)
-  contractedCapacityValue Float?
-  contractedCapacityUnit  String?   @db.VarChar(10)
-  voltageLevel            String?   @db.VarChar(20)
-  meterType               String?   @db.VarChar(120)
-  connectionSpecs         String?   @db.Text
-  agreedMaxDemandKw       Float?
-  notes                   String?   @db.Text
-  meteringPointStatus     String?   @db.VarChar(50)
-  utilityProvider         String?   @db.VarChar(255)
-  gpsCoordinates          String?   @db.Text
-  registeredAddress       String?   @db.VarChar(255)
-  operationalStatus       String?   @db.Text
-  installationDate        DateTime? @db.Date
-  contractEndDate         DateTime? @db.Date
+model Document {
+  // Primary key
+  id Int @id @default(autoincrement()) @map("document_id")
 
-  // Foreign keys (scalar)
-  branchId Int?
+  // Attributes
+  name         String  @map("document_name") @db.VarChar(255)
+  originalName String  @map("document_original_name") @db.VarChar(255)
+  mimeType     String  @map("document_mime_type") @db.VarChar(100)
+  size         Int     @map("document_size")
+  path         String  @map("document_path") @db.VarChar(500)
+  description  String? @map("document_description") @db.Text
+  documentType String? @map("document_type") @db.VarChar(64)
+
+  // Foreign keys
+  customerId Int @map("customer_id")
 
   // Relations
-  branch       Branch?       @relation(fields: [branchId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  consumptions Consumption[]
+  customer Customer @relation(fields: [customerId], references: [id])
 
-  // Indexes & mapping
+  // Indexes & table mapping
+  @@index([customerId])
+  @@index([documentType])
+  @@map("documents")
+}
+
+model MeteringPoint {
+  // Primary key
+  id Int @id @default(autoincrement()) @map("metering_point_id")
+
+  // Attributes
+  deliveryAddress         String?   @map("delivery_address") @db.Text
+  locationAddress         String?   @map("location_address") @db.VarChar(150)
+  cityOrLocality          String?   @map("city_or_locality") @db.VarChar(150)
+  country                 String?   @map("country") @db.VarChar(100)
+  tariffGroup             String?   @map("tariff_group") @db.VarChar(100)
+  technicalContactName    String?   @map("technical_contact_name") @db.VarChar(255)
+  technicalContactTitle   String?   @map("technical_contact_title") @db.VarChar(120)
+  technicalContactPhone   String?   @map("technical_contact_phone") @db.VarChar(50)
+  technicalContactEmail   String?   @map("technical_contact_email") @db.VarChar(255)
+  contractedCapacityValue Decimal?  @map("contracted_capacity_value") @db.Decimal(12, 3)
+  contractedCapacityUnit  String?   @map("contracted_capacity_unit") @db.VarChar(10)
+  voltageLevel            String?   @map("voltage_level") @db.VarChar(20)
+  meterType               String?   @map("meter_type") @db.VarChar(120)
+  connectionSpecs         String?   @map("connection_specs") @db.Text
+  agreedMaxDemandKw       Decimal?  @map("agreed_max_demand_kw") @db.Decimal(12, 3)
+  notes                   String?   @map("notes") @db.Text
+  status                  String?   @map("meetering_point_status") @db.VarChar(50)
+  utilityProvider         String?   @map("utility_provider") @db.VarChar(255)
+  gpsCoordinates          Json?     @map("gps_coordinates")
+  registeredAddress       String?   @map("registered_address") @db.VarChar(255)
+  operationalStatus       String?   @map("operational_status") @db.Text
+  installationDate        DateTime? @map("installation_date") @db.Date
+  contractEndDate         DateTime? @map("contract_end_date") @db.Date
+  connectionType          String?   @map("connection_type") @db.Text
+
+  // Foreign keys
+  branchId  Int  @map("branch_id")
+  contactId Int? @map("contact_id")
+
+  // Relations
+  branch                Branch                  @relation(fields: [branchId], references: [id])
+  contact               Contact?                @relation(fields: [contactId], references: [id])
+  ConsumptionFile       ConsumptionFile[]
+  Consumption           Consumption[]
+  ForecastConsumption   ForecastConsumption[]
+  MlForecastConsumption MlForecastConsumption[]
+
+  // Indexes & table mapping
   @@index([branchId])
   @@map("metering_points")
 }
 
-model Contract {
-  // Primary & scalar fields
-  id                              Int       @id @default(autoincrement())
-  contractNumber                  String    @db.VarChar(512)
-  effectiveDate                   DateTime? @db.Date
-  supplyStartDate                 DateTime? @db.Date
-  initialTermYears                Int?
-  maturityDate                    DateTime? @db.Date
-  renewalTermYears                Int?
-  contractQuantity                String?   @db.VarChar(100)
-  pricePerMwh                     Float?
-  includesNetworkTariffs          Boolean?
-  includesVat                     Boolean?
-  paymentTermsDays                Int?
-  securityDepositAmount           Float?
-  terminationNoticeDays           Int?
-  earlyTerminationFee             String?   @db.VarChar(100)
-  disputeResolutionMethod         String?   @db.Text
-  forecastDeadlineDaysBeforeMonth Int?
+model ConsumptionFile {
+  // Primary key
+  id Int @id @default(autoincrement()) @map("consumption_file_id")
 
-  // Foreign keys (scalar)
-  customerId Int?
+  // Attributes
+  name         String  @map("consumption_file_name") @db.VarChar(255)
+  originalName String  @map("consumption_file_original_name") @db.VarChar(255)
+  mimeType     String  @map("consumption_file_mime_type") @db.VarChar(100)
+  size         Int     @map("consumption_file_size")
+  path         String  @map("consumption_file_path") @db.VarChar(500)
+  description  String? @map("consumption_file_description") @db.Text
+
+  // Foreign keys
+  meteringPointId Int @map("metering_point_id")
 
   // Relations
-  customer     Customer?     @relation(fields: [customerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  consumptions Consumption[]
+  meteringPoint MeteringPoint @relation(fields: [meteringPointId], references: [id])
+  consumptions  Consumption[] @relation("FileConsumptions")
 
-  // Indexes & mapping
-  @@index([customerId])
-  @@map("contracts")
-}
-
-model ConsumptionFile {
-  id           Int     @id @default(autoincrement())
-  name         String  @db.VarChar(255)
-  originalName String  @db.VarChar(255)
-  mimeType     String  @db.VarChar(100)
-  size         Int
-  path         String  @db.VarChar(500)
-  description  String? @db.Text
-
-  consumptions Consumption[]
-
+  // Indexes & table mapping
+  @@index([meteringPointId])
   @@map("consumption_files")
 }
 
 model Consumption {
-  id                        Int      @id @default(autoincrement())
-  timestamp                 DateTime @db.Timestamp(0)
-  timeframe                 String   @db.VarChar(50)
-  electricityConsumptionKwh Decimal? @db.Decimal(12, 6)
+  // Primary key (composite)
+  dtReporting DateTime @map("dt_reporting") @db.Date
+  tmReporting DateTime @map("tm_reporting") @db.Time(0)
 
-  meteringPointId   Int
-  contractId        Int?
-  consumptionFileId Int?
+  // Attributes
+  electricityConsumptionKwh Decimal? @map("electricity_consumption_kwh") @db.Decimal(10, 2)
+  submittedAt               DateTime @map("submitted_at") @db.Timestamptz(6)
 
-  meteringPoint   MeteringPoint    @relation(fields: [meteringPointId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  contract        Contract?        @relation(fields: [contractId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  consumptionFile ConsumptionFile? @relation(fields: [consumptionFileId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-
-  @@unique([meteringPointId, timestamp, timeframe])
-  @@index([contractId])
-  @@index([consumptionFileId])
-  @@map("consumption")
-}
-
-model Contact {
-  id     Int           @id @default(autoincrement())
-  name   String
-  type   String?
-  role   String?
-  phone  String?
-  email  String
-  status ContactStatus @default(ACTIVE)
-
-  // Foreign keys (scalar)
-  customerId Int
+  // Foreign keys
+  meteringPointId   Int @map("metering_point_id")
+  consumptionFileId Int @map("consumption_file_id")
 
   // Relations
-  customer Customer @relation(fields: [customerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  meteringPoint   MeteringPoint   @relation(fields: [meteringPointId], references: [id])
+  consumptionFile ConsumptionFile @relation(name: "FileConsumptions", fields: [consumptionFileId], references: [id])
 
-  // Indexes & mapping
-  @@index([customerId])
+  // Indexes & table mapping
+  @@id([meteringPointId, dtReporting, tmReporting])
+  @@map("consumptions")
 }
 
-enum ContactStatus {
-  ACTIVE
-  INACTIVE
-}
+model Contract {
+  // Primary key
+  id Int @id @default(autoincrement()) @map("contract_number")
 
-model Document {
-  // Primary & scalar fields
-  id           Int     @id @default(autoincrement())
-  name         String  @db.VarChar(255)
-  originalName String  @db.VarChar(255)
-  mimeType     String  @db.VarChar(100)
-  size         Int
-  path         String  @db.VarChar(500)
-  description  String? @db.Text
-  documentType String? @db.VarChar(64)
+  // Attributes
+  effectiveDate                   DateTime? @map("effective_date") @db.Date
+  supplyStartDate                 DateTime? @map("supply_start_date") @db.Date
+  initialTermYears                Int?      @map("initial_term_years")
+  maturityDate                    DateTime? @map("maturity_date") @db.Date
+  renewalTermYears                Int?      @map("renewal_term_years")
+  contractQuantity                String?   @map("contract_quantity") @db.VarChar(100)
+  pricePerMwh                     Decimal?  @map("price_per_mwh") @db.Decimal(10, 2)
+  includesNetworkTariffs          Boolean?  @map("includes_network_tariffs")
+  includesVat                     Boolean?  @map("includes_vat")
+  paymentTermsDays                Int?      @map("payment_terms_days")
+  securityDepositAmount           Decimal?  @map("security_deposit_amount") @db.Decimal(15, 2)
+  terminationNoticeDays           Int?      @map("termination_notice_days")
+  earlyTerminationFee             String?   @map("early_termination_fee") @db.VarChar(100)
+  disputeResolutionMethod         String?   @map("dispute_resolution_method") @db.Text
+  forecastDeadlineDaysBeforeMonth Int?      @map("forecast_deadline_days_before_month")
 
-  // Foreign keys (scalar)
-  customerId Int
+  // Foreign keys
+  customerId Int @map("customer_id")
 
   // Relations
-  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id])
 
-  // Indexes & mapping
+  // Indexes & table mapping
   @@index([customerId])
-  @@index([documentType])
-  @@map("documents")
+  @@map("contracts")
+}
+
+model ForecastConsumption {
+  // Primary key (composite)
+  dtReporting DateTime @map("dt_reporting") @db.Date
+  tmReporting DateTime @map("tm_reporting") @db.Time(0)
+
+  // Attributes
+  electricityConsumptionKwh Decimal? @map("electricity_consumption_kwh") @db.Decimal(10, 2)
+  submittedAt               DateTime @map("submitted_at") @db.Timestamptz(6)
+  submittedBy               String?  @map("submitted_by") @db.VarChar(120)
+
+  // Foreign keys
+  meteringPointId Int @map("metering_point_id")
+
+  // Relations
+  meteringPoint MeteringPoint @relation(fields: [meteringPointId], references: [id])
+
+  // Indexes & table mapping
+  @@id([meteringPointId, dtReporting, tmReporting])
+  @@map("forecast_consumptions")
+}
+
+model MlForecastConsumption {
+  // Primary key (composite)
+  dtForecasting DateTime @map("dt_forecasting") @db.Date
+  tmForecasting DateTime @map("tm_forecasting") @db.Time(0)
+
+  // Attributes
+  electricityConsumptionKwhPred Decimal? @map("electricity_consumption_kwh_pred") @db.Decimal(10, 2)
+  dtTmReporting                 DateTime @map("dt_tm_reporting") @db.Timestamp(6)
+  predLo95                      Decimal? @map("pred_lo_95") @db.Decimal(10, 2)
+  predHi95                      Decimal? @map("pred_hi_95") @db.Decimal(10, 2)
+
+  // Foreign keys
+  meteringPointId Int @map("metering_point_id")
+
+  // Relations
+  meteringPoint MeteringPoint @relation(fields: [meteringPointId], references: [id])
+
+  // Indexes & table mapping
+  @@id([meteringPointId, dtForecasting, tmForecasting])
+  @@map("ml_forecast_consumptions")
+}
+
+model WeatherData {
+  // Primary key (composite)
+  locationId  String   @map("location_id") @db.VarChar(64)
+  dtReporting DateTime @map("dt_reporting") @db.Date
+  tmReporting DateTime @map("tm_reporting") @db.Time(0)
+
+  // Attributes
+  sourceName      String   @map("source_name") @db.VarChar(128)
+  locationName    String   @map("location_name") @db.VarChar(255)
+  latitude        Decimal  @map("latitude") @db.Decimal(8, 5)
+  longitude       Decimal  @map("longitude") @db.Decimal(8, 5)
+  seasonName      String?  @map("season_name") @db.VarChar(16)
+  dayType         String?  @map("day_type") @db.VarChar(16)
+  temperatureC    Decimal? @map("temperature_c") @db.Decimal(5, 2)
+  relHumidityPct  Decimal? @map("rel_humidity_pct") @db.Decimal(5, 2)
+  precipitationMm Decimal? @map("precipitation_mm") @db.Decimal(6, 2)
+  rainMm          Decimal? @map("rain_mm") @db.Decimal(6, 2)
+  snowfallMm      Decimal? @map("snowfall_mm") @db.Decimal(6, 2)
+  cloudCoverPct   Decimal? @map("cloud_cover_pct") @db.Decimal(5, 2)
+  windSpeedMps    Decimal? @map("wind_speed_mps") @db.Decimal(5, 2)
+  windDirDeg      Decimal? @map("wind_dir_deg") @db.Decimal(5, 1)
+  pressureMslHpa  Decimal? @map("pressure_msl_hpa") @db.Decimal(7, 2)
+  dtCreated       DateTime @map("dt_created") @db.Timestamp(6)
+  dtUpdated       DateTime @map("dt_updated") @db.Timestamp(6)
+
+  // Indexes & table mapping
+  @@id([locationId, dtReporting, tmReporting])
+  @@map("weather_data")
 }

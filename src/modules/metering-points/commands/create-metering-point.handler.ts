@@ -1,11 +1,11 @@
 // External
-import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { MeteringPoint } from '@/prisma/prisma.client';
-import { Prisma } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { type PrismaExtension } from '@/prisma/prisma.extension';
+import { type Prisma, type MeteringPoint } from '@/prisma/prisma.client';
 import { MeteringPointCreatedEvent } from '../events/metering-point-created.event';
 import { CreateMeteringPointCommand } from './create-metering-point.command';
 
@@ -14,34 +14,28 @@ export class CreateMeteringPointHandler
   implements ICommandHandler<CreateMeteringPointCommand>
 {
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('PrismaService')
+    private readonly prismaService: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateMeteringPointCommand): Promise<MeteringPoint> {
-    const { branchId, ...dto } = command.dto;
+    const { branchId, ...input } = command.dto;
 
-    try {
-      const meteringPoint = await this.prismaService.meteringPoint.create({
-        data: {
-          ...dto,
+    const data: Prisma.MeteringPointCreateInput = {
+      ...input,
 
-          // attach to branch via relation
-          branch: { connect: { id: branchId } },
-        },
-      });
+      branch: {
+        connect: { id: branchId },
+      },
+    };
 
-      this.eventBus.publish(new MeteringPointCreatedEvent(meteringPoint));
+    const meteringPoint = await this.prismaService.client.meteringPoint.create({
+      data,
+    });
 
-      return meteringPoint;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2003') {
-          throw new NotFoundException('Branch not found.');
-        }
-      }
+    this.eventBus.publish(new MeteringPointCreatedEvent(meteringPoint));
 
-      throw error;
-    }
+    return meteringPoint;
   }
 }

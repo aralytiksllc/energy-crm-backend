@@ -3,7 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 // Internal
-import type { Role } from '@/prisma/prisma.client';
+import type { Role } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FindOneRoleQuery } from './find-one-role.query';
 

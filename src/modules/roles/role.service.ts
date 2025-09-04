@@ -3,8 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Role } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Role } from '@/prisma/prisma.service';
 import { CreateRoleCommand } from './commands/create-role.command';
 import { CreateRoleDto } from './dtos/create-role.dto';
 import { DeleteRoleCommand } from './commands/delete-role.command';
@@ -21,7 +21,7 @@ export class RoleService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(dto: FindManyRolesDto): Promise<Paged<Role>> {
+  async findMany(dto: FindManyRolesDto): Promise<Paginate<Role>> {
     const query = new FindManyRolesQuery(dto);
     return this.queryBus.execute(query);
   }

@@ -2,7 +2,7 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 // Internal
-import type { Role } from '@/prisma/prisma.client';
+import type { Role } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { RoleUpdatedEvent } from '../events/role-updated.event';
 import { UpdateRoleCommand } from './update-role.command';

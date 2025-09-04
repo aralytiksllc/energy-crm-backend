@@ -3,7 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 // Internal
-import type { Branch } from '@/prisma/prisma.client';
+import type { Branch } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FindOneBranchQuery } from './find-one-branch.query';
 

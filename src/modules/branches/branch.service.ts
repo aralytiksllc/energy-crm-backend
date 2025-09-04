@@ -3,8 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Branch } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import { type Branch } from '@/prisma/prisma.client';
 import { CreateBranchCommand } from './commands/create-branch.command';
 import { CreateBranchDto } from './dtos/create-branch.dto';
 import { DeleteBranchCommand } from './commands/delete-branch.command';
@@ -21,7 +21,7 @@ export class BranchService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(dto: FindManyBranchsDto): Promise<Paged<Branch>> {
+  async findMany(dto: FindManyBranchsDto): Promise<Paginate<Branch>> {
     const query = new FindManyBranchsQuery(dto);
     return this.queryBus.execute(query);
   }

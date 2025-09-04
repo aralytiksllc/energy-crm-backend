@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Branch } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import { type Branch } from '@/prisma/prisma.client';
 import { CreateBranchDto } from './dtos/create-branch.dto';
 import { FindManyBranchsDto } from './dtos/find-many-branchs.dto';
 import { UpdateBranchDto } from './dtos/update-branch.dto';
@@ -27,7 +27,7 @@ export class BranchController {
   @Get()
   findMany(
     @Query(FindManyBranchsPipe) dto: FindManyBranchsDto,
-  ): Promise<Paged<Branch>> {
+  ): Promise<Paginate<Branch>> {
     return this.branchService.findMany(dto);
   }
 

@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { MeteringPoint } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { MeteringPoint } from '@/prisma/prisma.service';
 import { CreateMeteringPointDto } from './dtos/create-metering-point.dto';
 import { FindManyMeteringPointsDto } from './dtos/find-many-metering-points.dto';
 import { UpdateMeteringPointDto } from './dtos/update-metering-point.dto';
@@ -27,7 +27,7 @@ export class MeteringPointController {
   @Get()
   findMany(
     @Query(FindManyMeteringPointsPipe) dto: FindManyMeteringPointsDto,
-  ): Promise<Paged<MeteringPoint>> {
+  ): Promise<Paginate<MeteringPoint>> {
     return this.meteringPointService.findMany(dto);
   }
 

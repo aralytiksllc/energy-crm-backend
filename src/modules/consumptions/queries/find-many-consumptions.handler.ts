@@ -2,8 +2,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { ConsumptionFile } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { ConsumptionFile } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FindManyConsumptionsQuery } from './find-many-consumptions.query';
 
@@ -11,7 +11,7 @@ import { FindManyConsumptionsQuery } from './find-many-consumptions.query';
 export class FindManyConsumptionsHandler implements IQueryHandler<FindManyConsumptionsQuery> {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async execute(query: FindManyConsumptionsQuery): Promise<Paged<ConsumptionFile>> {
+  async execute(query: FindManyConsumptionsQuery): Promise<Paginate<ConsumptionFile>> {
     const findOptions = query.dto.findOptions;
 
     const [rows, count] = await this.prismaService.$transaction([
@@ -19,6 +19,6 @@ export class FindManyConsumptionsHandler implements IQueryHandler<FindManyConsum
       this.prismaService.consumptionFile.count({ where: findOptions.where }),
     ]);
 
-    return new Paged(rows, count, 1, 1);
+    return new Paginate(rows, count, 1, 1);
   }
 }

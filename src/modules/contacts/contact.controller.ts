@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Contact } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import { type Contact } from '@/prisma/prisma.client';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { FindManyContactsDto } from './dtos/find-many-contacts.dto';
 import { UpdateContactDto } from './dtos/update-contact.dto';
@@ -27,7 +27,7 @@ export class ContactController {
   @Get()
   findMany(
     @Query(FindManyContactsPipe) dto: FindManyContactsDto,
-  ): Promise<Paged<Contact>> {
+  ): Promise<Paginate<Contact>> {
     return this.contactService.findMany(dto);
   }
 

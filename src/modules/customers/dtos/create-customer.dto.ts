@@ -1,108 +1,122 @@
-// External
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
   IsOptional,
   IsEmail,
   IsNumber,
-  Min,
+  IsDateString,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-
-// Internal
 
 export class CreateCustomerDto {
+  @ApiProperty()
   @IsString()
-  companyName: string;
+  name: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   registeredAddress?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsEmail()
   legalNoticeEmail?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   phone?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsEmail()
   defaultOperationalEmail?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsEmail()
   defaultEscalationEmail?: string;
 
-  @IsOptional()
+  @ApiProperty()
   @IsString()
-  registrationNumber?: string;
+  registrationNumber: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   businessType?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
-  @Type(() => Date)
+  @IsDateString()
   registrationDate?: Date;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsNumber()
-  @Min(0)
   registeredCapital?: number;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  companyStatus?: string;
+  status?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   mainActivity?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   legalId?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   legalStatus?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  companyCode?: string;
+  code?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  companyType?: string;
+  type?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  companyDescription?: string;
+  description?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   cityRegion?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   authorizedRepresentative?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  companyRole?: string;
+  role?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   sectorPrimary?: string;
 
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   sectorSecondary?: string;
 
-  @IsOptional()
-  @IsString()
-  clientStatus?: string;
-
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   preferredCommunicationLanguage?: string;

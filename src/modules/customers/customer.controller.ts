@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Customer } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import { type Customer } from '@/prisma/prisma.client';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { FindManyCustomersDto } from './dtos/find-many-customers.dto';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
@@ -26,7 +26,7 @@ export class CustomerController {
   @Get()
   findMany(
     @Query(FindManyCustomersPipe) dto: FindManyCustomersDto,
-  ): Promise<Paged<Customer>> {
+  ): Promise<Paginate<Customer>> {
     return this.customerService.findMany(dto);
   }
 
@@ -41,7 +41,10 @@ export class CustomerController {
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() dto: UpdateCustomerDto): Promise<Customer> {
+  update(
+    @Param('id') id: number,
+    @Body() dto: UpdateCustomerDto,
+  ): Promise<Customer> {
     return this.customerService.update(+id, dto);
   }
 

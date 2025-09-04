@@ -1,51 +1,32 @@
 // External
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { Branch } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { type PrismaExtension } from '@/prisma/prisma.extension';
+import { type Branch } from '@/prisma/prisma.client';
 import { BranchUpdatedEvent } from '../events/branch-updated.event';
 import { UpdateBranchCommand } from './update-branch.command';
-import { NotFoundException } from '@nestjs/common';
 
 @CommandHandler(UpdateBranchCommand)
 export class UpdateBranchHandler
-  implements ICommandHandler<UpdateBranchCommand>
+  implements ICommandHandler<UpdateBranchCommand, Branch>
 {
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('PrismaService')
+    private readonly prismaService: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: UpdateBranchCommand): Promise<Branch> {
-    const {
-      id,
-      dto: { customerId, ...dto },
-    } = command;
+    const branch = await this.prismaService.client.branch.update({
+      where: { id: command.id },
+      data: { ...command.dto },
+    });
 
-    try {
-      const { count } = await this.prismaService.branch.updateMany({
-        where: { id, customerId },
-        data: { ...dto },
-      });
+    this.eventBus.publish(new BranchUpdatedEvent(branch));
 
-      if (count === 0) {
-        throw new NotFoundException('Branch not found for this customer');
-      }
-
-      const branch = await this.prismaService.branch.findUnique({
-        where: { id, customerId },
-      });
-
-      if (!branch) {
-        throw new NotFoundException('Branch not found after update');
-      }
-
-      this.eventBus.publish(new BranchUpdatedEvent(branch));
-
-      return branch;
-    } catch (error) {
-      throw error;
-    }
+    return branch;
   }
 }

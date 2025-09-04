@@ -15,8 +15,8 @@ import { memoryStorage } from 'multer';
 import { Req } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Consumption } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Consumption } from '@/prisma/prisma.service';
 import { CreateConsumptionFileDto } from './dtos/create-consumption-file.dto';
 import { CreateConsumptionDto } from './dtos/create-consumption.dto';
 import { FindManyConsumptionsDto } from './dtos/find-many-consumptions.dto';
@@ -33,7 +33,7 @@ export class ConsumptionController {
   @Get()
   findMany(
     @Query(FindManyConsumptionsPipe) dto: FindManyConsumptionsDto,
-  ): Promise<Paged<Consumption>> {
+  ): Promise<Paginate<Consumption>> {
     return this.consumptionService.findMany(dto);
   }
 

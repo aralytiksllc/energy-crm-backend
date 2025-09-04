@@ -2,8 +2,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Document } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Document } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FindManyDocumentsQuery } from './find-many-documents.query';
 
@@ -11,7 +11,7 @@ import { FindManyDocumentsQuery } from './find-many-documents.query';
 export class FindManyDocumentsHandler implements IQueryHandler<FindManyDocumentsQuery> {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async execute(query: FindManyDocumentsQuery): Promise<Paged<Document>> {
+  async execute(query: FindManyDocumentsQuery): Promise<Paginate<Document>> {
     const findOptions = query.dto.findOptions;
 
     const [rows, count] = await this.prismaService.$transaction([
@@ -19,6 +19,6 @@ export class FindManyDocumentsHandler implements IQueryHandler<FindManyDocuments
       this.prismaService.document.count({ where: findOptions.where }),
     ]);
 
-    return new Paged(rows, count, 1, 1);
+    return new Paginate(rows, count, 1, 1);
   }
 }

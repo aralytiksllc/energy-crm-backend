@@ -1,47 +1,39 @@
 // External
-import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { Contact } from '@/prisma/prisma.client';
-import { Prisma } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { type PrismaExtension } from '@/prisma/prisma.extension';
+import { type Prisma, type Contact } from '@/prisma/prisma.client';
 import { ContactCreatedEvent } from '../events/contact-created.event';
 import { CreateContactCommand } from './create-contact.command';
 
 @CommandHandler(CreateContactCommand)
 export class CreateContactHandler
-  implements ICommandHandler<CreateContactCommand>
+  implements ICommandHandler<CreateContactCommand, Contact>
 {
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('PrismaService')
+    private readonly prismaService: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateContactCommand): Promise<Contact> {
-    const { customerId, ...dto } = command.dto;
+    const { customerId, ...input } = command.dto;
 
-    try {
-      const contact = await this.prismaService.contact.create({
-        data: {
-          ...dto,
+    const data: Prisma.ContactCreateInput = {
+      ...input,
 
-          // attach to customer via relation
-          customer: { connect: { id: customerId } },
-        },
-      });
+      customer: {
+        connect: { id: customerId },
+      },
+    };
 
-      this.eventBus.publish(new ContactCreatedEvent(contact));
+    const contact = await this.prismaService.client.contact.create({ data });
 
-      return contact;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2003') {
-          throw new NotFoundException('Customer not found.');
-        }
-      }
+    this.eventBus.publish(new ContactCreatedEvent(contact));
 
-      throw error;
-    }
+    return contact;
   }
 }

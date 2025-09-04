@@ -12,7 +12,6 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { UpdateContactHandler } from './commands/update-contact.handler';
 import { ContactController } from './contact.controller';
 import { ContactService } from './contact.service';
-import { ContactSeed } from './contact.seed';
 
 @Module({
   imports: [CqrsModule, PrismaModule],
@@ -25,7 +24,6 @@ import { ContactSeed } from './contact.seed';
     UpdateContactHandler,
     DeleteContactHandler,
     ContactService,
-    ContactSeed,
   ],
   exports: [ContactService],
 })

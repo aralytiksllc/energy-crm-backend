@@ -3,8 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Contact } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import { type Contact } from '@/prisma/prisma.client';
 import { CreateContactCommand } from './commands/create-contact.command';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { DeleteContactCommand } from './commands/delete-contact.command';
@@ -21,7 +21,7 @@ export class ContactService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(dto: FindManyContactsDto): Promise<Paged<Contact>> {
+  async findMany(dto: FindManyContactsDto): Promise<Paginate<Contact>> {
     const query = new FindManyContactsQuery(dto);
     return this.queryBus.execute(query);
   }

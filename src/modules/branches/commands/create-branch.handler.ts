@@ -1,47 +1,45 @@
 // External
-import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { Branch } from '@/prisma/prisma.client';
-import { Prisma } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { type PrismaExtension } from '@/prisma/prisma.extension';
+import { type Prisma, type Branch } from '@/prisma/prisma.client';
 import { BranchCreatedEvent } from '../events/branch-created.event';
 import { CreateBranchCommand } from './create-branch.command';
 
 @CommandHandler(CreateBranchCommand)
 export class CreateBranchHandler
-  implements ICommandHandler<CreateBranchCommand>
+  implements ICommandHandler<CreateBranchCommand, Branch>
 {
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('PrismaService')
+    private readonly prismaService: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateBranchCommand): Promise<Branch> {
-    const { customerId, ...dto } = command.dto;
+    const { customerId, contactId, ...input } = command.dto;
 
-    try {
-      const branch = await this.prismaService.branch.create({
-        data: {
-          ...dto,
+    const data: Prisma.BranchCreateInput = {
+      ...input,
 
-          // attach to customer via relation
-          customer: { connect: { id: customerId } },
-        },
-      });
+      customer: {
+        connect: { id: customerId },
+      },
+    };
 
-      this.eventBus.publish(new BranchCreatedEvent(branch));
-
-      return branch;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2003') {
-          throw new NotFoundException('Customer not found.');
-        }
-      }
-
-      throw error;
+    if (contactId) {
+      data.contact = {
+        connect: { id: contactId },
+      };
     }
+
+    const branch = await this.prismaService.client.branch.create({ data });
+
+    this.eventBus.publish(new BranchCreatedEvent(branch));
+
+    return branch;
   }
 }

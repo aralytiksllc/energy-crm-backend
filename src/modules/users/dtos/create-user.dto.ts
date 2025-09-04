@@ -1,11 +1,11 @@
 // External
-import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEmail,
   IsInt,
   IsOptional,
   IsString,
+  MaxLength,
   MinLength,
 } from 'class-validator';
 
@@ -13,26 +13,30 @@ import {
 
 export class CreateUserDto {
   @IsString()
-  firstName: string;
+  @MaxLength(255)
+  firstName!: string;
 
   @IsString()
-  lastName: string;
+  @MaxLength(255)
+  lastName!: string;
 
   @IsEmail()
-  email: string;
+  @MaxLength(255)
+  email!: string;
 
   @IsString()
   @MinLength(8)
-  password: string;
+  @MaxLength(255)
+  password!: string;
 
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   isActive?: boolean;
 
   @IsInt()
-  roleId: number;
+  roleId!: number;
 
-  @IsInt()
   @IsOptional()
+  @IsInt()
   departmentId?: number;
 }

@@ -3,7 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 // Internal
-import type { Contract } from '@/prisma/prisma.client';
+import type { Contract } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FindOneContractQuery } from './find-one-contract.query';
 

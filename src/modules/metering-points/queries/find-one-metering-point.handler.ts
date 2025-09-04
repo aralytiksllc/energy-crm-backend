@@ -1,25 +1,25 @@
 // External
-import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { MeteringPoint } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { type PrismaExtension } from '@/prisma/prisma.extension';
+import { type MeteringPoint } from '@/prisma/prisma.client';
 import { FindOneMeteringPointQuery } from './find-one-metering-point.query';
 
 @QueryHandler(FindOneMeteringPointQuery)
-export class FindOneMeteringPointHandler implements IQueryHandler<FindOneMeteringPointQuery> {
-  constructor(private readonly prisma: PrismaService) {}
+export class FindOneMeteringPointHandler
+  implements IQueryHandler<FindOneMeteringPointQuery>
+{
+  constructor(
+    @Inject('PrismaService')
+    private readonly prismaService: PrismaService<PrismaExtension>,
+  ) {}
 
   async execute(query: FindOneMeteringPointQuery): Promise<MeteringPoint> {
-    const meteringPoint = await this.prisma.meteringPoint.findUnique({
+    return await this.prismaService.client.meteringPoint.findUniqueOrThrow({
       where: { id: query.id },
     });
-
-    if (!meteringPoint) {
-      throw new NotFoundException('MeteringPoint not found.');
-    }
-
-    return meteringPoint;
   }
 }

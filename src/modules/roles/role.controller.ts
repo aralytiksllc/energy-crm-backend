@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Role } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Role } from '@/prisma/prisma.service';
 import { CreateRoleDto } from './dtos/create-role.dto';
 import { FindManyRolesDto } from './dtos/find-many-roles.dto';
 import { UpdateRoleDto } from './dtos/update-role.dto';
@@ -26,7 +26,7 @@ export class RoleController {
   @Get()
   findMany(
     @Query(FindManyRolesPipe) dto: FindManyRolesDto,
-  ): Promise<Paged<Role>> {
+  ): Promise<Paginate<Role>> {
     return this.roleService.findMany(dto);
   }
 

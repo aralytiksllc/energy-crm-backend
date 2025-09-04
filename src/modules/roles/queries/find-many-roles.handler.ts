@@ -2,8 +2,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Role } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Role } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FindManyRolesQuery } from './find-many-roles.query';
 
@@ -11,7 +11,7 @@ import { FindManyRolesQuery } from './find-many-roles.query';
 export class FindManyRolesHandler implements IQueryHandler<FindManyRolesQuery> {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async execute(query: FindManyRolesQuery): Promise<Paged<Role>> {
+  async execute(query: FindManyRolesQuery): Promise<Paginate<Role>> {
     const findOptions = query.dto.findOptions;
 
     const [rows, count] = await this.prismaService.$transaction([
@@ -19,6 +19,6 @@ export class FindManyRolesHandler implements IQueryHandler<FindManyRolesQuery> {
       this.prismaService.role.count({ where: findOptions.where }),
     ]);
 
-    return new Paged(rows, count, 1, 1);
+    return new Paginate(rows, count, 1, 1);
   }
 }

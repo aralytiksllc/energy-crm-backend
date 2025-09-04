@@ -15,8 +15,8 @@ import {
 import type { Response } from 'express';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Contract } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Contract } from '@/prisma/prisma.service';
 import { CreateContractDto } from './dtos/create-contract.dto';
 import { FindManyContractsDto } from './dtos/find-many-contracts.dto';
 import { UpdateContractDto } from './dtos/update-contract.dto';
@@ -30,7 +30,7 @@ export class ContractController {
   @Get()
   findMany(
     @Query(FindManyContractsPipe) dto: FindManyContractsDto,
-  ): Promise<Paged<Contract>> {
+  ): Promise<Paginate<Contract>> {
     return this.contractService.findMany(dto);
   }
 

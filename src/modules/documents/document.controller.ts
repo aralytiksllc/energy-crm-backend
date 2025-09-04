@@ -15,10 +15,10 @@ import {
 } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
+import { Paginate } from '@/common/paginate';
 import { AzureStorageFileInterceptor } from '@/common/azure-storage';
 import type { UploadedFileMetadata } from '@/common/azure-storage';
-import type { Document } from '@/prisma/prisma.client';
+import type { Document } from '@/prisma/prisma.service';
 import { CreateDocumentDto } from './dtos/create-document.dto';
 import { FindManyDocumentsDto } from './dtos/find-many-documents.dto';
 import { UpdateDocumentDto } from './dtos/update-document.dto';
@@ -32,7 +32,7 @@ export class DocumentController {
   @Get()
   findMany(
     @Query(FindManyDocumentsPipe) dto: FindManyDocumentsDto,
-  ): Promise<Paged<Document>> {
+  ): Promise<Paginate<Document>> {
     return this.documentService.findMany(dto);
   }
 

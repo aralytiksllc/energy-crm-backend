@@ -2,7 +2,7 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 // Internal
-import type { Consumption } from '@/prisma/prisma.client';
+import type { Consumption } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { ConsumptionUpdatedEvent } from '../events/consumption-updated.event';
 import { UpdateConsumptionCommand } from './update-consumption.command';

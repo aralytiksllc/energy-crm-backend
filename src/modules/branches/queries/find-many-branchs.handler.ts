@@ -2,8 +2,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Branch } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Branch } from '@/prisma/prisma.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FindManyBranchsQuery } from './find-many-branchs.query';
 
@@ -11,7 +11,7 @@ import { FindManyBranchsQuery } from './find-many-branchs.query';
 export class FindManyBranchsHandler implements IQueryHandler<FindManyBranchsQuery> {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async execute(query: FindManyBranchsQuery): Promise<Paged<Branch>> {
+  async execute(query: FindManyBranchsQuery): Promise<Paginate<Branch>> {
     const findOptions = query.dto.findOptions;
 
     const [rows, count] = await this.prismaService.$transaction([
@@ -19,6 +19,6 @@ export class FindManyBranchsHandler implements IQueryHandler<FindManyBranchsQuer
       this.prismaService.branch.count({ where: findOptions.where }),
     ]);
 
-    return new Paged(rows, count, 1, 1);
+    return new Paginate(rows, count, 1, 1);
   }
 }

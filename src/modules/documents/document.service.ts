@@ -3,8 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { Document } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { Document } from '@/prisma/prisma.service';
 import { CreateDocumentCommand } from './commands/create-document.command';
 import { CreateDocumentDto } from './dtos/create-document.dto';
 import { DeleteDocumentCommand } from './commands/delete-document.command';
@@ -21,7 +21,7 @@ export class DocumentService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(dto: FindManyDocumentsDto): Promise<Paged<Document>> {
+  async findMany(dto: FindManyDocumentsDto): Promise<Paginate<Document>> {
     const query = new FindManyDocumentsQuery(dto);
     return this.queryBus.execute(query);
   }

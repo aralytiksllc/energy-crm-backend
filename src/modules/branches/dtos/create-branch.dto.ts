@@ -1,20 +1,35 @@
-// External
-import { IsString, IsOptional, IsNumber, IsInt } from 'class-validator';
-
-// Internal
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateBranchDto {
-  @IsString()
-  branchName: string;
+  @ApiProperty()
+  id: number;
 
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  cityRegion?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  operationalStatus?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  customerId: number;
+
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsNumber()
-  peakLoadKw?: number;
-
-  @IsOptional()
-  @IsString()
-  weatherDataLinkage?: string;
-
-  @IsInt()
-  customerId: number;
+  contactId?: number;
 }

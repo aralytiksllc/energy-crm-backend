@@ -1,27 +1,25 @@
 // External
-import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { Customer } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { type PrismaExtension } from '@/prisma/prisma.extension';
+import { type Customer } from '@/prisma/prisma.client';
 import { FindOneCustomerQuery } from './find-one-customer.query';
 
 @QueryHandler(FindOneCustomerQuery)
 export class FindOneCustomerHandler
-  implements IQueryHandler<FindOneCustomerQuery>
+  implements IQueryHandler<FindOneCustomerQuery, Customer>
 {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    @Inject('PrismaService')
+    private readonly prismaService: PrismaService<PrismaExtension>,
+  ) {}
 
   async execute(query: FindOneCustomerQuery): Promise<Customer> {
-    const customer = await this.prisma.customer.findUnique({
+    return await this.prismaService.client.customer.findUniqueOrThrow({
       where: { id: query.id },
     });
-
-    if (!customer) {
-      throw new NotFoundException('Customer not found.');
-    }
-
-    return customer;
   }
 }

@@ -1,44 +1,39 @@
 // External
-import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { Document } from '@/prisma/prisma.client';
-import { Prisma } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { type PrismaExtension } from '@/prisma/prisma.extension';
+import { type Prisma, type Document } from '@/prisma/prisma.client';
 import { DocumentCreatedEvent } from '../events/document-created.event';
 import { CreateDocumentCommand } from '../commands/create-document.command';
 
 @CommandHandler(CreateDocumentCommand)
 export class CreateDocumentHandler
-  implements ICommandHandler<CreateDocumentCommand>
+  implements ICommandHandler<CreateDocumentCommand, Document>
 {
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('PrismaService')
+    private readonly prismaService: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateDocumentCommand): Promise<Document> {
-    const { customerId, ...data } = command.dto;
+    const { customerId, ...input } = command.dto;
 
-    try {
-      const document = await this.prismaService.document.create({
-        data: {
-          ...data,
-          customer: { connect: { id: customerId } },
-        },
-      });
+    const data: Prisma.DocumentCreateInput = {
+      ...input,
 
-      this.eventBus.publish(new DocumentCreatedEvent(document));
-      
-      return document;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2003') {
-          throw new NotFoundException('Customer not found.');
-        }
-      }
-      throw error;
-    }
+      customer: {
+        connect: { id: customerId },
+      },
+    };
+
+    const document = await this.prismaService.client.document.create({ data });
+
+    this.eventBus.publish(new DocumentCreatedEvent(document));
+
+    return document;
   }
 }

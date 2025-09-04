@@ -4,7 +4,7 @@ import { Subjects } from '@casl/prisma';
 // Internal
 import { createAbility } from '@/common/ability/ability.impl';
 import type { Ability } from '@/common/ability/ability.types';
-import type { User } from '@/prisma/prisma.client';
+import type { User } from '@/prisma/prisma.service';
 
 type Actions = 'manage' | 'create' | 'read' | 'update' | 'delete';
 

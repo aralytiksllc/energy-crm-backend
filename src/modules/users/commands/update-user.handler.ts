@@ -1,9 +1,11 @@
 // External
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { User } from '@/prisma/prisma.client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { type PrismaExtension } from '@/prisma/prisma.extension';
+import { type User } from '@/prisma/prisma.client';
 import { UserUpdatedEvent } from '../events/user-updated.event';
 import { UpdateUserCommand } from './update-user.command';
 import { Hash } from '@/common/hash/hash.impl';
@@ -11,7 +13,8 @@ import { Hash } from '@/common/hash/hash.impl';
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('PrismaService')
+    private readonly prismaService: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -20,10 +23,9 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
       command.dto.password = await Hash.make(command.dto.password);
     }
 
-    const user = await this.prismaService.user.update({
+    const user = await this.prismaService.client.user.update({
       where: { id: command.id },
       data: { ...command.dto },
-      include: { role: { include: { permissions: true } }, department: true },
     });
 
     this.eventBus.publish(new UserUpdatedEvent(user));

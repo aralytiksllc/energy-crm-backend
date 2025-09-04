@@ -1,11 +1,4 @@
 // External
-import { Module } from '@nestjs/common';
+export { CustomPrismaModule as PrismaModule } from 'nestjs-prisma';
 
 // Internal
-import { PrismaService } from './prisma.service';
-
-@Module({
-  providers: [PrismaService],
-  exports: [PrismaService],
-})
-export class PrismaModule {}

@@ -3,8 +3,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
 
 // Internal
-import { Paged } from '@/common/paged/paged.impl';
-import type { User } from '@/prisma/prisma.client';
+import { Paginate } from '@/common/paginate';
+import type { User } from '@/prisma/prisma.service';
 import { CreateUserCommand } from './commands/create-user.command';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { DeleteUserCommand } from './commands/delete-user.command';
@@ -21,7 +21,7 @@ export class UserService {
     private readonly commandBus: CommandBus,
   ) {}
 
-  async findMany(dto: FindManyUsersDto): Promise<Paged<User>> {
+  async findMany(dto: FindManyUsersDto): Promise<Paginate<User>> {
     const query = new FindManyUsersQuery(dto);
     return this.queryBus.execute(query);
   }

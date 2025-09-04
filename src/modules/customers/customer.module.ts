@@ -12,7 +12,6 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { UpdateCustomerHandler } from './commands/update-customer.handler';
 import { CustomerController } from './customer.controller';
 import { CustomerService } from './customer.service';
-import { CustomerSeed } from './customer.seed';
 
 @Module({
   imports: [CqrsModule, PrismaModule],
@@ -25,7 +24,6 @@ import { CustomerSeed } from './customer.seed';
     UpdateCustomerHandler,
     DeleteCustomerHandler,
     CustomerService,
-    CustomerSeed,
   ],
   exports: [CustomerService],
 })

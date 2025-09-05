@@ -4,7 +4,6 @@ import {
   Controller,
   Delete,
   Get,
-  Header,
   Param,
   ParseIntPipe,
   Post,
@@ -56,12 +55,12 @@ export class ContractController {
     return this.contractService.delete(id);
   }
 
-  @Get(':id/generate-pdf')
-  @Header('Content-Type', 'application/pdf')
-  async generatePdf(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<StreamableFile> {
+  @Get(':id/pdf')
+  async pdf(@Param('id', ParseIntPipe) id: number): Promise<StreamableFile> {
     const buffer = await this.contractService.generatePdf(id);
-    return new StreamableFile(buffer);
+    return new StreamableFile(buffer, {
+      disposition: `inline; filename="contract-${id}.pdf"`,
+      type: 'application/pdf',
+    });
   }
 }

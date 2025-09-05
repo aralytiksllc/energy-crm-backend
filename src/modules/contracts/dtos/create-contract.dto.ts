@@ -1,41 +1,37 @@
 // External
-
 import {
+  IsBoolean,
+  IsDateString,
   IsInt,
   IsOptional,
   IsString,
   IsNumber,
-  IsBoolean,
-  Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 // Internal
 
 export class CreateContractDto {
-  @IsString()
-  contractNumber: string;
+  @IsOptional()
+  @IsDateString()
+  effectiveDate?: string;
 
   @IsOptional()
-  @Type(() => Date)
-  effectiveDate?: Date;
-
-  @IsOptional()
-  @Type(() => Date)
-  supplyStartDate?: Date;
+  @IsDateString()
+  supplyStartDate?: string;
 
   @IsOptional()
   @IsInt()
-  @Min(0)
+  @Type(() => Number)
   initialTermYears?: number;
 
   @IsOptional()
-  @Type(() => Date)
-  maturityDate?: Date;
+  @IsDateString()
+  maturityDate?: string;
 
   @IsOptional()
   @IsInt()
-  @Min(0)
+  @Type(() => Number)
   renewalTermYears?: number;
 
   @IsOptional()
@@ -44,7 +40,7 @@ export class CreateContractDto {
 
   @IsOptional()
   @IsNumber()
-  @Min(0)
+  @Type(() => Number)
   pricePerMwh?: number;
 
   @IsOptional()
@@ -57,17 +53,17 @@ export class CreateContractDto {
 
   @IsOptional()
   @IsInt()
-  @Min(0)
+  @Type(() => Number)
   paymentTermsDays?: number;
 
   @IsOptional()
   @IsNumber()
-  @Min(0)
+  @Type(() => Number)
   securityDepositAmount?: number;
 
   @IsOptional()
   @IsInt()
-  @Min(0)
+  @Type(() => Number)
   terminationNoticeDays?: number;
 
   @IsOptional()
@@ -80,10 +76,10 @@ export class CreateContractDto {
 
   @IsOptional()
   @IsInt()
-  @Min(0)
+  @Type(() => Number)
   forecastDeadlineDaysBeforeMonth?: number;
 
-  @IsOptional()
   @IsInt()
-  customerId?: number;
+  @Type(() => Number)
+  customerId!: number;
 }

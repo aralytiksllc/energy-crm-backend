@@ -4,19 +4,18 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Param,
   ParseIntPipe,
   Post,
   Put,
   Query,
-  Res,
   StreamableFile,
 } from '@nestjs/common';
-import type { Response } from 'express';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import type { Contract } from '@/prisma/prisma.service';
+import { type Contract } from '@/common/prisma/prisma.client';
 import { CreateContractDto } from './dtos/create-contract.dto';
 import { FindManyContractsDto } from './dtos/find-many-contracts.dto';
 import { UpdateContractDto } from './dtos/update-contract.dto';
@@ -58,16 +57,11 @@ export class ContractController {
   }
 
   @Get(':id/generate-pdf')
+  @Header('Content-Type', 'application/pdf')
   async generatePdf(
     @Param('id', ParseIntPipe) id: number,
-    @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
-    const { buffer, filename } = await this.contractService.generatePdf(id);
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
-
+    const buffer = await this.contractService.generatePdf(id);
     return new StreamableFile(buffer);
   }
 }

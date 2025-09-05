@@ -1,7 +1,9 @@
-// puppeteer.service.ts
+// External
 import { Injectable, OnModuleDestroy, Logger } from '@nestjs/common';
 import puppeteer, { Browser } from 'puppeteer';
 import * as fs from 'fs';
+
+// Internal
 
 @Injectable()
 export class PuppeteerService implements OnModuleDestroy {
@@ -12,24 +14,18 @@ export class PuppeteerService implements OnModuleDestroy {
     if (this.browser) return this.browser;
 
     const bundledPath = await puppeteer.executablePath();
-    this.logger.log(`Puppeteer executablePath(): ${bundledPath}`);
-    this.logger.log(`exists(executablePath) = ${fs.existsSync(bundledPath)}`);
-
     const systemChrome = '/usr/bin/google-chrome';
-    this.logger.log(`exists(${systemChrome}) = ${fs.existsSync(systemChrome)}`);
 
-    let executablePath = fs.existsSync(bundledPath) ? bundledPath : undefined;
+    let executablePath: string | undefined;
 
-    if (!executablePath && fs.existsSync(systemChrome)) {
+    if (fs.existsSync(bundledPath)) {
+      executablePath = bundledPath;
+    } else if (fs.existsSync(systemChrome)) {
       executablePath = systemChrome;
-      this.logger.warn(
-        'Falling back to system Chrome at /usr/bin/google-chrome',
-      );
+      this.logger.warn('Using system Chrome');
     }
 
-    this.logger.log(
-      `Launching Chrome with executablePath=${executablePath ?? '(auto)'}`,
-    );
+    this.logger.log(`Launching browser (${executablePath ?? 'auto-detect'})`);
 
     this.browser = await puppeteer.launch({
       headless: true,
@@ -46,6 +42,7 @@ export class PuppeteerService implements OnModuleDestroy {
 
   async onModuleDestroy() {
     await this.browser?.close();
+    this.logger.log('Browser closed');
     this.browser = undefined;
   }
 }

@@ -1,27 +1,25 @@
 // External
-import { NotFoundException } from '@nestjs/common';
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { Contract } from '@/prisma/prisma.service';
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type Contract } from '@/common/prisma/prisma.client';
 import { FindOneContractQuery } from './find-one-contract.query';
 
 @QueryHandler(FindOneContractQuery)
 export class FindOneContractHandler
-  implements IQueryHandler<FindOneContractQuery>
+  implements IQueryHandler<FindOneContractQuery, Contract>
 {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
+  ) {}
 
   async execute(query: FindOneContractQuery): Promise<Contract> {
-    const contract = await this.prisma.contract.findUnique({
+    return await this.prisma.client.contract.findUniqueOrThrow({
       where: { id: query.id },
     });
-
-    if (!contract) {
-      throw new NotFoundException('Contract not found.');
-    }
-
-    return contract;
   }
 }

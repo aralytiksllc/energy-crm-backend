@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import type { Contract } from '@/prisma/prisma.service';
+import { type Contract } from '@/common/prisma/prisma.client';
 import { CreateContractCommand } from './commands/create-contract.command';
 import { CreateContractDto } from './dtos/create-contract.dto';
 import { DeleteContractCommand } from './commands/delete-contract.command';
@@ -47,7 +47,7 @@ export class ContractService {
     return this.commandBus.execute(command);
   }
 
-  async generatePdf(id: number): Promise<{ buffer: Buffer; filename: string }> {
+  async generatePdf(id: number): Promise<Buffer> {
     const command = new GenerateContractPdfCommand(id);
     return this.commandBus.execute(command);
   }

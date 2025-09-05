@@ -1,25 +1,25 @@
 // External
-import { NotFoundException } from '@nestjs/common';
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { Document } from '@/prisma/prisma.service';
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type Document } from '@/common/prisma/prisma.client';
 import { FindOneDocumentQuery } from './find-one-document.query';
 
 @QueryHandler(FindOneDocumentQuery)
-export class FindOneDocumentHandler implements IQueryHandler<FindOneDocumentQuery> {
-  constructor(private readonly prisma: PrismaService) {}
+export class FindOneDocumentHandler
+  implements IQueryHandler<FindOneDocumentQuery>
+{
+  constructor(
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
+  ) {}
 
   async execute(query: FindOneDocumentQuery): Promise<Document> {
-    const document = await this.prisma.document.findUnique({
+    return await this.prisma.client.document.findUniqueOrThrow({
       where: { id: query.id },
     });
-
-    if (!document) {
-      throw new NotFoundException('Document not found.');
-    }
-
-    return document;
   }
 }

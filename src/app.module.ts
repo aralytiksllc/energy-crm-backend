@@ -29,14 +29,13 @@ import { AzureStorageModule } from './common/azure-storage';
       isGlobal: true,
       useFactory: () => prismaExtension,
     }),
-    AzureStorageModule.withConfigAsync({
+    AzureStorageModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        connectionString: config.get<string>(
-          'AZURE_STORAGE_CONNECTION_STRING',
-        )!,
-        accountName: config.get<string>('AZURE_STORAGE_ACCOUNT_NAME')!,
-        containerName: config.get<string>('AZURE_STORAGE_CONTAINER_NAME')!,
+        accountName: config.get<string>('AZURE_ACCOUNT_NAME', ''),
+        accountKey: config.get<string>('AZURE_ACCOUNT_KEY', ''),
+        containerName: config.get<string>('AZURE_CONTAINER', 'mda'),
+        sasExpiresInSeconds: config.get<number>('AZURE_SAS_TTL', 3600),
       }),
     }),
     EmailModule,

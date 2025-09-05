@@ -8,7 +8,9 @@ import { ConsumptionDeletedEvent } from '../events/consumption-deleted.event';
 import { DeleteConsumptionCommand } from './delete-consumption.command';
 
 @CommandHandler(DeleteConsumptionCommand)
-export class DeleteConsumptionHandler implements ICommandHandler<DeleteConsumptionCommand> {
+export class DeleteConsumptionHandler
+  implements ICommandHandler<DeleteConsumptionCommand>
+{
   constructor(
     private readonly prismaService: PrismaService,
     private readonly eventBus: EventBus,

@@ -12,14 +12,14 @@ export class CreateConsumptionHandler
 
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly azureStorageService: AzureStorageService,
+    private readonly azureStorage: AzureStorageService,
     private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateConsumptionCommand) {
     const { file, dto, rows } = command;
 
-    const { blobName, blobUrl } = await this.azureStorageService.upload(file, {
+    const { blobName, blobUrl } = await this.azureStorage.upload(file, {
       containerName: 'mda',
     });
 

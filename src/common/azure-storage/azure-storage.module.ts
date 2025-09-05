@@ -1,81 +1,45 @@
-import { DynamicModule, Global, Module, Provider } from '@nestjs/common';
-import { AZURE_STORAGE_MODULE_OPTIONS } from './azure-storage.constant';
+// External
+import { Module, DynamicModule } from '@nestjs/common';
+
+// Internal
 import { AzureStorageService } from './azure-storage.service';
-import { AzureStorageMulter } from './azure-storage.middleware';
-import type {
-  AzureStorageOptions,
-  AzureStorageAsyncOptions,
-  AzureStorageOptionsFactory,
-} from './azure-storage.interfaces';
+import { AZURE_STORAGE_MODULE_OPTIONS } from './azure-storage.constant';
+import { type AzureStorageOptions } from './azure-storage.interfaces';
 
-const PUBLIC_PROVIDERS = [AzureStorageService, AzureStorageMulter];
-
-@Global()
-@Module({
-  providers: [...PUBLIC_PROVIDERS],
-  exports: [...PUBLIC_PROVIDERS],
-})
+@Module({})
 export class AzureStorageModule {
-  static withConfig(options: AzureStorageOptions): DynamicModule {
-    const optionsProvider: Provider = {
-      provide: AZURE_STORAGE_MODULE_OPTIONS,
-      useValue: options,
-    };
-
+  static forRoot(options: AzureStorageOptions): DynamicModule {
     return {
+      global: true,
       module: AzureStorageModule,
-      providers: [optionsProvider, ...PUBLIC_PROVIDERS],
-      exports: [...PUBLIC_PROVIDERS],
+      providers: [
+        { provide: AZURE_STORAGE_MODULE_OPTIONS, useValue: options },
+        AzureStorageService,
+      ],
+      exports: [AzureStorageService],
     };
   }
 
-  static withConfigAsync(options: AzureStorageAsyncOptions): DynamicModule {
-    const asyncProviders = this.createAsyncProviders(options);
-
+  static forRootAsync(options: {
+    imports?: any[];
+    useFactory: (
+      ...args: any[]
+    ) => AzureStorageOptions | Promise<AzureStorageOptions>;
+    inject?: any[];
+  }): DynamicModule {
     return {
+      global: true,
       module: AzureStorageModule,
-      providers: [...asyncProviders, ...PUBLIC_PROVIDERS],
-      exports: [...PUBLIC_PROVIDERS],
-    };
-  }
-
-  private static createAsyncProviders(
-    options: AzureStorageAsyncOptions,
-  ): Provider[] {
-    if (options.useFactory) {
-      return [
+      imports: options.imports || [],
+      providers: [
         {
           provide: AZURE_STORAGE_MODULE_OPTIONS,
           useFactory: options.useFactory,
           inject: options.inject || [],
         },
-      ];
-    }
-
-    const useClassOrExisting = options.useClass || options.useExisting;
-
-    if (!useClassOrExisting) {
-      throw new Error(
-        'withConfigAsync requires useFactory, useClass, or useExisting.',
-      );
-    }
-
-    const providers: Provider[] = [];
-
-    if (options.useClass) {
-      providers.push({
-        provide: options.useClass,
-        useClass: options.useClass,
-      });
-    }
-
-    providers.push({
-      provide: AZURE_STORAGE_MODULE_OPTIONS,
-      useFactory: async (factory: AzureStorageOptionsFactory) =>
-        factory.createAzureStorageOptions(),
-      inject: [useClassOrExisting],
-    });
-
-    return providers;
+        AzureStorageService,
+      ],
+      exports: [AzureStorageService],
+    };
   }
 }

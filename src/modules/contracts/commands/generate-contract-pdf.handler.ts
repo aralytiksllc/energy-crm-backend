@@ -148,7 +148,9 @@ export class GenerateContractPdfHandler
     ]);
 
     const html = Handlebars.compile(contentSrc, { noEscape: false })(ctx);
-    const footerTemplate = Handlebars.compile(footerSrc, { noEscape: true })(ctx);
+    const footerTemplate = Handlebars.compile(footerSrc, { noEscape: true })(
+      ctx,
+    );
 
     const browser = await this.pptr.getBrowser();
     const page = await browser.newPage();
@@ -195,7 +197,7 @@ export class GenerateContractPdfHandler
 
     const cust = db.customer;
     const primary = cust?.contacts[0] ?? null;
-    const any = cust?.contacts?.find(c => !!c.email || !!c.phone) ?? null;
+    const any = cust?.contacts?.find((c) => !!c.email || !!c.phone) ?? null;
 
     // Mandatory fields: still resolve with a simple fallback so we never render undefined strings
     const email =
@@ -260,8 +262,8 @@ export class GenerateContractPdfHandler
           (db as any).forecastDeadlineDaysBeforeMonth ?? '',
       },
       // Optional: expose a flat list of metering points if you prefer simple iteration in templates
-      flatMeteringPoints: (cust?.branches || []).flatMap(b =>
-        (b.meteringPoints || []).map(mp => ({
+      flatMeteringPoints: (cust?.branches || []).flatMap((b) =>
+        (b.meteringPoints || []).map((mp) => ({
           branchId: b.id,
           branchName: b.branchName,
           ...mp,
@@ -275,12 +277,16 @@ export class GenerateContractPdfHandler
 
     // Customer (mandatory)
     if (!ctx.customer.companyName) missing.push('customer.companyName');
-    if (!ctx.customer.registeredAddress) missing.push('customer.registeredAddress');
+    if (!ctx.customer.registeredAddress)
+      missing.push('customer.registeredAddress');
     if (!ctx.customer.cityRegion) missing.push('customer.cityRegion');
-    if (!ctx.customer.registrationNumber) missing.push('customer.registrationNumber');
-    if (!ctx.customer.defaultOperationalEmail) missing.push('customer.defaultOperationalEmail');
+    if (!ctx.customer.registrationNumber)
+      missing.push('customer.registrationNumber');
+    if (!ctx.customer.defaultOperationalEmail)
+      missing.push('customer.defaultOperationalEmail');
     if (!ctx.customer.phone) missing.push('customer.phone');
-    if (!ctx.customer.authorizedRepresentative) missing.push('customer.authorizedRepresentative');
+    if (!ctx.customer.authorizedRepresentative)
+      missing.push('customer.authorizedRepresentative');
     if (!ctx.customer.companyRole) missing.push('customer.companyRole');
     if (!ctx.customer.legalStatus) missing.push('customer.legalStatus');
 

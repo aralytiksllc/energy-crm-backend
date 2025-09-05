@@ -8,7 +8,9 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { FindOneConsumptionQuery } from './find-one-consumption.query';
 
 @QueryHandler(FindOneConsumptionQuery)
-export class FindOneConsumptionHandler implements IQueryHandler<FindOneConsumptionQuery> {
+export class FindOneConsumptionHandler
+  implements IQueryHandler<FindOneConsumptionQuery>
+{
   constructor(private readonly prisma: PrismaService) {}
 
   async execute(query: FindOneConsumptionQuery): Promise<Consumption> {

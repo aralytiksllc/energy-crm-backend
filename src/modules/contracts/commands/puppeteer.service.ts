@@ -22,15 +22,23 @@ export class PuppeteerService implements OnModuleDestroy {
 
     if (!executablePath && fs.existsSync(systemChrome)) {
       executablePath = systemChrome;
-      this.logger.warn('Falling back to system Chrome at /usr/bin/google-chrome');
+      this.logger.warn(
+        'Falling back to system Chrome at /usr/bin/google-chrome',
+      );
     }
 
-    this.logger.log(`Launching Chrome with executablePath=${executablePath ?? '(auto)'}`);
+    this.logger.log(
+      `Launching Chrome with executablePath=${executablePath ?? '(auto)'}`,
+    );
 
     this.browser = await puppeteer.launch({
       headless: true,
       executablePath,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--font-render-hinting=none'],
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--font-render-hinting=none',
+      ],
     });
 
     return this.browser;

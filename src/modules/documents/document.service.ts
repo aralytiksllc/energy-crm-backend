@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import type { Document } from '@/prisma/prisma.service';
+import { type Document } from '@/common/prisma/prisma.client';
 import { CreateDocumentCommand } from './commands/create-document.command';
 import { CreateDocumentDto } from './dtos/create-document.dto';
 import { DeleteDocumentCommand } from './commands/delete-document.command';
@@ -31,13 +31,20 @@ export class DocumentService {
     return this.queryBus.execute(query);
   }
 
-  async create(dto: CreateDocumentDto): Promise<Document> {
-    const command = new CreateDocumentCommand(dto);
+  async create(
+    file: Express.Multer.File,
+    dto: CreateDocumentDto,
+  ): Promise<Document> {
+    const command = new CreateDocumentCommand(file, dto);
     return this.commandBus.execute(command);
   }
 
-  async update(id: number, dto: UpdateDocumentDto): Promise<Document> {
-    const command = new UpdateDocumentCommand(id, dto);
+  async update(
+    id: number,
+    file: Express.Multer.File,
+    dto: UpdateDocumentDto,
+  ): Promise<Document> {
+    const command = new UpdateDocumentCommand(id, file, dto);
     return this.commandBus.execute(command);
   }
 

@@ -9,16 +9,15 @@ import {
   Post,
   Put,
   Query,
-  UseInterceptors,
   UploadedFile,
-  BadRequestException,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as multer from 'multer';
 
 // Internal
 import { Paginate } from '@/common/paginate';
-import { AzureStorageFileInterceptor } from '@/common/azure-storage';
-import type { UploadedFileMetadata } from '@/common/azure-storage';
-import type { Document } from '@/prisma/prisma.service';
+import { type Document } from '@/common/prisma/prisma.client';
 import { CreateDocumentDto } from './dtos/create-document.dto';
 import { FindManyDocumentsDto } from './dtos/find-many-documents.dto';
 import { UpdateDocumentDto } from './dtos/update-document.dto';
@@ -42,36 +41,22 @@ export class DocumentController {
   }
 
   @Post()
-  @UseInterceptors(AzureStorageFileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', { storage: multer.memoryStorage() }))
   async upload(
-    @UploadedFile() file: UploadedFileMetadata,
+    @UploadedFile() file: Express.Multer.File,
     @Body() dto: CreateDocumentDto,
   ) {
-    if (!file) {
-      throw new BadRequestException('File is required');
-    }
-
-    if (!file.storageUrl) {
-      throw new BadRequestException('Upload to Azure failed (no storage URL)');
-    }
-
-    const payload: CreateDocumentDto = {
-      ...dto,
-      originalName: file.originalname,
-      mimeType: file.mimetype,
-      size: file.size,
-      path: file.storageUrl,
-    };
-
-    return this.documentService.create(payload);
+    return this.documentService.create(file, dto);
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('file', { storage: multer.memoryStorage() }))
   update(
     @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
     @Body() dto: UpdateDocumentDto,
   ): Promise<Document> {
-    return this.documentService.update(id, dto);
+    return this.documentService.update(id, file, dto);
   }
 
   @Delete(':id')

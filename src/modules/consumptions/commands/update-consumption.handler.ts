@@ -1,9 +1,11 @@
 // External
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
 // Internal
-import type { Consumption } from '@/prisma/prisma.service';
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { type PrismaExtension } from '@/common/prisma/prisma.extension';
+import { type ConsumptionFile } from '@/common/prisma/prisma.client';
 import { ConsumptionUpdatedEvent } from '../events/consumption-updated.event';
 import { UpdateConsumptionCommand } from './update-consumption.command';
 
@@ -12,12 +14,13 @@ export class UpdateConsumptionHandler
   implements ICommandHandler<UpdateConsumptionCommand>
 {
   constructor(
-    private readonly prismaService: PrismaService,
+    @Inject('prisma')
+    private readonly prisma: PrismaService<PrismaExtension>,
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: UpdateConsumptionCommand): Promise<Consumption> {
-    const consumption = await this.prismaService.consumption.update({
+  async execute(command: UpdateConsumptionCommand): Promise<ConsumptionFile> {
+    const consumption = await this.prisma.client.consumptionFile.update({
       where: { id: command.id },
       data: { ...command.dto },
     });
